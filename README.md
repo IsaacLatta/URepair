@@ -59,7 +59,7 @@ cd build
 	```bash
 	cmake .. -G "Visual Studio 17 2022"
 	```
-- Now open the .sln file found in the **build** directory.
+- Now open the .sln file found in the **build** directory with Visual Studio.
 ### Linux
 - Navigate to the **URepair/build** directory, for example in the home directory:
 ```bash 
