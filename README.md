@@ -11,7 +11,7 @@
 - **NOTE**: Be sure to select the option to add cmake to the **PATH** variable. If you missed this option: 
 	1. Open the start menu and search for **"Environment variables"**.
 	2. Click on **"Edit system environment"**.
-	3. In **System Properties window**, select "Environment Variables".
+	3. In **System Properties** window, select **"Environment Variables"**.
 	4. Find **"PATH"** under **System Variables** and click **"Edit"** then click **"New"**.
 	5. Paste the path to the cmake installation bin folder (e.g., C:\Program Files\CMake\bin).
 	6. To verify, open powershell or the command prompt and run:
