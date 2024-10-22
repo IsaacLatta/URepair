@@ -20,7 +20,7 @@
 	``` 
 
 ### Linux
-- **Cmake**: Install via your package manager, for example on ubuntu:
+- **CMake**: Install via your package manager, for example on ubuntu:
 ```bash
 sudo apt install cmake
 ```
