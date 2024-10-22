@@ -1,3 +1,0 @@
-/home/isaac/URepair/build/CMakeFiles/myapp.dir
-/home/isaac/URepair/build/CMakeFiles/edit_cache.dir
-/home/isaac/URepair/build/CMakeFiles/rebuild_cache.dir
