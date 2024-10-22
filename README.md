@@ -60,6 +60,7 @@ cd build
 	cmake .. -G "Visual Studio 17 2022"
 	```
 - Now open the .sln file found in the **build** directory with Visual Studio.
+- To run, press **F5** or the little green start button(arrow).
 ### Linux
 - Navigate to the **URepair/build** directory, for example in the home directory:
 ```bash 
