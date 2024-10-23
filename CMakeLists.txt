@@ -4,7 +4,7 @@ project(MyProject)
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 11)
 
-# Set the OpenGL preference to GLVND (modern)
+# Set the OpenGL preference to GLVND (modern OpenGL driver)
 set(OpenGL_GL_PREFERENCE GLVND)
 
 # Define source files
@@ -26,14 +26,36 @@ include_directories(third_party/glad/include)
 include_directories(third_party/imgui)
 include_directories(third_party/imgui/backends)
 
-# Find GLFW (cross-platform)
-find_package(glfw3 3.3 REQUIRED)
+# Add GLFW include directory (common to both platforms)
+include_directories(third_party/glfw)
 
-# Find OpenGL (cross-platform)
+# Find the OpenGL package (for cross-platform OpenGL linking)
 find_package(OpenGL REQUIRED)
 
-# Create the executable
-add_executable(myapp ${SOURCE_FILES})
+# Platform-specific settings
+if (WIN32)
+    # On Windows, use the local .lib files for linking
+    link_directories(third_party/glfw/lib/windows)
+    
+    # Add the executable
+    add_executable(myapp ${SOURCE_FILES})
+    
+    # Link with the glfw3.lib and OpenGL32.lib
+    target_link_libraries(myapp glfw3 OpenGL::GL)
+    
+    # Ensure glfw3.dll is copied to the output folder
+    add_custom_command(TARGET myapp POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_SOURCE_DIR}/third_party/glfw/bin/windows/glfw3.dll
+        $<TARGET_FILE_DIR:myapp>)
 
-# Link libraries (cross-platform linking)
-target_link_libraries(myapp glfw OpenGL::GL)
+elseif(UNIX)
+    # On Linux, use the .so files for linking
+    link_directories(third_party/glfw/bin/linux)
+    
+    # Add the executable
+    add_executable(myapp ${SOURCE_FILES})
+    
+    # Link with the GLFW and OpenGL libraries
+    target_link_libraries(myapp glfw OpenGL::GL dl)
+endif()
