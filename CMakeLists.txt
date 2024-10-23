@@ -19,6 +19,9 @@ set(SOURCE_FILES
     third_party/imgui/backends/imgui_impl_opengl3.cpp
 )
 
+# Add the project include directory
+include_directories(include)
+
 # Add glad include directory
 include_directories(third_party/glad/include)
 
