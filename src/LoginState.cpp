@@ -1,7 +1,6 @@
 #include "AppState.h"
 #include "app.h"
 
-
 void LoginState::handle() {
     User* user = app->getUser();
     char username_buffer[128];
@@ -18,7 +17,7 @@ void LoginState::handle() {
     style.ItemSpacing = ImVec2(10.0f, 20.0f);   // Increase space between items
 
     // Input fields and buttons with larger sizes
-    ImGui::Begin("Welcome to URepair");
+    ImGui::Begin("Welcome to URepair", nullptr, ImGuiWindowFlags_NoCollapse);
 
     ImGui::SetNextItemWidth(300.0f);  // Set width of input field
     ImGui::InputText("Username", username_buffer, IM_ARRAYSIZE(username_buffer));
