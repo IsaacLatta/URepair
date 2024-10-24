@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(MyProject)
+project(URepair)
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 11)
@@ -12,6 +12,8 @@ set(SOURCE_FILES
     src/main.cpp
     src/app.cpp
     src/logger.cpp
+    src/User.cpp
+    src/AppState.cpp
     third_party/glad/glad.c
     third_party/imgui/imgui.cpp
     third_party/imgui/imgui_draw.cpp
@@ -43,24 +45,24 @@ if (WIN32)
     link_directories(third_party/glfw/lib/windows)
     
     # Add the executable
-    add_executable(myapp ${SOURCE_FILES})
+    add_executable(URepair ${SOURCE_FILES})
     
     # Link with the glfw3.lib and OpenGL32.lib
-    target_link_libraries(myapp glfw3 OpenGL::GL)
+    target_link_libraries(URepair glfw3 OpenGL::GL)
     
     # Ensure glfw3.dll is copied to the output folder
-    add_custom_command(TARGET myapp POST_BUILD
+    add_custom_command(TARGET URepair POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
         ${CMAKE_SOURCE_DIR}/third_party/glfw/bin/windows/glfw3.dll
-        $<TARGET_FILE_DIR:myapp>)
+        $<TARGET_FILE_DIR:URepair>)
 
 elseif(UNIX)
     # On Linux, use the .so files for linking
     link_directories(third_party/glfw/bin/linux)
     
     # Add the executable
-    add_executable(myapp ${SOURCE_FILES})
+    add_executable(URepair ${SOURCE_FILES})
     
     # Link with the GLFW and OpenGL libraries
-    target_link_libraries(myapp glfw OpenGL::GL dl)
+    target_link_libraries(URepair glfw OpenGL::GL dl)
 endif()

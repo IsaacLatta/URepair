@@ -1,7 +1,5 @@
 #include "logger.h"
 
-#include <string>
-
 static std::string get_filename(const char* file_path) {
     std::string path(file_path);
     std::size_t pos = path.find_last_of("/\\");  
