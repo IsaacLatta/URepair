@@ -10,6 +10,8 @@ set(OpenGL_GL_PREFERENCE GLVND)
 # Define source files
 set(SOURCE_FILES
     src/main.cpp
+    src/app.cpp
+    src/logger.cpp
     third_party/glad/glad.c
     third_party/imgui/imgui.cpp
     third_party/imgui/imgui_draw.cpp
