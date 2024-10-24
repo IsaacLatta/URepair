@@ -43,7 +43,7 @@ bool App::init() {
     if (!window) {
         ERROR("GLFW", "window creation failed");
         glfwTerminate();
-        return false;  // Return false here
+        return false;  
     }
 
     this->main_window = window;

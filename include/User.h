@@ -6,8 +6,6 @@
 class User 
 {
     public:
-    char username_buffer[128];
-	char password_buffer[128];
     bool isLoggedIn;
     User();
     void setUsername(const char*);

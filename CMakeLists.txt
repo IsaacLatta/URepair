@@ -13,7 +13,8 @@ set(SOURCE_FILES
     src/app.cpp
     src/logger.cpp
     src/User.cpp
-    src/AppState.cpp
+    src/MainState.cpp
+    src/LoginState.cpp
     third_party/glad/glad.c
     third_party/imgui/imgui.cpp
     third_party/imgui/imgui_draw.cpp
