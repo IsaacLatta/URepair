@@ -74,6 +74,7 @@ void App::mainLoop() {
 		glfwSwapBuffers(this->main_window);
         
 	}
+	INFO("App", "window closed, exiting ...");
 }
 
 void App::run() {

@@ -9,8 +9,8 @@
 #include <iostream>
 #include "logger.h"
 
-#define DEFAULT_HEIGHT 800
-#define DEFAULT_WIDTH 600
+#define DEFAULT_HEIGHT 1000
+#define DEFAULT_WIDTH 1000
 
 class App {
 	public:
