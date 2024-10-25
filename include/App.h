@@ -22,6 +22,7 @@ class App {
 	void setNewState(AppState* new_state);
 	void changeUser(User* user);
 	User* getUser();
+	Database* getDB() { return db; }
 	private:
 	void changeState();
 	void mainLoop();

@@ -34,7 +34,7 @@ void LoginState::handle() {
     if (ImGui::Button("Login", ImVec2(200, 50))) {  
         INFO("login username", username_buffer);
         INFO("login password", password_buffer);
-        User* new_user = user->validate();
+        User* new_user = app->getDB()->validate(user);
         if(new_user) {
             app->changeUser(new_user);
             app->setNewState(new MainState(app));
