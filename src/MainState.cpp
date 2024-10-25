@@ -73,34 +73,99 @@ void MainState::showTalentSearchFilters() {
     }
 }
 
+void MainState::showBookingMenu(Talent* talent, bool* stay_open) {
+    
+    static const std::size_t BUFSIZE = 256;
+    static char comments_buffer[BUFSIZE];
+    static char date_buffer[BUFSIZE];
+    static char file_buffer[BUFSIZE];
+    ImGui::SetNextWindowSize(ImVec2(700, 700), ImGuiCond_Always); 
+    if (ImGui::Begin("Book Talent", NULL, ImGuiWindowFlags_NoResize)) {
+        ImGui::Text("Booking details for %s", talent->name.c_str());
+        ImGui::Separator();
+
+        ImGui::Text("Service Type: %s", talent->service_type.c_str());
+        ImGui::Text("Location: %s", talent->location.c_str());
+        ImGui::Text("Rating: %d/5", talent->rating);
+        ImGui::Text("Price: $%.2f", talent->rate);
+
+        ImGui::Separator();
+        ImGui::InputText("Date", date_buffer, BUFSIZE);
+        ImGui::InputTextMultiline("Comments", comments_buffer, BUFSIZE, ImVec2(200, 200));
+        if(ImGui::Button("Add attatchment", ImVec2(300, 40))) {
+            INFO("booking", "attatchment added");
+            ImGui::InputText("File name", file_buffer, BUFSIZE);
+            if(ImGui::Button("upload", ImVec2(300, 40))) {
+                ImGui::InputText("File name", file_buffer, BUFSIZE);
+                INFO("booking, file path", file_buffer);
+            }
+        }
+
+        ImGui::Separator();
+        if (ImGui::Button("Confirm Booking", ImVec2(150, 40))) {
+            INFO("booking", "Talent booked");
+            *stay_open = false;
+            memset(comments_buffer, '\0', BUFSIZE);
+            memset(date_buffer, '\0', BUFSIZE);
+            memset(file_buffer, '\0', BUFSIZE);
+        }
+
+        ImGui::SameLine();
+
+        if (ImGui::Button("Cancel", ImVec2(150, 40))) {
+            *stay_open = false;
+            memset(comments_buffer, '\0', BUFSIZE);
+            memset(date_buffer, '\0', BUFSIZE);
+            memset(file_buffer, '\0', BUFSIZE);
+        }
+
+        ImGui::End();
+    }
+}
+
 void MainState::showTalentSearchResults() {
+    static bool show_booking_menu = false;
+    static Talent* selected_talent = nullptr;
+
     if (search_results.empty()) {
         ImGui::Text("No talents found matching the criteria.");
         return;
     }
 
     // Display the talents in a table format
-    if (ImGui::BeginTable("Talents Table", 5, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingFixedFit)) {
-        ImGui::TableSetupColumn("Name", 0, 150.0f);              // Fixed width 150
-        ImGui::TableSetupColumn("Service Type", 0, 200.0f);      // Fixed width 200
-        ImGui::TableSetupColumn("Location", 0, 150.0f);          // Fixed width 150
-        ImGui::TableSetupColumn("Rating", 0, 100.0f);            // Fixed width 100
-        ImGui::TableSetupColumn("Price", 0, 100.0f);             // Fixed width 100
+    if (ImGui::BeginTable("Talents Table", 6, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingFixedFit)) {
+        ImGui::TableSetupColumn("Name", 0, 150.0f);
+        ImGui::TableSetupColumn("Service Type", 0, 200.0f);
+        ImGui::TableSetupColumn("Location", 0, 150.0f);
+        ImGui::TableSetupColumn("Rating", 0, 100.0f);
+        ImGui::TableSetupColumn("Price", 0, 100.0f);
+        ImGui::TableSetupColumn("Action", 0, 100.0f);
         ImGui::TableHeadersRow();
 
-        for (const Talent& talent : search_results) {
+        for (int i = 0; i < search_results.size(); ++i) {
             ImGui::TableNextRow();
 
-            ImGui::TableSetColumnIndex(0); ImGui::Text("%s", talent.name.c_str());
-            ImGui::TableSetColumnIndex(1); ImGui::Text("%s", talent.service_type.c_str());
-            ImGui::TableSetColumnIndex(2); ImGui::Text("%s", talent.location.c_str());
-            ImGui::TableSetColumnIndex(3); ImGui::Text("%d/5", talent.rating);
-            ImGui::TableSetColumnIndex(4); ImGui::Text("$%.2f", talent.rate);
+            ImGui::TableSetColumnIndex(0); ImGui::Text("%s", search_results[i].name.c_str());
+            ImGui::TableSetColumnIndex(1); ImGui::Text("%s", search_results[i].service_type.c_str());
+            ImGui::TableSetColumnIndex(2); ImGui::Text("%s", search_results[i].location.c_str());
+            ImGui::TableSetColumnIndex(3); ImGui::Text("%d/5", search_results[i].rating);
+            ImGui::TableSetColumnIndex(4); ImGui::Text("$%.2f", search_results[i].rate);
+            ImGui::TableSetColumnIndex(5);
+            std::string button_label = "Book##" + std::to_string(i); 
+            if (ImGui::Button(button_label.c_str())) {
+                INFO("", "booking talent");
+                show_booking_menu = true;
+                selected_talent = &search_results[i];
+            }
         }
-
         ImGui::EndTable();
     }
+
+    if (show_booking_menu && selected_talent != nullptr) {
+        showBookingMenu(selected_talent, &show_booking_menu);
+    }
 }
+
 
 void MainState::handle() {
     std::string welcome_msg =  "Welcome, " + app->getUser()->getUsername() + ".";

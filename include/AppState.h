@@ -38,6 +38,7 @@ class MainState: public AppState {
     void showJobs();
     void showTalentSearchFilters();
     void showTalentSearchResults();
+    void showBookingMenu(Talent* talent, bool*);
 };
 
 
