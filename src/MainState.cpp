@@ -21,7 +21,7 @@ void MainState::showMenuBar() {
         ImGui::EndMenuBar();
     }
 	if(change_to_profile) {
-		//app->changeState(new ProfileState(app));
+		app->setNewState(new ProfileState(app));
 		INFO("State", "would change to profile");
 	}
 	if(logout) {
@@ -69,7 +69,7 @@ void MainState::showTalentSearchFilters() {
 
     if (ImGui::Button("Search")) {
         INFO("Search", "Search for talent triggered");
-        //search_results = db->findTalents(search_service_type, search_location, min_rating, min_price, max_price);
+        search_results = app->getDB()->findTalents(search_service_type, search_location, min_rating, min_price, max_price);
     }
 }
 

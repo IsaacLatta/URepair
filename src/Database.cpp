@@ -5,6 +5,10 @@ Database* Database::databaseFactory() {
     return new Dummy();
 }
 
+bool Dummy::connect() {
+    return true;
+}
+
 User* Dummy::validate(User* user) {
    INFO("User", "validated");
    user->isLoggedIn = true;
@@ -57,3 +61,19 @@ bool Dummy::loadData(User* user) {
     updateJobs(user);
     return true;
 }
+
+bool Dummy::changePassword(User* user, const char* old_pass, const char* new_pass) {
+    if(strcmp(user->getPassword().c_str(), old_pass)) {
+        return false;
+    }
+    user->setPassword(new_pass);
+    return true;
+}
+bool Dummy::changeUsername(User* user, const char* password, const char* new_username) {
+    if(strcmp(user->getPassword().c_str(), password)) {
+        return false;
+    }
+    user->setUsername(new_username);
+    return true;
+}
+    

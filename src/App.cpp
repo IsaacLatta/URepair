@@ -38,9 +38,11 @@ User* App::getUser() {
 
 void App::changeState() {
     if(next_state) {
+        INFO("App", "freeing state")
         delete state;
         state = next_state;
         next_state = nullptr;
+        INFO("App", "state freed");
     }
 }
 
@@ -59,7 +61,6 @@ bool App::init() {
         return false;
     }
 
-    // Set GLFW options and create a window with an OpenGL context
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -67,7 +68,7 @@ bool App::init() {
 	glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);  // Transparent window (if supported)
     GLFWwindow* window = glfwCreateWindow(DEFAULT_WIDTH, DEFAULT_HEIGHT, "Main Window", NULL, NULL);
     if (!window) {
-        ERROR("GLFW", "window creation failed");
+        ERROR("GLFW window", get_gl_error().c_str());
         glfwTerminate();
         return false;  
     }
@@ -99,6 +100,9 @@ bool App::init() {
     this->user = new User();
 	this->state = new LoginState(this);
     this->db = Database::databaseFactory();
+    if(!db->connect()) {
+        return false;
+    }
     return true;
 }
 
@@ -111,6 +115,7 @@ void App::mainLoop() {
 
 		this->state->handle();
         changeState();
+
 		ImGui::Render();
 		glClearColor(0.0f, 0.125f, 0.2f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT);

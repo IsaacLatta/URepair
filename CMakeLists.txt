@@ -16,6 +16,7 @@ set(SOURCE_FILES
     src/MainState.cpp
     src/LoginState.cpp
     src/Database.cpp
+    src/ProfileState.cpp
     third_party/glad/glad.c
     third_party/imgui/imgui.cpp
     third_party/imgui/imgui_draw.cpp

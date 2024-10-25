@@ -40,15 +40,16 @@ class MainState: public AppState {
     void showTalentSearchResults();
 };
 
-/*
+
 class ProfileState: public AppState {
     public:
     ProfileState(App* app): AppState(app) {};
     void handle() override;
     private:
-
+    void showOptions();
+    void showSecurityMenu(bool*);
 };
-*/
+
 
 
 #endif
