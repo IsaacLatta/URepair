@@ -4,7 +4,8 @@
 #include <ctime>
 #include <string>
 #include <iostream>
-#include <GL/gl.h>
+#include <glad/glad.h>
+//#include <GL/gl.h>
 
 void log_message(const char* s1, const char* s2, const char* file, int line);
 void log_error(const char* s1, const char* s2, const char* file, int line);

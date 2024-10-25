@@ -5,7 +5,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-App::App() : main_window(nullptr) {}
+App::App() : main_window(nullptr), state(nullptr), next_state(nullptr) {}
 
 App::~App() {
 	if(state != nullptr) {
@@ -13,18 +13,38 @@ App::~App() {
 	}
 }
 
-User* App::getUser() {
-	return &user;
+void App::changeUser(User* new_user) {
+    if(!new_user) {
+        ERROR("changeUser", "new_user must not be NULL");
+        return;
+    }
+    
+    if(this->user) {
+        INFO("deleting user", "");
+        delete user;
+    }
+    this->user = new_user;
 }
 
-void App::changeState(AppState* new_state) {
+User* App::getUser() {
+	return user;
+}
+
+void App::changeState() {
+    if(next_state) {
+        delete state;
+        state = next_state;
+        next_state = nullptr;
+    }
+}
+
+void App::setNewState(AppState* new_state) {
 	if(!new_state) {
 		ERROR("state change", "next state is null");
 		return;
 	}
 
-	delete state;
-	this->state = new_state;
+	next_state = new_state;
 }
 
 bool App::init() {
@@ -70,6 +90,7 @@ bool App::init() {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glViewport(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
+    this->user = new User();
 	this->state = new LoginState(this);
     return true;
 }
@@ -82,7 +103,7 @@ void App::mainLoop() {
         ImGui::NewFrame();
 
 		this->state->handle();
-
+        changeState();
 		ImGui::Render();
 		glClearColor(0.0f, 0.125f, 0.2f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT);

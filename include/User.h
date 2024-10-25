@@ -14,18 +14,31 @@ struct Job {
     double cost;
 } ;
 
+struct Talent {
+    std::string name;
+    std::string service_type;  
+    std::string location;      
+    int rating;                // Rating out of 5
+    float rate;
+};
+
 class User 
 {
     public:
     bool isLoggedIn;
+
     User();
+    User(const User& user);
+
     std::vector<Job>* getJobs();
     void setUsername(const char*);
     void setPassword(const char*);
+    User* validate();
     bool loadData();
     std::string getUsername();
     std::string getPassword();
-    private:
+
+    protected:
     std::vector<Job> jobs;
     std::string username;
     std::string password;

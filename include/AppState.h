@@ -2,6 +2,8 @@
 #define APPSTATE_H
 #include <vector>
 
+#include "User.h"
+
 class App;
 
 class AppState 
@@ -25,8 +27,17 @@ class MainState: public AppState {
     MainState(App* app) : AppState(app) {};
     void handle() override;
     private:
+    char search_service_type[128] = "";  
+    char search_location[128] = "";      
+    int min_rating = 0;                  
+    int min_price = 0;                   
+    int max_price = 500;                 
+
+    std::vector<Talent> search_results;
     void showMenuBar();
     void showJobs();
+    void showTalentSearchFilters();
+    void showTalentSearchResults();
 };
 
 /*
