@@ -1,4 +1,4 @@
-#include "app.h"
+#include "App.h"
 
 int main() {
 	App app;
@@ -7,4 +7,5 @@ int main() {
 		return -1;
 	}
 	app.run();
+	return 0;
 }

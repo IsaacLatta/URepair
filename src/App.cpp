@@ -1,4 +1,4 @@
-#include "app.h"
+#include "App.h"
 
 // Framebuffer size callback for resizing the window
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -11,6 +11,12 @@ App::~App() {
 	if(state != nullptr) {
 		delete state;
 	}
+    if(next_state != nullptr) {
+        delete next_state;
+    }
+    if(db != nullptr) {
+        delete db;
+    }
 }
 
 void App::changeUser(User* new_user) {
@@ -18,12 +24,12 @@ void App::changeUser(User* new_user) {
         ERROR("changeUser", "new_user must not be NULL");
         return;
     }
-    
     if(this->user) {
-        INFO("deleting user", "");
         delete user;
+        INFO("user", "deleted");
     }
     this->user = new_user;
+    db->loadData(this->user);
 }
 
 User* App::getUser() {
@@ -92,6 +98,7 @@ bool App::init() {
 
     this->user = new User();
 	this->state = new LoginState(this);
+    this->db = Database::databaseFactory();
     return true;
 }
 

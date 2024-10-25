@@ -34,7 +34,7 @@ class User
     void setUsername(const char*);
     void setPassword(const char*);
     User* validate();
-    bool loadData();
+    void setJobs(std::vector<Job>& jobs);
     std::string getUsername();
     std::string getPassword();
 

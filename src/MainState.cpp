@@ -1,5 +1,5 @@
 #include "AppState.h"
-#include "app.h"
+#include "App.h"
 
 void MainState::showMenuBar() {
 	bool change_to_profile = false;

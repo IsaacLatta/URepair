@@ -1,5 +1,5 @@
 #include "AppState.h"
-#include "app.h"
+#include "App.h"
 
 void LoginState::handle() {
     User* user = app->getUser();
@@ -36,7 +36,6 @@ void LoginState::handle() {
         INFO("login password", password_buffer);
         User* new_user = user->validate();
         if(new_user) {
-
             app->changeUser(new_user);
             app->setNewState(new MainState(app));
         }    

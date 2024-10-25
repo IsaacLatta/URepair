@@ -9,9 +9,8 @@ User::User(const User& user) {
    this->isLoggedIn = user.isLoggedIn;
 }
 
-bool User::loadData() { 
-   INFO("User", "fetching data ..."); 
-   return true;
+void User::setJobs(std::vector<Job>& jobs) {
+   this->jobs = std::move(jobs);
 }
 
 User* User::validate() {
