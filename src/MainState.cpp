@@ -75,11 +75,12 @@ void MainState::showTalentSearchFilters() {
 
 void MainState::showBookingMenu(Talent* talent, bool* stay_open) {
     
+    static bool attatchment_menu = false;
     static const std::size_t BUFSIZE = 256;
     static char comments_buffer[BUFSIZE];
     static char date_buffer[BUFSIZE];
     static char file_buffer[BUFSIZE];
-    ImGui::SetNextWindowSize(ImVec2(700, 700), ImGuiCond_Always); 
+    ImGui::SetNextWindowSize(ImVec2(800, 1000), ImGuiCond_Always); 
     if (ImGui::Begin("Book Talent", NULL, ImGuiWindowFlags_NoResize)) {
         ImGui::Text("Booking details for %s", talent->name.c_str());
         ImGui::Separator();
@@ -93,12 +94,8 @@ void MainState::showBookingMenu(Talent* talent, bool* stay_open) {
         ImGui::InputText("Date", date_buffer, BUFSIZE);
         ImGui::InputTextMultiline("Comments", comments_buffer, BUFSIZE, ImVec2(200, 200));
         if(ImGui::Button("Add attatchment", ImVec2(300, 40))) {
-            INFO("booking", "attatchment added");
-            ImGui::InputText("File name", file_buffer, BUFSIZE);
-            if(ImGui::Button("upload", ImVec2(300, 40))) {
-                ImGui::InputText("File name", file_buffer, BUFSIZE);
-                INFO("booking, file path", file_buffer);
-            }
+            attatchment_menu = true;
+            INFO("booking", "showing attatchment");
         }
 
         ImGui::Separator();
@@ -119,6 +116,20 @@ void MainState::showBookingMenu(Talent* talent, bool* stay_open) {
             memset(file_buffer, '\0', BUFSIZE);
         }
 
+        if(attatchment_menu) {
+        
+            ImGui::InputText("File name", file_buffer, BUFSIZE);
+            if(ImGui::Button("Upload", ImVec2(300, 40))) {
+                memset(file_buffer, '\0', BUFSIZE);
+                attatchment_menu = false;
+                INFO("booking", "uploaded");
+            }
+            if(ImGui::Button("Cancel##", ImVec2(300, 40))) {
+                memset(file_buffer, '\0', BUFSIZE);
+                attatchment_menu = false;
+                INFO("booking", "cancel");
+            }
+        }
         ImGui::End();
     }
 }
