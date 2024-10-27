@@ -21,17 +21,15 @@ void MainClientView::showMenuBar() {
         ImGui::EndMenuBar();
     }
 	if(change_to_profile) {
-		app->setNewState(new ProfileView(app));
-		INFO("State", "would change to profile");
+		profileHandler();
 	}
 	if(logout) {
-		INFO("State", "logging out");
-		app->setNewState(new LoginView(app));
+		logoutHandler();
 	}
 }
 
 void MainClientView::showJobs() {
-	std::vector<Job>* jobs = app->getUser()->getJobs();
+	std::vector<Job>* jobs = client->getJobs();
 	
 	 if (ImGui::BeginTable("Jobs Table", 6, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingFixedFit)) {
         ImGui::TableSetupColumn("ID", 0, 50.0f);              // Fixed width 50
@@ -68,8 +66,7 @@ void MainClientView::showTalentSearchFilters() {
     ImGui::SliderInt("Max Price", &max_price, 0, 500);
 
     if (ImGui::Button("Search")) {
-        INFO("Search", "Search for talent triggered");
-        search_results = app->getDB()->findTalents(search_service_type, search_location, min_rating, min_price, max_price);
+        searchHandler(search_service_type, search_location, min_rating, min_price, max_price);
     }
 }
 
@@ -100,11 +97,11 @@ void MainClientView::showBookingMenu(Talent* talent, bool* stay_open) {
 
         ImGui::Separator();
         if (ImGui::Button("Confirm Booking", ImVec2(150, 40))) {
-            INFO("booking", "Talent booked");
             *stay_open = false;
             memset(comments_buffer, '\0', BUFSIZE);
             memset(date_buffer, '\0', BUFSIZE);
             memset(file_buffer, '\0', BUFSIZE);
+            bookingHandler(talent);
         }
 
         ImGui::SameLine();
@@ -117,17 +114,15 @@ void MainClientView::showBookingMenu(Talent* talent, bool* stay_open) {
         }
 
         if(attatchment_menu) {
-        
             ImGui::InputText("File name", file_buffer, BUFSIZE);
             if(ImGui::Button("Upload", ImVec2(300, 40))) {
                 memset(file_buffer, '\0', BUFSIZE);
                 attatchment_menu = false;
-                INFO("booking", "uploaded");
+                uploadHandler();
             }
             if(ImGui::Button("Cancel##", ImVec2(300, 40))) {
                 memset(file_buffer, '\0', BUFSIZE);
                 attatchment_menu = false;
-                INFO("booking", "cancel");
             }
         }
         ImGui::End();
@@ -177,9 +172,8 @@ void MainClientView::showTalentSearchResults() {
     }
 }
 
-
 void MainClientView::handle() {
-    std::string welcome_msg =  "Welcome, " + app->getUser()->getUsername() + ".";
+    std::string welcome_msg =  "Welcome, " + client->getUsername() + ".";
 	const char* title = welcome_msg.c_str();
 	
 	ImGui::SetNextWindowSize(ImVec2(DEFAULT_WIDTH, DEFAULT_HEIGHT));

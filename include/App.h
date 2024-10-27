@@ -10,6 +10,8 @@
 #include "logger.h"
 #include "View.h"
 #include "Database.h"
+#include "Controller.h"
+
 #define DEFAULT_HEIGHT 1000
 #define DEFAULT_WIDTH 1000
 
@@ -19,17 +21,14 @@ class App {
 	~App();
 	bool init();
 	void run();
-	void setNewState(View* new_state);
 	void changeUser(User* user);
 	User* getUser();
 	Database* getDB() { return db; }
 	private:
-	void changeState();
 	void mainLoop();
 	Database* db;
 	User* user;
-	View* state;
-	View* next_state;
+	Controller* controller;
 	GLFWwindow* main_window;
 };
 

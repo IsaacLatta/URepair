@@ -1,10 +1,10 @@
 #include "Controller.h"
 #include "App.h"
 
-void Controller::clearRevisit() {
-    while (!revisit.empty()) {
-        View* view = revisit.top();
-        revisit.pop();
+void Controller::clearViews(std::stack<View*>& views) {
+    while (!views.empty()) {
+        View* view = views.top();
+        views.pop();
         delete view; 
     }
 }
@@ -23,10 +23,10 @@ void Controller::pushView(View* view) {
         return;
     }
     if (!history.empty()) {
-        clearRevisit();
+        clearViews(revisit);
+        revisit = std::stack<View*>();
     }
     history.push(view);
-    app->setNewState(view); 
 }
 
 void Controller::goBack() {
@@ -36,8 +36,7 @@ void Controller::goBack() {
     }
     View* current = history.top();
     history.pop();
-    revisit.push(current);  
-    app->setNewState(history.top());  
+    revisit.push(current);   
 }
 
 void Controller::goForward() {
@@ -47,12 +46,13 @@ void Controller::goForward() {
     }
     View* next = revisit.top();
     revisit.pop();
-    history.push(next);  
-    app->setNewState(next);  
+    history.push(next);    
 }
 
 void Controller::setupLoginView()
 {
+    clearViews(history);
+    clearViews(revisit);
     LoginView *view = new LoginView(app);
     view->loginHandler = [this](const char *username, const char *password)
     {
@@ -62,10 +62,49 @@ void Controller::setupLoginView()
             ERROR("controller", "login failed");
             return;
         }
-
-        app->changeUser(new_user);
-        MainClientView *mainView = new MainClientView(app);
-        pushView(mainView);
+        setupMainView(new_user);
     };
     pushView(view);
 }
+
+void Controller::setupProfileView(User* user) {
+    // To be implemented
+    ProfileView* profile = new ProfileView(app);
+}
+
+void Controller::setupMainView(User *user) {
+    if (dynamic_cast<Client *>(user))
+    {
+        MainClientView *main = new MainClientView(app);
+        main->searchHandler = [this, main](const char *service_type, const char *location, int min_rating, int min_price, int max_price)
+        {
+            INFO("Search", "Search for talent triggered");
+            main->search_results = app->getDB()->findTalents(service_type, location, min_rating, min_price, max_price);
+        };
+        main->profileHandler = [this, main, user]()
+        {
+            setupProfileView(user);
+        };
+        main->logoutHandler = [this]()
+        {
+            setupLoginView();
+        };
+        main->bookingHandler = [this, main, user](Talent* talent)
+        {
+            INFO("booking", "talent booked");  // to be implemented
+        };
+        main->uploadHandler = [this]()
+        {
+            INFO("booking", "uploaded");  // to be implemented
+        };
+        pushView(main);
+    }
+    else
+    {
+        ERROR("controller", "cannot render MainClientView");
+        return;
+    }
+
+    app->changeUser(user);
+}
+

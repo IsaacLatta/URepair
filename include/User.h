@@ -23,6 +23,8 @@ struct Talent {
     std::string location;      
     int rating;                // Rating out of 5
     float rate;
+    Talent(const char* name, const char* service, const char* location, int rating, float rate): 
+    name(name), service_type(service), location(location), rating(rating), rate(rate){}
 };
 
 class User 

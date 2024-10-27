@@ -14,8 +14,10 @@ class Controller
     void renderCurrent();
     void setupLoginView();
     private:
-    void clearRevisit();
-    void pushView(View* view);
+    void setupMainView(User*);
+    void setupProfileView(User*);
+    void clearViews(std::stack<View*>&);
+    void pushView(View*);
     void goBack();
     void goForward();
     App* app;

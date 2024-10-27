@@ -5,18 +5,12 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-App::App() : main_window(nullptr), state(nullptr), next_state(nullptr), user(nullptr) {}
+App::App() : main_window(nullptr), controller(nullptr), user(nullptr) {}
 
 App::~App() {
-	if(state != nullptr) {
-		delete state;
-	}
-    if(next_state != nullptr) {
-        delete next_state;
-    }
-    if(db != nullptr) {
-        delete db;
-    }
+    if(user != nullptr) delete user;
+	if(controller != nullptr) delete controller;
+    if(db != nullptr) delete db;
 }
 
 void App::changeUser(User* new_user) {
@@ -34,25 +28,6 @@ void App::changeUser(User* new_user) {
 
 User* App::getUser() {
 	return user;
-}
-
-void App::changeState() {
-    if(next_state) {
-        INFO("App", "freeing state")
-        delete state;
-        state = next_state;
-        next_state = nullptr;
-        INFO("App", "state freed");
-    }
-}
-
-void App::setNewState(View* new_state) {
-	if(!new_state) {
-		ERROR("state change", "next state is null");
-		return;
-	}
-
-	next_state = new_state;
 }
 
 bool App::init() {
@@ -98,7 +73,7 @@ bool App::init() {
     glViewport(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     ImGui::GetIO().FontGlobalScale = 1.25f;  // Scale the entire UI by 1.25x
 
-	this->state = new LoginView(this);
+	controller = new Controller(this);
     this->db = Database::databaseFactory();
     if(!db->connect()) {
         return false;
@@ -113,8 +88,7 @@ void App::mainLoop() {
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-		this->state->handle();
-        changeState();
+        controller->renderCurrent();
 
 		ImGui::Render();
 		glClearColor(0.0f, 0.125f, 0.2f, 0.0f);
