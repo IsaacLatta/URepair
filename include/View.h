@@ -3,28 +3,30 @@
 #include <vector>
 
 #include "User.h"
+#include <functional>
 
 class App;
 
-class AppState 
+class View 
 {
     public:
-    AppState(App* app): app(app) {};
+    View(App* app): app(app) {};
     virtual void handle() = 0;
     protected:
     App* app;
 };
 
-class LoginState: public AppState
+class LoginView: public View
 {   
     public:
-    LoginState(App* app): AppState(app) {};
+    std::function<void(const char*, const char*)> loginHandler;
+    LoginView(App* app): View(app) {};
     void handle() override;
 };
 
-class MainState: public AppState {
+class MainClientView: public View {
     public:
-    MainState(App* app) : AppState(app) {};
+    MainClientView(App* app) : View(app) {};
     void handle() override;
     private:
     char search_service_type[128] = "";  
@@ -42,9 +44,9 @@ class MainState: public AppState {
 };
 
 
-class ProfileState: public AppState {
+class ProfileView: public View {
     public:
-    ProfileState(App* app): AppState(app) {};
+    ProfileView(App* app): View(app) {};
     void handle() override;
     private:
     void showOptions();

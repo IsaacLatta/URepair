@@ -5,7 +5,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-App::App() : main_window(nullptr), state(nullptr), next_state(nullptr) {}
+App::App() : main_window(nullptr), state(nullptr), next_state(nullptr), user(nullptr) {}
 
 App::~App() {
 	if(state != nullptr) {
@@ -46,7 +46,7 @@ void App::changeState() {
     }
 }
 
-void App::setNewState(AppState* new_state) {
+void App::setNewState(View* new_state) {
 	if(!new_state) {
 		ERROR("state change", "next state is null");
 		return;
@@ -96,9 +96,9 @@ bool App::init() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glViewport(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    ImGui::GetIO().FontGlobalScale = 1.25f;  // Scale the entire UI by 1.25x
 
-    this->user = new User();
-	this->state = new LoginState(this);
+	this->state = new LoginView(this);
     this->db = Database::databaseFactory();
     if(!db->connect()) {
         return false;

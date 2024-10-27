@@ -13,10 +13,11 @@ set(SOURCE_FILES
     src/App.cpp
     src/logger.cpp
     src/User.cpp
-    src/MainState.cpp
-    src/LoginState.cpp
+    src/MainClientView.cpp
+    src/LoginView.cpp
     src/Database.cpp
-    src/ProfileState.cpp
+    src/ProfileView.cpp
+    src/Controller.cpp
     third_party/glad/glad.c
     third_party/imgui/imgui.cpp
     third_party/imgui/imgui_draw.cpp

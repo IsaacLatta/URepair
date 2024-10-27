@@ -9,10 +9,10 @@ bool Dummy::connect() {
     return true;
 }
 
-User* Dummy::validate(User* user) {
-   INFO("User", "validated");
-   user->isLoggedIn = true;
-   return new User(*user);
+User* Dummy::signIn(const char* username, const char* password) {
+    Client* client = new Client(username, password);
+    loadData(client);
+    return client;
 }
 
 static std::vector<Talent> filterTalents(const std::vector<Talent>& talents, const char* service_type, const char* location, int min_rating, int min_price, int max_price) {

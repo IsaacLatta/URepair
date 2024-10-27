@@ -1,7 +1,7 @@
-#include "AppState.h"
+#include "View.h"
 #include "App.h"
 
-void ProfileState::showSecurityMenu(bool* p_open)
+void ProfileView::showSecurityMenu(bool* p_open)
 {
     if (!*p_open) {
         return;
@@ -60,7 +60,7 @@ void ProfileState::showSecurityMenu(bool* p_open)
     }
 }
 
-void ProfileState::showOptions() {
+void ProfileView::showOptions() {
     static bool settings_open = true; // Control visibility of the settings menu
     bool logout = false;
     bool switch_to_main = false;
@@ -93,15 +93,15 @@ void ProfileState::showOptions() {
     }
     if(logout) {
         INFO("profile state", "switching to login state");
-        app->setNewState(new LoginState(app));
+        app->setNewState(new LoginView(app));
     }
     if(switch_to_main) {
         INFO("profile state", "switching to main state");
-        app->setNewState(new MainState(app));
+        app->setNewState(new MainClientView(app));
     }
 }
 
-void ProfileState::handle()
+void ProfileView::handle()
 {
     showOptions();
 }

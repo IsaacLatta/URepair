@@ -1,7 +1,7 @@
-#include "AppState.h"
+#include "View.h"
 #include "App.h"
 
-void MainState::showMenuBar() {
+void MainClientView::showMenuBar() {
 	bool change_to_profile = false;
 	bool logout = false;
     if (ImGui::BeginMenuBar()) {
@@ -21,16 +21,16 @@ void MainState::showMenuBar() {
         ImGui::EndMenuBar();
     }
 	if(change_to_profile) {
-		app->setNewState(new ProfileState(app));
+		app->setNewState(new ProfileView(app));
 		INFO("State", "would change to profile");
 	}
 	if(logout) {
 		INFO("State", "logging out");
-		app->setNewState(new LoginState(app));
+		app->setNewState(new LoginView(app));
 	}
 }
 
-void MainState::showJobs() {
+void MainClientView::showJobs() {
 	std::vector<Job>* jobs = app->getUser()->getJobs();
 	
 	 if (ImGui::BeginTable("Jobs Table", 6, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingFixedFit)) {
@@ -56,7 +56,7 @@ void MainState::showJobs() {
     }
 }
 
-void MainState::showTalentSearchFilters() {
+void MainClientView::showTalentSearchFilters() {
     ImGui::Text("Find Talent:");
 
     ImGui::InputText("Service Type", search_service_type, IM_ARRAYSIZE(search_service_type));
@@ -73,7 +73,7 @@ void MainState::showTalentSearchFilters() {
     }
 }
 
-void MainState::showBookingMenu(Talent* talent, bool* stay_open) {
+void MainClientView::showBookingMenu(Talent* talent, bool* stay_open) {
     
     static bool attatchment_menu = false;
     static const std::size_t BUFSIZE = 256;
@@ -134,7 +134,7 @@ void MainState::showBookingMenu(Talent* talent, bool* stay_open) {
     }
 }
 
-void MainState::showTalentSearchResults() {
+void MainClientView::showTalentSearchResults() {
     static bool show_booking_menu = false;
     static Talent* selected_talent = nullptr;
 
@@ -178,7 +178,7 @@ void MainState::showTalentSearchResults() {
 }
 
 
-void MainState::handle() {
+void MainClientView::handle() {
     std::string welcome_msg =  "Welcome, " + app->getUser()->getUsername() + ".";
 	const char* title = welcome_msg.c_str();
 	
