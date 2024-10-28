@@ -1,27 +1,30 @@
-#ifndef APPSTATE_H
-#define APPSTATE_H
+#ifndef VIEW_H
+#define VIEW_H
 #include <vector>
 
 #include "User.h"
+#include <memory>
 #include <functional>
 
-class App;
+class User;
 
 class View 
 {
     public:
-    View(App* app): app(app) {};
+    View(): user(nullptr) {}
+    View(std::shared_ptr<User> user): user(user) {};
     virtual void handle() = 0;
     virtual ~View() = default;
     protected:
-    App* app;
+    std::shared_ptr<User> user;
 };
 
 class LoginView: public View
 {   
     public:
     std::function<void(const char*, const char*)> loginHandler = nullptr;
-    LoginView(App* app): View(app) {};
+    LoginView(std::shared_ptr<User> user): View(user) {};
+    LoginView() {}
     void handle() override;
 };
 
@@ -34,12 +37,10 @@ class MainClientView: public View {
     std::function<void(Talent*)> bookingHandler;
     std::function<void()> uploadHandler;
 
-    MainClientView(App* app) : View(app) {};
-    MainClientView(App* app, Client* client) : View(app), client(client) {};
+    explicit MainClientView(std::shared_ptr<Client> client) : View(client) {}
     void handle() override;
     private:
-    Client* client;
-
+    
     char search_service_type[128] = "";  
     char search_location[128] = "";      
     int min_rating = 0;                  
@@ -60,13 +61,11 @@ class ProfileView: public View {
     std::function<void()> logoutHandler;
     std::function<void()> goBack;
 
-    ProfileView(App* app): View(app) {};
+    ProfileView(std::shared_ptr<User> user): View(user) {};
     void handle() override;
     private:
     void showOptions();
     void showSecurityMenu(bool*);
 };
-
-
 
 #endif

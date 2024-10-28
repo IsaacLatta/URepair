@@ -3,26 +3,27 @@
 
 #include <memory>
 #include <stack>
+
+#include "View.h"
+#include "User.h"
 #include "logger.h"
-
-
-class User;
-class App;
-class View;
+#include "Database.h"
 
 class Controller
 {
     public:
-    Controller(App* app): app(app) {}
+    Controller();
+    bool start();
     void renderCurrent();
-    void setupLoginView();
     private:
-    void setupMainView(User*);
-    void setupProfileView(User*);
+    void setupLoginView();
+    void setupMainView(std::shared_ptr<User> user);
+    void setupProfileView(std::shared_ptr<User> user);
     void pushView(std::shared_ptr<View> view);
     void goBack();
     void goForward();
-    App* app;
+    std::shared_ptr<User> user;
+    std::unique_ptr<Database> db;
     std::stack<std::shared_ptr<View>> history;
     std::stack<std::shared_ptr<View>> revisit;
 };

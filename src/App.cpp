@@ -5,17 +5,10 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-App::App() : main_window(nullptr), controller(nullptr), user(nullptr) {}
+App::App() : main_window(nullptr), controller(nullptr) {}
 
 App::~App() {
-    if(user != nullptr) delete user;
 	if(controller != nullptr) delete controller;
-    if(db != nullptr) delete db;
-}
-
-
-User* App::getUser() {
-	return user;
 }
 
 bool App::init() {
@@ -61,13 +54,8 @@ bool App::init() {
     glViewport(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     ImGui::GetIO().FontGlobalScale = 1.25f;  // Scale the entire UI by 1.25x
 
-	controller = new Controller(this);
-    controller->setupLoginView();
-    this->db = Database::databaseFactory();
-    if(!db || !db->connect()) {
-        return false;
-    }
-    return true;
+    controller = new Controller();
+	return controller->start();
 }
 
 void App::mainLoop() {

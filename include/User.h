@@ -5,9 +5,6 @@
 #include <vector>
 #include "logger.h"
 
-class View;
-class App;
-
 struct Job {
     int id;
     char description[256];
@@ -33,8 +30,7 @@ class User
     bool isLoggedIn;
     User();
     User(const char* username, const char* password): isLoggedIn(true), username(username), password(password) {}
-    virtual View* getInitialView(App* app) = 0;
-
+    virtual ~User() = default;
     std::vector<Job>* getJobs();
     void setUsername(const char*);
     void setPassword(const char*);
@@ -53,7 +49,6 @@ class Client : public User
 {
     public:
     Client(const char* username, const char* password): User(username, password) {}
-    View* getInitialView(App* app);
 };
 
 

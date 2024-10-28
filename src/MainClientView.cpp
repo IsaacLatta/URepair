@@ -29,7 +29,7 @@ void MainClientView::showMenuBar() {
 }
 
 void MainClientView::showJobs() {
-	std::vector<Job>* jobs = client->getJobs();
+	std::vector<Job>* jobs = user->getJobs();
 	
 	 if (ImGui::BeginTable("Jobs Table", 6, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingFixedFit)) {
         ImGui::TableSetupColumn("ID", 0, 50.0f);              // Fixed width 50
@@ -173,7 +173,7 @@ void MainClientView::showTalentSearchResults() {
 }
 
 void MainClientView::handle() {
-    std::string welcome_msg =  "Welcome, " + client->getUsername() + ".";
+    std::string welcome_msg =  "Welcome, " + user->getUsername() + ".";
 	const char* title = welcome_msg.c_str();
 	
 	ImGui::SetNextWindowSize(ImVec2(DEFAULT_WIDTH, DEFAULT_HEIGHT));

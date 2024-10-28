@@ -1,5 +1,4 @@
 #include "User.h"
-#include "App.h"
 
 User::User() : username(""), password(""), isLoggedIn(false) {}
 
@@ -25,8 +24,4 @@ std::string User::getUsername() {
 
 std::string User::getPassword() {
     return this->password;
-}
-
-View* Client::getInitialView(App* app) {
-   return new MainClientView(app);
 }

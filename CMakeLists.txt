@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(URepair)
 
 # Set C++ standard
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 # Set the OpenGL preference to GLVND (modern OpenGL driver)
 set(OpenGL_GL_PREFERENCE GLVND)

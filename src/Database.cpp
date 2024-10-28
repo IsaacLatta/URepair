@@ -1,17 +1,22 @@
 #include "Database.h"
 
-Database* Database::databaseFactory() {
+std::unique_ptr<Database> Database::databaseFactory() {
     INFO("database", "created");
-    return new Dummy();
+    return std::make_unique<Dummy>();
 }
 
 bool Dummy::connect() {
     return true;
 }
 
-User* Dummy::signIn(const char* username, const char* password) {
-    Client* client = new Client(username, password);
-    loadData(client);
+bool Dummy::loadData(User* user) { 
+    updateJobs(user);
+    return true;
+}
+
+std::shared_ptr<User> Dummy::signIn(const char* username, const char* password) {
+    auto client = std::make_shared<Client>(username, password);
+    loadData(client.get());
     return client;
 }
 
@@ -55,11 +60,6 @@ void Dummy::updateJobs(User* user) {
         { 5, "Fix bathroom light", "Electrician Jane", "Completed", "2024-10-20", 200.0 }
     };
     user->setJobs(jobs);
-}
-
-bool Dummy::loadData(User* user) { 
-    updateJobs(user);
-    return true;
 }
 
 bool Dummy::changePassword(User* user, const char* old_pass, const char* new_pass) {
