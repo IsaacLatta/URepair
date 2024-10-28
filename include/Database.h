@@ -4,6 +4,7 @@
 #include "User.h"
 #include <memory>
 #include <cstring>
+#include <sqlite3.h>
 
 class Database 
 {

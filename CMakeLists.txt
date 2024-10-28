@@ -25,6 +25,7 @@ set(SOURCE_FILES
     third_party/imgui/imgui_tables.cpp
     third_party/imgui/backends/imgui_impl_glfw.cpp
     third_party/imgui/backends/imgui_impl_opengl3.cpp
+    third_party/sqlite/sqlite3.c
 )
 
 # Add the project include directory
@@ -39,6 +40,9 @@ include_directories(third_party/imgui/backends)
 
 # Add GLFW include directory (common to both platforms)
 include_directories(third_party/glfw)
+
+#Add Sqlite directories
+include_directories(third_party/sqlite)
 
 # Find the OpenGL package (for cross-platform OpenGL linking)
 find_package(OpenGL REQUIRED)
