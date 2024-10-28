@@ -21,7 +21,6 @@ class App {
 	~App();
 	bool init();
 	void run();
-	void changeUser(User* user);
 	User* getUser();
 	Database* getDB() { return db; }
 	private:

@@ -1,30 +1,22 @@
 #include "Controller.h"
 #include "App.h"
 
-void Controller::clearViews(std::stack<View*>& views) {
-    while (!views.empty()) {
-        View* view = views.top();
-        views.pop();
-        delete view; 
-    }
-}
-
 void Controller::renderCurrent() {
     if(history.empty()) {
         ERROR("controller", "no view to render");
         return;
     }
-    history.top()->handle();
+    auto current = history.top();
+    current->handle();
 }
 
-void Controller::pushView(View* view) {
+void Controller::pushView(std::shared_ptr<View> view) {
     if (!view) {
         ERROR("controller", "attempt to push NULL view");
         return;
     }
     if (!history.empty()) {
-        clearViews(revisit);
-        revisit = std::stack<View*>();
+        revisit = std::stack<std::shared_ptr<View>>();
     }
     history.push(view);
 }
@@ -34,7 +26,7 @@ void Controller::goBack() {
         ERROR("controller", "view history empty");
         return;
     }
-    View* current = history.top();
+    auto current = history.top();
     history.pop();
     revisit.push(current);   
 }
@@ -44,38 +36,63 @@ void Controller::goForward() {
         ERROR("controller", "revisit is empty");
         return;
     }
-    View* next = revisit.top();
+    auto next = revisit.top();
     revisit.pop();
     history.push(next);    
 }
 
 void Controller::setupLoginView()
 {
-    clearViews(history);
-    clearViews(revisit);
-    LoginView *view = new LoginView(app);
+    auto view = std::make_shared<LoginView>(app);
     view->loginHandler = [this](const char *username, const char *password)
     {
+        INFO("controller", "logging user in");
         User *new_user = app->getDB()->signIn(username, password);
         if (new_user == nullptr)
         {
             ERROR("controller", "login failed");
             return;
         }
+        INFO("controller", "user logged in");
         setupMainView(new_user);
     };
     pushView(view);
 }
 
 void Controller::setupProfileView(User* user) {
-    // To be implemented
-    ProfileView* profile = new ProfileView(app);
+    if(auto* client = dynamic_cast<Client*>(user)) {
+        auto profile = std::make_shared<ProfileView>(app);
+        profile->changeUsername = [this, user](const char* username, const char* password) 
+        {
+            INFO("controller", "changing username");
+            return app->getDB()->changeUsername(user, username, password);
+        };
+        profile->changePassword = [this, user](const char* new_password, const char* old_password) 
+        {
+            INFO("controller", "changing password");
+            return app->getDB()->changePassword(user, new_password, old_password);
+        };
+        profile->logoutHandler = [this]()
+        {
+            INFO("controller", "switching to login state");
+            setupLoginView();
+        };
+        profile->goBack = [this]()
+        {
+            INFO("controller", "going back");
+            goBack();
+        };
+        pushView(profile);
+    }
+    else {
+        ERROR("controller", "user is not a client");
+    }
 }
 
 void Controller::setupMainView(User *user) {
-    if (dynamic_cast<Client *>(user))
+    if (auto* client = dynamic_cast<Client *>(user))
     {
-        MainClientView *main = new MainClientView(app);
+        auto main = std::make_shared<MainClientView>(app, client);
         main->searchHandler = [this, main](const char *service_type, const char *location, int min_rating, int min_price, int max_price)
         {
             INFO("Search", "Search for talent triggered");
@@ -87,6 +104,7 @@ void Controller::setupMainView(User *user) {
         };
         main->logoutHandler = [this]()
         {
+            INFO("profile state", "switching to login state");
             setupLoginView();
         };
         main->bookingHandler = [this, main, user](Talent* talent)
@@ -97,7 +115,9 @@ void Controller::setupMainView(User *user) {
         {
             INFO("booking", "uploaded");  // to be implemented
         };
+        INFO("controller", "handlers assigned to main view, pushing new view");
         pushView(main);
+        INFO("controller", "main view pushed");
     }
     else
     {
@@ -105,6 +125,7 @@ void Controller::setupMainView(User *user) {
         return;
     }
 
-    app->changeUser(user);
+    app->getDB()->loadData(user);
+    INFO("controller", "user data loaded");
 }
 

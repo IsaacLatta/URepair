@@ -13,18 +13,6 @@ App::~App() {
     if(db != nullptr) delete db;
 }
 
-void App::changeUser(User* new_user) {
-    if(!new_user) {
-        ERROR("changeUser", "new_user must not be NULL");
-        return;
-    }
-    if(this->user) {
-        delete user;
-        INFO("user", "deleted");
-    }
-    this->user = new_user;
-    db->loadData(this->user);
-}
 
 User* App::getUser() {
 	return user;
@@ -74,8 +62,9 @@ bool App::init() {
     ImGui::GetIO().FontGlobalScale = 1.25f;  // Scale the entire UI by 1.25x
 
 	controller = new Controller(this);
+    controller->setupLoginView();
     this->db = Database::databaseFactory();
-    if(!db->connect()) {
+    if(!db || !db->connect()) {
         return false;
     }
     return true;

@@ -25,7 +25,9 @@ void ProfileView::showSecurityMenu(bool* p_open)
         ImGui::InputText("New password", password_buffer1, BUFSIZE);
         ImGui::InputText("Enter again to confirm", password_buffer2, BUFSIZE);
         if(ImGui::Button("Submit")) {
-            app->getDB()->changePassword(app->getUser(), password_buffer1, password_buffer2);
+            if(!changePassword(password_buffer1, password_buffer2)) {
+                ERROR("password change failed", "");
+            }
             change_password = false;
             memset(password_buffer1, '\0', BUFSIZE);
             memset(password_buffer2, '\0', BUFSIZE);
@@ -44,7 +46,9 @@ void ProfileView::showSecurityMenu(bool* p_open)
         ImGui::InputText("New username", username_buffer, BUFSIZE);
         ImGui::InputText("Password", password_buffer1, BUFSIZE);
         if(ImGui::Button("Submit")) {
-            app->getDB()->changeUsername(app->getUser(), username_buffer, password_buffer1);
+            if(!changeUsername(username_buffer, password_buffer1)) {
+                ERROR("username change failed", "");
+            }
             change_username = false;
             memset(password_buffer1, '\0', BUFSIZE);
             memset(username_buffer, '\0', BUFSIZE);
@@ -55,7 +59,6 @@ void ProfileView::showSecurityMenu(bool* p_open)
             memset(password_buffer1, '\0', BUFSIZE);
             memset(username_buffer, '\0', BUFSIZE);
         }
-        ImGui::End();
         ImGui::End();
     }
 }
@@ -92,12 +95,10 @@ void ProfileView::showOptions() {
         ImGui::EndMainMenuBar();
     }
     if(logout) {
-        INFO("profile state", "switching to login state");
-        app->setNewState(new LoginView(app));
+        logoutHandler();
     }
     if(switch_to_main) {
-        INFO("profile state", "switching to main state");
-        app->setNewState(new MainClientView(app));
+        goBack();
     }
 }
 

@@ -20,7 +20,7 @@ class View
 class LoginView: public View
 {   
     public:
-    std::function<void(const char*, const char*)> loginHandler;
+    std::function<void(const char*, const char*)> loginHandler = nullptr;
     LoginView(App* app): View(app) {};
     void handle() override;
 };
@@ -53,11 +53,12 @@ class MainClientView: public View {
     void showBookingMenu(Talent* talent, bool*);
 };
 
-
 class ProfileView: public View {
     public:
     std::function<bool(const char*, const char*)> changeUsername;
     std::function<bool(const char*, const char*)> changePassword;
+    std::function<void()> logoutHandler;
+    std::function<void()> goBack;
 
     ProfileView(App* app): View(app) {};
     void handle() override;

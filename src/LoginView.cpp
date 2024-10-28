@@ -20,7 +20,10 @@ void LoginView::handle() {
     ImGui::InputText("Password", password_buffer, BUFSIZE, ImGuiInputTextFlags_Password);
     
     if (ImGui::Button("Login", ImVec2(200, 50))) {  
-        loginHandler(username_buffer, password_buffer);
+        if(loginHandler) 
+            loginHandler(username_buffer, password_buffer);
+        else
+            ERROR("LoginView", "no login handler");
         memset(username_buffer, '\0', BUFSIZE);
         memset(password_buffer, '\0', BUFSIZE);
     }

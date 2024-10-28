@@ -1,9 +1,12 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
+#include <memory>
 #include <stack>
 #include "logger.h"
 
+
+class User;
 class App;
 class View;
 
@@ -16,13 +19,12 @@ class Controller
     private:
     void setupMainView(User*);
     void setupProfileView(User*);
-    void clearViews(std::stack<View*>&);
-    void pushView(View*);
+    void pushView(std::shared_ptr<View> view);
     void goBack();
     void goForward();
     App* app;
-    std::stack<View*> history;
-    std::stack<View*> revisit;
+    std::stack<std::shared_ptr<View>> history;
+    std::stack<std::shared_ptr<View>> revisit;
 };
 
 #endif
