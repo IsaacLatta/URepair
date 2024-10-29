@@ -25,3 +25,12 @@ std::string User::getUsername() {
 std::string User::getPassword() {
     return this->password;
 }
+
+void Contractor::setTalent(Talent talent) {
+    this->talent = talent;
+}
+
+Talent* Contractor::getTalent() {
+    return &talent;
+}
+

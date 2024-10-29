@@ -22,7 +22,7 @@ std::string get_gl_error() {
     while((err = glGetError()) != GL_NO_ERROR) {
         switch(err) {
             case GL_INVALID_ENUM:      error += " INVALID_ENUM"; break;
-            case GL_INVALID_VALUE:     error  += " INVALID_VALUE"; break;
+            case GL_INVALID_VALUE:     error += " INVALID_VALUE"; break;
             case GL_INVALID_OPERATION: error += " INVALID_OPERATION"; break;
             case GL_STACK_OVERFLOW:    error += " STACK_OVERFLOW"; break;
             case GL_STACK_UNDERFLOW:   error += " STACK_UNDERFLOW"; break;
@@ -40,5 +40,5 @@ void log_message(const char* s1, const char* s2, const char* file, int line) {
 
 void log_error(const char* s1, const char* s2, const char* file, int line) {
     std::string time =  get_time();
-    std::cerr << "[" << time << " " << get_filename(file) << ":" << line << "] ERROR" << s1 << ": " << s2 << "\n";
+    std::cerr << "[" << time << " " << get_filename(file) << ":" << line << "] ERROR " << s1 << ": " << s2 << "\n";
 }

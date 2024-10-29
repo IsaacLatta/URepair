@@ -9,15 +9,25 @@ bool Dummy::connect() {
     return true;
 }
 
-bool Dummy::loadData(User* user) { 
+bool Dummy::loadData(User* user) {
+    if (auto con = dynamic_cast<Contractor*>(user))
+    {
+        Talent* talent = con->getTalent();
+        // fill with dummy values
+    }
     updateJobs(user);
     return true;
 }
 
 std::shared_ptr<User> Dummy::signIn(const char* username, const char* password) {
-    auto client = std::make_shared<Client>(username, password);
-    loadData(client.get());
-    return client;
+    std::shared_ptr<User> user;
+    if (!strcmp(username, "c")) {
+        user = std::make_shared<Contractor>(username, password);
+    }
+    else
+        user = std::make_shared<Client>(username, password);
+    loadData(user.get());
+    return user;
 }
 
 static std::vector<Talent> filterTalents(const std::vector<Talent>& talents, const char* service_type, const char* location, int min_rating, int min_price, int max_price) {
