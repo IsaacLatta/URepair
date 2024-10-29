@@ -86,4 +86,7 @@ bool Dummy::changeUsername(User* user, const char* password, const char* new_use
     user->setUsername(new_username);
     return true;
 }
-    
+
+bool Dummy::bookJob(User* user, Job* job) {
+    return true;
+}

@@ -12,6 +12,7 @@ class Database
     static std::unique_ptr<Database> databaseFactory();
     virtual bool connect() = 0;
     virtual std::shared_ptr<User> signIn(const char* username, const char* password) = 0; // factory function that creates the corresponding user, (e.g. client, talent) may vary for sqlite vs sql server vs dummy.
+    virtual bool bookJob(User*, Job*) = 0;
     virtual bool loadData(User* user) = 0;
     virtual void updateJobs(User* user) = 0;
     virtual bool changePassword(User* user, const char*, const char*) = 0;
@@ -25,6 +26,7 @@ class Dummy : public Database
     public:
     bool connect() override;
     std::shared_ptr<User> signIn(const char* username, const char* password) override;
+    bool bookJob(User*, Job*) override;
     bool loadData(User*) override;
     void updateJobs(User*) override;
     bool changePassword(User* user, const char* old_pass, const char* new_pass) override;

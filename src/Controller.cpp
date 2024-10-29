@@ -1,5 +1,4 @@
 #include "Controller.h"
-//#include "App.h"
 
 Controller::Controller() {}
 
@@ -129,18 +128,33 @@ void Controller::setupMainView(std::shared_ptr<User> user) {
         {
             INFO("booking", "uploaded");  // to be implemented
         };
-        INFO("controller", "handlers assigned to main view, pushing new view");
+        INFO("controller", "handlers assigned to main client view, pushing new view");
         pushView(main);
         INFO("controller", "main view pushed");
     }
-    else if (auto con = std::dynamic_pointer_cast<Contractor>(user))
+    else if (auto contr = std::dynamic_pointer_cast<Contractor>(user))
     {
-        auto main = std::make_shared<MainContractorView>(con);
-        INFO("controller", "would switch to contractor view");
+        auto main = std::make_shared<MainContractorView>(contr);
+        main->logoutHandler = [this]() 
+        {
+            setupLoginView();
+        };
+        main->jobAcceptHandler = [this, contr](Job* job) 
+        {
+            if(db->bookJob(contr.get(), job)) {
+                INFO("controller", "job booked");
+            }
+        };
+        main->profileHandler = [this]()
+        {
+            INFO("controller", "would switch to client view");
+        };
+        pushView(main);
+        INFO("controller", "main contractor view pushed to history");
     }
     else
     {
-        ERROR("controller", "cannot render MainClientView");
+        ERROR("controller", "user dynamic_cast failed");
         return;
     }
 
