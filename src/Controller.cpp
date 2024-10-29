@@ -133,6 +133,11 @@ void Controller::setupMainView(std::shared_ptr<User> user) {
         pushView(main);
         INFO("controller", "main view pushed");
     }
+    else if (auto con = std::dynamic_pointer_cast<Contractor>(user))
+    {
+        auto main = std::make_shared<MainContractorView>(con);
+        INFO("controller", "would switch to contractor view");
+    }
     else
     {
         ERROR("controller", "cannot render MainClientView");

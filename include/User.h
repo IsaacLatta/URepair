@@ -20,6 +20,7 @@ struct Talent {
     std::string location;      
     int rating;                // Rating out of 5
     float rate;
+    Talent() {}
     Talent(const char* name, const char* service, const char* location, int rating, float rate): 
     name(name), service_type(service), location(location), rating(rating), rate(rate){}
 };
@@ -59,6 +60,15 @@ class Client : public User
 {
     public:
     Client(const char* username, const char* password): User(username, password) {}
+};
+class Contractor : public User
+{
+private: 
+    Talent talent;
+public :
+    Contractor(const char* username, const char* password): User(username, password) {} // review to see if correctly implemented
+    Talent* getTalent();
+    void setTalent(Talent talent);
 };
 
 

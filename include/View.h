@@ -61,12 +61,30 @@ class ProfileView: public View {
     std::function<void()> logoutHandler;
     std::function<void()> goBack;
 
-    ProfileView(std::shared_ptr<User> user): View(user) {};
+    ProfileView(std::shared_ptr<User> user): View(user) {}
     void handle() override;
     private:
     void showOptions();
     void showSecurityMenu(bool*);
     void ShowProfilePage();
+};
+
+
+class MainContractorView: public View {
+public:
+    explicit MainContractorView(std::shared_ptr<Contractor> contractor) : View(contractor) {};
+    void handle() override;
+    std::function<void(Job*)> jobAcceptHandler = [](Job*) { INFO("view", "would call accept job"); }; // needs to be created - allows the contractors to view incoming requests
+    std::function<void()> logoutHandler = []() { INFO("view", "would log user out"); };
+    std::function<void()> profileHandler = []() { INFO("view", "user can view profile"); }; // 
+    //std::function<void()> activejobHandler = []() { INFO("view", "see open jobs "); }; // needs to be created - allows contractors to view details about current active accepted jobs
+
+private:
+
+   void showContractorMenuBar();
+   void showJobRequests();
+  
+    
 };
 
 #endif
