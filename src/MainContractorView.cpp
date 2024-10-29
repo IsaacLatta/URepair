@@ -32,5 +32,13 @@ void MainContractorView::showJobRequests() {
 
 }
 void MainContractorView::handle() {
+	std::string welcome_screen = "Welcome, " + user->getUsername() + ".";
+	const char* title = welcome_screen.c_str();
 
+	ImGui::SetNextWindowSize(ImVec2(DEFAULT_WIDTH, DEFAULT_HEIGHT));
+	ImGui::Begin(title, nullptr, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoCollapse);
+
+	showContractorMenuBar();
+
+	ImGui::End();
 }
