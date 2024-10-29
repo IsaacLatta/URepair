@@ -78,6 +78,7 @@ class Client : public User
     public:
     Client(const char* username, const char* password): User(username, password) {}
 };
+
 class Contractor : public User
 {
 private: 
@@ -87,6 +88,7 @@ public :
     Talent* getTalent();
     void setTalent(Talent talent);
 };
+
 
 
 #endif

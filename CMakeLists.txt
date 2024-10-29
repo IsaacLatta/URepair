@@ -19,7 +19,11 @@ set(SOURCE_FILES
     src/ProfileView.cpp
     src/Controller.cpp
     src/MainContractorView.cpp
+<<<<<<< HEAD
     src/ClientProfileView.cpp
+=======
+    src/AdminMainView.cpp
+>>>>>>> matia-branch
     third_party/glad/glad.c
     third_party/imgui/imgui.cpp
     third_party/imgui/imgui_draw.cpp
