@@ -158,6 +158,11 @@ void Controller::setupMainView(std::shared_ptr<User> user) {
     else if (auto admin = std::dynamic_pointer_cast<Admin>(user)) {
         // setup admin view
         auto main = std::make_shared<MainAdminView>(admin);
+        main->queryHandler = [this](const char* query) 
+        {
+            LOG("INFO", "controller", "running query: %s", query);
+        };
+        pushView(main);
     }
     else
     {

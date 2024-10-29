@@ -76,6 +76,7 @@ class ProfileView: public View {
 class MainAdminView : public View 
 {
     public:
+    std::function<void(const char*)> queryHandler;
     MainAdminView(std::shared_ptr<User> user): View(user) {}
     void handle() override;
  };
