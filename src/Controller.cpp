@@ -2,6 +2,49 @@
 
 Controller::Controller() {}
 
+static int callback(void* NotUsed, int argc, char** argv, char** azColName) {
+	int i;
+	for (i = 0; i < argc; i++) {
+		printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+	}
+	printf("\n");
+	return 0;
+}
+
+void run_query(const char* query) {
+    sqlite3* db;
+	char* zErrMsg = 0;
+	int rc;
+	char* sql;
+	const char* data = "Callback function called";
+	
+	
+	rc = sqlite3_open("test.db", &db);
+
+	if (rc) {
+		fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+	}
+	else {
+		fprintf(stderr, "Opened database successfully\n");
+	}
+
+	//sql = "CREATE TABLE users(userID int, fname varchar, lname varchar,"
+	//"dob date)";
+	//sql = "Insert into users values(4, 'Bradley', 'Schmidt', '2004-05-22')";
+	sql = "select * from users";
+
+	rc = sqlite3_exec(db, sql, callback, (void*)data, &zErrMsg);
+
+	if (rc != SQLITE_OK) {
+		fprintf(stderr, "SQL error: %s\n", zErrMsg);
+		sqlite3_free(zErrMsg);
+	}
+	else {
+		fprintf(stdout, "Operation done successfully\n");
+	}
+	sqlite3_close(db);
+}
+
 void Controller::renderCurrent() {
     if(history.empty()) {
         ERROR("controller", "no view to render");
@@ -156,11 +199,11 @@ void Controller::setupMainView(std::shared_ptr<User> user) {
         LOG("INFO", "controller", "main contractor view pushed to history");
     }
     else if (auto admin = std::dynamic_pointer_cast<Admin>(user)) {
-        // setup admin view
         auto main = std::make_shared<MainAdminView>(admin);
         main->queryHandler = [this](const char* query) 
         {
             LOG("INFO", "controller", "running query: %s", query);
+            return "";
         };
         pushView(main);
     }
