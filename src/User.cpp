@@ -2,16 +2,8 @@
 
 User::User() : username(""), password(""), isLoggedIn(false) {}
 
-std::string User::getPhone() {
-   return phone;
-}
-
-std::string User::getEmail() {
-   return email;
-}
-
-std::string User::getLocation() {
-   return location;
+Info* User::getInfo() {
+   return &info;
 }
 
 void User::setJobs(std::vector<Job>& jobs) {
