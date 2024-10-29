@@ -155,6 +155,9 @@ void Controller::setupMainView(std::shared_ptr<User> user) {
         pushView(main);
         LOG("INFO", "controller", "main contractor view pushed to history");
     }
+    else if (auto admin = std::dynamic_pointer_cast<Admin>(user)) {
+        //
+    }
     else
     {
         ERROR("controller", "user dynamic_cast failed");

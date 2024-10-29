@@ -26,6 +26,9 @@ std::shared_ptr<User> Dummy::signIn(const char* username, const char* password) 
     if (!strcmp(username, "c")) {
         user = std::make_shared<Contractor>(username, password);
     }
+    else if (!strcmp(username, "a")) {
+        user = std::make_shared<Admin>(username, password);
+    }
     else
         user = std::make_shared<Client>(username, password);
     loadData(user.get());
