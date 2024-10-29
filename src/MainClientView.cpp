@@ -14,8 +14,7 @@ void MainClientView::showMenuBar() {
         if (ImGui::BeginMenu("Profile")) {
             if(ImGui::MenuItem("View Profile")) {
 				change_to_profile = true;
-			}  
-            ImGui::MenuItem("Jobs");  
+			}   
             ImGui::EndMenu();
         }
         ImGui::EndMenuBar();
@@ -129,8 +128,30 @@ void MainClientView::showBookingMenu(Talent* talent, bool* stay_open) {
     }
 }
 
+void MainClientView::showMessageBox(bool* p_open, Talent* talent) {
+    if(!*p_open) {
+        return;
+    }
+    static char buffer[BUFFER_SIZE] = "\0";
+    std::string name = "Message " + talent->name;
+    ImGui::Text(name.c_str());
+    ImGui::SameLine();
+    ImGui::InputTextMultiline("##bio", buffer, BUFFER_SIZE, ImVec2(400, 200));
+    ImGui::SameLine();
+    if(ImGui::SmallButton("Send")) {
+        memset(buffer, '\0', BUFFER_SIZE);
+        *p_open = false;
+    }
+    ImGui::SameLine();
+    if(ImGui::SmallButton("Cancel")) {
+        memset(buffer, '\0', BUFFER_SIZE);
+        *p_open = false;
+    }
+}
+
 void MainClientView::showTalentSearchResults() {
     static bool show_booking_menu = false;
+    static bool show_message_box = false;
     static Talent* selected_talent = nullptr;
 
     if (search_results.empty()) {
@@ -145,7 +166,7 @@ void MainClientView::showTalentSearchResults() {
         ImGui::TableSetupColumn("Location", 0, 150.0f);
         ImGui::TableSetupColumn("Rating", 0, 100.0f);
         ImGui::TableSetupColumn("Price", 0, 100.0f);
-        ImGui::TableSetupColumn("Action", 0, 100.0f);
+        ImGui::TableSetupColumn("Action", 0, 200.0f);
         ImGui::TableHeadersRow();
 
         for (int i = 0; i < search_results.size(); ++i) {
@@ -157,10 +178,17 @@ void MainClientView::showTalentSearchResults() {
             ImGui::TableSetColumnIndex(3); ImGui::Text("%d/5", search_results[i].rating);
             ImGui::TableSetColumnIndex(4); ImGui::Text("$%.2f", search_results[i].rate);
             ImGui::TableSetColumnIndex(5);
-            std::string button_label = "Book##" + std::to_string(i); 
-            if (ImGui::Button(button_label.c_str())) {
+            std::string book_button_label = "Book##" + std::to_string(i); 
+            if (ImGui::Button(book_button_label.c_str())) {
                 INFO("", "booking talent");
                 show_booking_menu = true;
+                selected_talent = &search_results[i];
+            }
+            std::string msg_button_label = "Message##" + std::to_string(i);
+            ImGui::SameLine();
+            if (ImGui::Button(msg_button_label.c_str())) {
+                INFO("", "messaging talent");
+                show_message_box = true;
                 selected_talent = &search_results[i];
             }
         }
@@ -169,6 +197,9 @@ void MainClientView::showTalentSearchResults() {
 
     if (show_booking_menu && selected_talent != nullptr) {
         showBookingMenu(selected_talent, &show_booking_menu);
+    }
+    if(show_message_box && selected_talent != nullptr) {
+        showMessageBox(&show_message_box, selected_talent);
     }
 }
 
@@ -185,7 +216,7 @@ void MainClientView::handle() {
     showJobs();  
     ImGui::EndChild();
 
-    ImGui::BeginChild("Talent Search Filters", ImVec2(0, 500), true);  
+    ImGui::BeginChild("Talent Search Filters", ImVec2(0, 400), true);  
     showTalentSearchFilters();  
     ImGui::EndChild();
 

@@ -97,6 +97,9 @@ void Controller::setupProfileView(std::shared_ptr<User> user) {
         };
         pushView(profile);
     }
+    else if (auto contr = std::dynamic_pointer_cast<Contractor>(user)) {
+        INFO("controller", "attempt to render contractor profile");
+    }
     else {
         ERROR("controller", "user is not a client");
     }

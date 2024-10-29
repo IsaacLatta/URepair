@@ -36,6 +36,11 @@ struct Info {
     email(email), phone(phone), name(name), location(loc), bio(bio) {}
 };
 
+struct Message {
+    Talent talent;
+    std::string message;
+};
+
 class User 
 {
     public:
@@ -44,6 +49,8 @@ class User
     User(const char* username, const char* password): isLoggedIn(true), username(username), password(password) {}
     virtual ~User() = default;
     std::vector<Job>* getJobs();
+    std::vector<Message>* getMessages();
+    void setMessages(std::vector<Message>&&);
     void setUsername(const char*);
     void setPassword(const char*);
     void setJobs(std::vector<Job>& jobs);
@@ -54,11 +61,11 @@ class User
     
     protected:
     Info info;
+    std::vector<Message> messages;
     std::vector<Job> jobs;
     std::string username;
     std::string password;
 };
-
 
 class Client : public User
 {

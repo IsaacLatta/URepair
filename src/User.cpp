@@ -34,6 +34,14 @@ void User::setInfo(Info&& info) {
     this->info = std::move(info);
 }
 
+void User::setMessages(std::vector<Message>&& messages) {
+    this->messages = std::move(messages);
+}
+
+std::vector<Message>* User::getMessages() {
+    return &messages;
+}
+
 void Contractor::setTalent(Talent talent) {
     this->talent = talent;
 }

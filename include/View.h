@@ -54,6 +54,7 @@ class MainClientView: public View {
     void showTalentSearchFilters();
     void showTalentSearchResults();
     void showBookingMenu(Talent* talent, bool*);
+    void showMessageBox(bool* p_open, Talent*);
 };
 
 class ProfileView: public View {
