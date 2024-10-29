@@ -4,6 +4,7 @@
 void MainContractorView::showContractorMenuBar() {
 	bool change_to_profile = false;
 	bool logout = false;
+	bool change_to_jobs = false;
 	if (ImGui::BeginMenuBar()) {
 		if (ImGui::BeginMenu("Profile")) {
 			if (ImGui::MenuItem("Logout")) {
@@ -16,7 +17,10 @@ void MainContractorView::showContractorMenuBar() {
 			if (ImGui::MenuItem("View Profile")) {
 				change_to_profile = true;
 			}
-			ImGui::MenuItem("Jobs");
+		if (ImGui::BeginMenu("Profile"))
+			if (ImGui::MenuItem("Jobs")) {
+				change_to_jobs = true;
+			}
 			ImGui::EndMenu();
 		}
 		ImGui::EndMenuBar();
@@ -26,6 +30,9 @@ void MainContractorView::showContractorMenuBar() {
 	}
 	if (logout) {
 		logoutHandler();
+	}
+	if (change_to_jobs) {
+		INFO("view", "Active job handler would appear");
 	}
 }
 void MainContractorView::showJobRequests() {
