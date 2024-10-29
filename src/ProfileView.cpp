@@ -54,14 +54,21 @@ void ProfileView::showEditOptions(bool* p_open) {
         memset(location, '\0', BUFFER_SIZE);
         *p_open = false;
     }
+    if (ImGui::Button("Save All")) {
+        memset(name, '\0', BUFFER_SIZE);
+        memset(phone, '\0', BUFFER_SIZE);
+        memset(email, '\0', BUFFER_SIZE);
+        memset(location, '\0', BUFFER_SIZE);
+        *p_open = false;
+    }
 }
 
 void ProfileView::showProfileInfo() {
 
     static bool edit = false;
     Info* info = user->getInfo();
-    ImGui::SetNextWindowSize(ImVec2(1000, 1000), ImGuiCond_Always);
-    ImGui::Begin("Client Profile", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+    //ImGui::SetNextWindowSize(ImVec2(1000, 1000), ImGuiCond_Always);
+    //ImGui::Begin("Client Profile", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
     ImGui::SameLine();
     if (ImGui::Button("Edit")) {
         edit = true;
@@ -82,7 +89,7 @@ void ProfileView::showProfileInfo() {
     ImGui::TextWrapped("%s", info->bio.c_str());
     ImGui::Separator();
     showEditOptions(&edit);
-    ImGui::End();
+    //ImGui::End();
 }
 
 void ProfileView::showSecurityMenu(bool* p_open)
@@ -187,6 +194,14 @@ void ProfileView::showOptions() {
 
 void ProfileView::handle()
 {
+    ImGui::SetNextWindowSize(ImVec2(DEFAULT_WIDTH, DEFAULT_HEIGHT));
+	ImGui::Begin("Profile", nullptr, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoCollapse);
     showOptions();
+
+    ImGui::BeginChild("Client Profile");
     showProfileInfo();
+    // render additional info here
+    ImGui::EndChild();
+
+    ImGui::End();
 }

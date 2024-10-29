@@ -74,7 +74,7 @@ bool Controller::start() {
 
 void Controller::setupProfileView(std::shared_ptr<User> user) {
     if(auto client = std::dynamic_pointer_cast<Client>(user)) {
-        auto profile = std::make_shared<ProfileView>(user);
+        auto profile = std::make_shared<ClientProfileView>(user);
         profile->changeUsername = [this, user](const char* username, const char* password) 
         {
             INFO("controller", "changing username");

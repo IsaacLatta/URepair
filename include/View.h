@@ -66,13 +66,18 @@ class ProfileView: public View {
 
     ProfileView(std::shared_ptr<User> user): View(user) {}
     void handle() override;
-    private:
+    protected:
     void showOptions();
     void showSecurityMenu(bool*);
     void showProfileInfo();
     void showEditOptions(bool*);
 };
 
+class ClientProfileView: public ProfileView {
+    public:
+    ClientProfileView(std::shared_ptr<User> user): ProfileView(user) {}
+    void handle() override;
+};
 
 class MainContractorView: public View {
 public:
@@ -84,11 +89,8 @@ public:
     //std::function<void()> activejobHandler = []() { INFO("view", "see open jobs "); }; // needs to be created - allows contractors to view details about current active accepted jobs
 
 private:
-
    void showContractorMenuBar();
    void showJobRequests();
-  
-    
 };
 
 #endif
