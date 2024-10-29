@@ -2,47 +2,44 @@
 
 Controller::Controller() {}
 
-static int callback(void* NotUsed, int argc, char** argv, char** azColName) {
-	int i;
-	for (i = 0; i < argc; i++) {
-		printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+static int callback(void* result_buffer, int argc, char** argv, char** col_name) {
+	std::string* result = static_cast<std::string*>(result_buffer); 
+	for (int i = 0; i < argc; i++) {
+		*result += col_name[i];
+        *result += " = ";
+        *result += argv[i] ? argv[i] : "NULL";
+        *result += "\n";
 	}
-	printf("\n");
 	return 0;
 }
 
-void run_query(const char* query) {
+const char* run_query(const char* query) {
     sqlite3* db;
-	char* zErrMsg = 0;
-	int rc;
-	char* sql;
-	const char* data = "Callback function called";
+	char* error_msg = 0;
+	int ret_code;
+	std::string result = "";
 	
-	
-	rc = sqlite3_open("test.db", &db);
-
-	if (rc) {
-		fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+	ret_code = sqlite3_open("test.db", &db);
+	if (ret_code) {
+        LOG("ERROR", "controller", "cannot open database: %s", sqlite3_errmsg(db));
+        return nullptr;
 	}
-	else {
-		fprintf(stderr, "Opened database successfully\n");
+	INFO("controller", "database open");
+
+	ret_code = sqlite3_exec(db, query, callback, (void*)&result, &error_msg);
+	if (ret_code != SQLITE_OK) {
+        LOG("ERROR", "controller", "Query failed: %s", error_msg);
+		sqlite3_free(error_msg);
+        sqlite3_close(db);
+        return nullptr;
 	}
 
-	//sql = "CREATE TABLE users(userID int, fname varchar, lname varchar,"
-	//"dob date)";
-	//sql = "Insert into users values(4, 'Bradley', 'Schmidt', '2004-05-22')";
-	sql = "select * from users";
-
-	rc = sqlite3_exec(db, sql, callback, (void*)data, &zErrMsg);
-
-	if (rc != SQLITE_OK) {
-		fprintf(stderr, "SQL error: %s\n", zErrMsg);
-		sqlite3_free(zErrMsg);
-	}
-	else {
-		fprintf(stdout, "Operation done successfully\n");
-	}
+	INFO("controller", "query successful");
 	sqlite3_close(db);
+    
+    char* ret_result = new char[result.length() + 1];
+    std::strcpy(ret_result, result.c_str());
+    return ret_result;
 }
 
 void Controller::renderCurrent() {
@@ -203,7 +200,7 @@ void Controller::setupMainView(std::shared_ptr<User> user) {
         main->queryHandler = [this](const char* query) 
         {
             LOG("INFO", "controller", "running query: %s", query);
-            return "";
+            return run_query(query);
         };
         pushView(main);
     }
