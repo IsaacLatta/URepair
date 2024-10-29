@@ -150,7 +150,7 @@ void Controller::setupMainView(std::shared_ptr<User> user) {
             INFO("controller", "would switch to client view");
         };
         pushView(main);
-        INFO("controller", "main contractor view pushed to history");
+        LOG("INFO", "controller", "main contractor view pushed to history");
     }
     else
     {

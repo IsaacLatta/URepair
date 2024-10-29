@@ -30,6 +30,10 @@ std::string User::getPassword() {
     return this->password;
 }
 
+void User::setInfo(Info&& info) {
+    this->info = std::move(info);
+}
+
 void Contractor::setTalent(Talent talent) {
     this->talent = talent;
 }

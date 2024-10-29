@@ -6,6 +6,8 @@
 #include <memory>
 #include <functional>
 
+#define BUFFER_SIZE 256
+
 class User;
 
 class View 
@@ -66,6 +68,8 @@ class ProfileView: public View {
     private:
     void showOptions();
     void showSecurityMenu(bool*);
+    void showProfileInfo();
+    void showEditOptions(bool*);
 };
 
 

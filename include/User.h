@@ -30,9 +30,10 @@ struct Info {
     std::string email;
     std::string name;
     std::string location;
+    std::string bio;
     Info() {}
-    Info(const char* email, const char* phone, const char* name, const char* loc):
-    email(email), phone(phone), name(name), location(loc) {}
+    Info(const char* email, const char* phone, const char* name, const char* loc, const char* bio):
+    email(email), phone(phone), name(name), location(loc), bio(bio) {}
 };
 
 class User 
@@ -46,6 +47,7 @@ class User
     void setUsername(const char*);
     void setPassword(const char*);
     void setJobs(std::vector<Job>& jobs);
+    void setInfo(Info&&);
     std::string getUsername();
     std::string getPassword();
     Info* getInfo();

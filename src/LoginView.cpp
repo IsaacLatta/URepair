@@ -10,8 +10,8 @@ void LoginView::handle() {
     style.FramePadding = ImVec2(10.0f, 10.0f);  // Increase padding inside input fields and buttons
     style.ItemSpacing = ImVec2(10.0f, 20.0f);   // Increase space between items
 
-    // Input fields and buttons with larger sizes
-    ImGui::Begin("Welcome to URepair", nullptr, ImGuiWindowFlags_NoCollapse);
+    ImGui::SetNextWindowSize(ImVec2(800, 800), ImGuiCond_Always); 
+    ImGui::Begin("Welcome to URepair", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
     ImGui::SetNextItemWidth(300.0f);  // Set width of input field
     ImGui::InputText("Username", username_buffer, BUFSIZE);

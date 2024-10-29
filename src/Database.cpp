@@ -15,6 +15,8 @@ bool Dummy::loadData(User* user) {
         Talent* talent = con->getTalent();
         // fill with dummy values
     }
+
+    user->setInfo(Info("jdoe@email.com", "2505791234", "John Doe","Vancouver, BC" , "I am a super nice guy, who will definitly pay you"));
     updateJobs(user);
     return true;
 }
