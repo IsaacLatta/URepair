@@ -21,7 +21,7 @@ bool App::init() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_ALPHA_BITS, 8);  // Alpha channel for transparency
-	glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);  // Transparent window (if supported)
+	//glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);  // Transparent window (if supported)
     GLFWwindow* window = glfwCreateWindow(DEFAULT_WIDTH, DEFAULT_HEIGHT, "Main Window", NULL, NULL);
     if (!window) {
         ERROR("GLFW window", get_gl_error().c_str());
@@ -68,7 +68,7 @@ void App::mainLoop() {
         controller->renderCurrent();
 
 		ImGui::Render();
-		glClearColor(0.0f, 0.125f, 0.2f, 0.0f);
+		glClearColor(1.0f, 0.4118f, 0.7059f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		glfwSwapBuffers(this->main_window);
