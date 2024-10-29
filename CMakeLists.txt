@@ -19,6 +19,7 @@ set(SOURCE_FILES
     src/ProfileView.cpp
     src/Controller.cpp
     src/MainContractorView.cpp
+    src/AdminMainView.cpp
     third_party/glad/glad.c
     third_party/imgui/imgui.cpp
     third_party/imgui/imgui_draw.cpp
