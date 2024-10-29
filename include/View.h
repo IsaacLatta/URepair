@@ -73,6 +73,13 @@ class ProfileView: public View {
     void showEditOptions(bool*);
 };
 
+class MainAdminView : public View 
+{
+    public:
+    MainAdminView(std::shared_ptr<User> user): View(user) {}
+    void handle() override;
+ };
+
 class ClientProfileView: public ProfileView {
     public:
     ClientProfileView(std::shared_ptr<User> user): ProfileView(user) {}
