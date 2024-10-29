@@ -66,6 +66,7 @@ class ProfileView: public View {
     private:
     void showOptions();
     void showSecurityMenu(bool*);
+    void ShowProfilePage();
 };
 
 #endif

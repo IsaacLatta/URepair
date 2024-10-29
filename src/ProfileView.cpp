@@ -63,6 +63,49 @@ void ProfileView::showSecurityMenu(bool* p_open)
     }
 }
 
+void ProfileView::ShowProfilePage() {
+    std::vector<Job>* jobs = user->getJobs();
+    ImGui::Begin("Client Profile");
+
+    // Title
+    ImGui::Text("Client Profile");
+    ImGui::Separator();
+
+    // Profile Picture Placeholder
+    ImGui::Text("[ Profile Picture ]");
+    ImGui::Separator();
+
+    // Client Info
+    ImGui::Text("Name: %s", user->getUsername().c_str());
+   //ImGui::Text("Contact: %s", client.phone.c_str());
+    //ImGui::Text("Email: %s", client.email.c_str());
+    ImGui::Text("Location: %s", client.location.c_str());
+    ImGui::Separator();
+
+    // Bio
+    ImGui::Text("Bio:");
+    ImGui::TextWrapped("%s", client.bio.c_str());
+    ImGui::Separator();
+
+    // Previous Bookings
+    ImGui::Text("Previous Bookings:");
+    for (const auto& booking : client.previousBookings) {
+        ImGui::BulletText("%s", booking.c_str());
+    }
+    ImGui::Separator();
+
+    // Buttons
+    if (ImGui::Button("Edit Profile")) {
+        // Open edit profile modal or page
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("View Past Projects")) {
+        // Show past projects or bookings
+    }
+
+    ImGui::End();
+}
+
 void ProfileView::showOptions() {
     static bool settings_open = true; // Control visibility of the settings menu
     bool logout = false;

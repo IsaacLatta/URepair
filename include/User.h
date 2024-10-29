@@ -24,6 +24,15 @@ struct Talent {
     name(name), service_type(service), location(location), rating(rating), rate(rate){}
 };
 
+struct Info {
+    std::string phone;
+    std::string email;
+    std::string name;
+    std::string location;
+    Info(const char* email, const char* phone, const char* name, const char* loc):
+    email(email), phone(phone), name(name), location(loc) {}
+};
+
 class User 
 {
     public:
@@ -37,7 +46,8 @@ class User
     void setJobs(std::vector<Job>& jobs);
     std::string getUsername();
     std::string getPassword();
-
+    std::string getInfo();
+    
     protected:
     std::vector<Job> jobs;
     std::string username;
