@@ -8,6 +8,8 @@
 #include "User.h"
 #include "logger.h"
 #include "Database.h"
+#include "ThreadPool.h"
+
 
 class Controller
 {
@@ -22,6 +24,7 @@ class Controller
     void pushView(std::shared_ptr<View> view);
     void goBack();
     void goForward();
+    ThreadPool pool;
     std::shared_ptr<User> user;
     std::unique_ptr<Database> db;
     std::stack<std::shared_ptr<View>> history;

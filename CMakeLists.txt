@@ -21,6 +21,7 @@ set(SOURCE_FILES
     src/MainContractorView.cpp
     src/ClientProfileView.cpp
     src/MainAdminView.cpp
+    src/ThreadPool.cpp
     third_party/glad/glad.c
     third_party/imgui/imgui.cpp
     third_party/imgui/imgui_draw.cpp
