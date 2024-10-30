@@ -71,6 +71,7 @@ class Admin : public User
 {
     public:
     Admin(const char* username, const char* password): User(username, password) {}
+
 };
 
 class Client : public User

@@ -17,7 +17,9 @@ void MainContractorView::showContractorMenuBar() {
 			if (ImGui::MenuItem("View Profile")) {
 				change_to_profile = true;
 			}
-		if (ImGui::BeginMenu("Profile"))
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Profile")){
 			if (ImGui::MenuItem("Jobs")) {
 				change_to_jobs = true;
 			}
