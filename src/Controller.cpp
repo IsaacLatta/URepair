@@ -180,6 +180,7 @@ void Controller::setupMainView(std::shared_ptr<User> user) {
         auto main = std::make_shared<MainContractorView>(contr);
         main->logoutHandler = [this]() 
         {
+            INFO("profile state", "switching to login state");
             setupLoginView();
         };
         main->jobAcceptHandler = [this, contr](Job* job) 
@@ -190,7 +191,7 @@ void Controller::setupMainView(std::shared_ptr<User> user) {
         };
         main->profileHandler = [this]()
         {
-            INFO("controller", "would switch to client view");
+            INFO("controller", "would switch to client view"); //needs to be implemented still
         };
         pushView(main);
         LOG("INFO", "controller", "main contractor view pushed to history");
@@ -201,6 +202,11 @@ void Controller::setupMainView(std::shared_ptr<User> user) {
         {
             LOG("INFO", "controller", "running query: %s", query);
             return run_query(query);
+        };
+        main->logoutHandler = [this]() 
+        {
+            INFO("profile state", "switching to login state");
+            setupLoginView();
         };
         pushView(main);
     }

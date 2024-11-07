@@ -37,6 +37,9 @@ void MainContractorView::showContractorMenuBar() {
 		INFO("view", "Active job handler would appear");
 	}
 }
+void MainContractorView::showJobRequestInfo() {
+
+}
 void MainContractorView::showJobRequests() {
 
 }
@@ -48,6 +51,6 @@ void MainContractorView::handle() {
 	ImGui::Begin(title, nullptr, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoCollapse);
 
 	showContractorMenuBar();
-
+	ImGui::Text("Pending job requests: %s" );
 	ImGui::End();
 }

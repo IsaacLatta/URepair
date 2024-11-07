@@ -4,6 +4,12 @@
 void MainAdminView::handle() {
     static char query_input_buffer[BUFFER_SIZE];
     static char query_output_buffer[BUFFER_SIZE];
+    
+    if (ImGui::Button("LOGOUT", ImVec2(200, 50)))
+    {
+        logoutHandler();
+    }
+
     ImGui::SetNextItemWidth(300.0f);  // Set width of input field
     ImGui::InputText("Input query: ", query_input_buffer, BUFFER_SIZE);
     

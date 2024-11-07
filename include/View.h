@@ -77,8 +77,10 @@ class MainAdminView : public View
 {
     public:
     std::function<const char*(const char*)> queryHandler;
+    std::function<void()> logoutHandler;
     MainAdminView(std::shared_ptr<User> user): View(user) {}
     void handle() override;
+private:
  };
 
 class ClientProfileView: public ProfileView {
@@ -98,7 +100,9 @@ public:
 
 private:
    void showContractorMenuBar();
+   void showJobRequestInfo();
    void showJobRequests();
+   void acceptRequest();
 };
 
 #endif
