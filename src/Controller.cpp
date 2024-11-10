@@ -189,9 +189,14 @@ void Controller::setupMainView(std::shared_ptr<User> user) {
                 INFO("controller", "job booked");
             }
         };
-        main->profileHandler = [this]()
+        main->profileHandler = [this, main, user]()
         {
-            INFO("controller", "would switch to client view"); //needs to be implemented still
+            setupProfileView(user);
+            INFO("controller", "would switch to contractor profile"); //needs to be implemented still
+        };
+        main->activejobHandler = [this]() 
+        {
+                INFO("controller", "display active jobs");
         };
         pushView(main);
         LOG("INFO", "controller", "main contractor view pushed to history");
