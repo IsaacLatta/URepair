@@ -81,11 +81,15 @@ public:
     std::function<void(Job*)> jobAcceptHandler = [](Job*) { INFO("view", "would call accept job"); }; // needs to be created - allows the contractors to view incoming requests
     std::function<void()> logoutHandler = []() { INFO("view", "would log user out"); };
     std::function<void()> profileHandler = []() { INFO("view", "user can view profile"); }; // 
-    //std::function<void()> activejobHandler = []() { INFO("view", "see open jobs "); }; // needs to be created - allows contractors to view details about current active accepted jobs
+    std::function<void(Job*)> activejobHandler = [](Job*) { INFO("view", "see open jobs "); }; // needs to be created - allows contractors to view details about current active accepted jobs
 
 private:
 
    void showContractorMenuBar();
+<<<<<<< Updated upstream
+=======
+   void showJobRequestInfo(const Job* job, bool* stay_open);
+>>>>>>> Stashed changes
    void showJobRequests();
   
     

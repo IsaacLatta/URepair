@@ -35,8 +35,29 @@ void MainContractorView::showContractorMenuBar() {
 		INFO("view", "Active job handler would appear");
 	}
 }
+<<<<<<< Updated upstream
+=======
+void MainContractorView::showJobRequestInfo(const Job* job, bool* stay_open) {
+	ImGui::Text("Job Description");
+	static bool attatchment_menu = false;
+	static const std::size_t BUFSIZE = 256;
+}
+//isaac help
+>>>>>>> Stashed changes
 void MainContractorView::showJobRequests() {
+	ImGui::Text("Pending job requests: %s");
+	static bool show_request_info = false;
+	std::vector<Job>* jobs = user->getJobs();
+	for (const Job& job : *jobs){
+		if (ImGui::Selectable(job.name)) {
+			if (ImGui::Button("View"))
+			{
+				showJobRequestInfo(&job, &show_request_info);
+			}
+			
+		}
 
+	}
 }
 void MainContractorView::handle() {
 	std::string welcome_screen = "Welcome, " + user->getUsername() + ".";
@@ -46,6 +67,10 @@ void MainContractorView::handle() {
 	ImGui::Begin(title, nullptr, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoCollapse);
 
 	showContractorMenuBar();
+<<<<<<< Updated upstream
 
+=======
+	showJobRequests();
+>>>>>>> Stashed changes
 	ImGui::End();
 }

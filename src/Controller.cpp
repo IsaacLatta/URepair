@@ -148,9 +148,18 @@ void Controller::setupMainView(std::shared_ptr<User> user) {
                 INFO("controller", "job booked");
             }
         };
-        main->profileHandler = [this]()
+        main->profileHandler = [this, main, user]()
         {
+<<<<<<< Updated upstream
             INFO("controller", "would switch to client view");
+=======
+            setupProfileView(user);
+            INFO("controller", "would switch to client view"); //needs to be implemented still
+>>>>>>> Stashed changes
+        };
+        main->activejobHandler = [this, contr](Job* job)
+        {
+                INFO("controller", "displays active jobs")
         };
         pushView(main);
         LOG("INFO", "controller", "main contractor view pushed to history");
