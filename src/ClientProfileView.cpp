@@ -1,7 +1,7 @@
 #include "View.h"
 #include "App.h"
 
-void ClientProfileView::handle () {
+void ClientProfileView::render () {
     ImGui::SetNextWindowSize(ImVec2(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 	ImGui::Begin("Profile", nullptr, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoCollapse);
     showOptions();

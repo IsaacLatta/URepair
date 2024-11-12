@@ -1,7 +1,7 @@
 #include "View.h"
 #include "App.h"
 
-void MainAdminView::handle() {
+void MainAdminView::render() {
     static char query_input_buffer[BUFFER_SIZE];
     static char query_output_buffer[BUFFER_SIZE];
     

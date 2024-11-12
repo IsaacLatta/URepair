@@ -203,7 +203,7 @@ void MainClientView::showTalentSearchResults() {
     }
 }
 
-void MainClientView::handle() {
+void MainClientView::render() {
     std::string welcome_msg =  "Welcome, " + user->getUsername() + ".";
 	const char* title = welcome_msg.c_str();
 	

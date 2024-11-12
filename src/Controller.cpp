@@ -48,7 +48,7 @@ void Controller::renderCurrent() {
         return;
     }
     auto current = history.top();
-    current->handle();
+    current->render();
 }
 
 void Controller::pushView(std::shared_ptr<View> view) {
@@ -57,7 +57,8 @@ void Controller::pushView(std::shared_ptr<View> view) {
         return;
     }
     if (!history.empty()) {
-        revisit = std::stack<std::shared_ptr<View>>();
+        /* User has now visited a new page, the revisit must be cleared to allow for new "goBack" operations */
+        revisit = std::stack<std::shared_ptr<View>>(); 
     }
     history.push(view);
 }
@@ -67,9 +68,11 @@ void Controller::goBack() {
         ERROR("controller", "view history empty");
         return;
     }
-    auto current = history.top();
+
+    // Remove the current view from   
+    auto current_view = history.top();
     history.pop();
-    revisit.push(current);   
+    revisit.push(current_view);   
 }
 
 void Controller::goForward() {
@@ -112,6 +115,50 @@ bool Controller::start() {
     return true;
 }
 
+void Controller::setupMainContractorView(std::shared_ptr<Contractor> contr)
+{
+    auto main = std::make_shared<MainContractorView>(contr);
+    main->logoutHandler = [this]() {
+        setupLoginView();
+    };
+    main->jobAcceptHandler = [this, contr](Job *job) {
+        if (db->bookJob(contr.get(), job))
+        {
+            INFO("controller", "job booked");
+        }
+    };
+    main->profileHandler = [this]() {
+        INFO("controller", "would switch to client view");
+    };
+    pushView(main);
+    LOG("INFO", "controller", "main contractor view pushed to history");
+}
+
+void Controller::setupMainClientView(std::shared_ptr<Client> client) {
+    auto main = std::make_shared<MainClientView>(client);
+    main->searchHandler = [this, main](const char *service_type, const char *location, int min_rating, int min_price, int max_price) {
+        INFO("Search", "Search for talent triggered");
+        main->search_results = db->findTalents(service_type, location, min_rating, min_price, max_price);
+    };
+    main->profileHandler = [this, main, client]() {
+        setupProfileView(client);
+    };
+    main->logoutHandler = [this]() {
+        INFO("profile state", "switching to login state");
+        setupLoginView();
+    };
+    main->bookingHandler = [this, main, client](Talent *talent) {
+        INFO("booking", "talent booked"); // to be implemented
+    };
+    main->uploadHandler = [this]() {
+        INFO("booking", "uploaded"); // to be implemented
+    };
+
+    INFO("controller", "handlers assigned to main client view, pushing new view");
+    pushView(main);
+    INFO("controller", "main view pushed");
+}
+
 void Controller::setupProfileView(std::shared_ptr<User> user) {
     if(auto client = std::dynamic_pointer_cast<Client>(user)) {
         auto profile = std::make_shared<ClientProfileView>(user);
@@ -146,35 +193,10 @@ void Controller::setupProfileView(std::shared_ptr<User> user) {
 }
 
 void Controller::setupMainView(std::shared_ptr<User> user) {
-    if (auto client = std::dynamic_pointer_cast<Client>(user))
-    {
-        auto main = std::make_shared<MainClientView>(client);
-        main->searchHandler = [this, main](const char *service_type, const char *location, int min_rating, int min_price, int max_price)
-        {
-            INFO("Search", "Search for talent triggered");
-            main->search_results = db->findTalents(service_type, location, min_rating, min_price, max_price);
-        };
-        main->profileHandler = [this, main, user]()
-        {
-            setupProfileView(user);
-        };
-        main->logoutHandler = [this]()
-        {
-            INFO("profile state", "switching to login state");
-            setupLoginView();
-        };
-        main->bookingHandler = [this, main, user](Talent* talent)
-        {
-            INFO("booking", "talent booked");  // to be implemented
-        };
-        main->uploadHandler = [this]()
-        {
-            INFO("booking", "uploaded");  // to be implemented
-        };
-        INFO("controller", "handlers assigned to main client view, pushing new view");
-        pushView(main);
-        INFO("controller", "main view pushed");
+    if (auto client = std::dynamic_pointer_cast<Client>(user)) {
+        setupMainClientView(client);   
     }
+<<<<<<< HEAD
     else if (auto contr = std::dynamic_pointer_cast<Contractor>(user))
     {
         auto main = std::make_shared<MainContractorView>(contr);
@@ -200,13 +222,21 @@ void Controller::setupMainView(std::shared_ptr<User> user) {
         };
         pushView(main);
         LOG("INFO", "controller", "main contractor view pushed to history");
+=======
+    else if (auto contr = std::dynamic_pointer_cast<Contractor>(user)) {
+        setupMainContractorView(contr);
+>>>>>>> 72a446c (Local commit)
     }
     else if (auto admin = std::dynamic_pointer_cast<Admin>(user)) {
         auto main = std::make_shared<MainAdminView>(admin);
-        main->queryHandler = [this](const char* query) 
-        {
+        main->queryHandler = [this](const char* query) {
             LOG("INFO", "controller", "running query: %s", query);
             return run_query(query);
+
+            /* sudo code
+            auto result = await threadpool->exec(db->runQuery, query);
+            user->update(result);
+            */
         };
         main->logoutHandler = [this]() 
         {
@@ -215,8 +245,7 @@ void Controller::setupMainView(std::shared_ptr<User> user) {
         };
         pushView(main);
     }
-    else
-    {
+    else {
         ERROR("controller", "user dynamic_cast failed");
         return;
     }

@@ -1,7 +1,7 @@
 #include "View.h"
 #include "App.h"
 
-void LoginView::handle() {
+void LoginView::render() {
     static const std::size_t BUFSIZE = 256;
     static char username_buffer[BUFSIZE];
 	static char password_buffer[BUFSIZE];

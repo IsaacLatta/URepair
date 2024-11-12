@@ -43,7 +43,7 @@ void MainContractorView::showJobRequestInfo() {
 void MainContractorView::showJobRequests() {
 
 }
-void MainContractorView::handle() {
+void MainContractorView::render() {
 	std::string welcome_screen = "Welcome, " + user->getUsername() + ".";
 	const char* title = welcome_screen.c_str();
 

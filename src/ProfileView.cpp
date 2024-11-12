@@ -192,7 +192,7 @@ void ProfileView::showOptions() {
     }
 }
 
-void ProfileView::handle()
+void ProfileView::render()
 {
     ImGui::SetNextWindowSize(ImVec2(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 	ImGui::Begin("Profile", nullptr, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoCollapse);

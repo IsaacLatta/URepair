@@ -15,7 +15,7 @@ class View
     public:
     View(): user(nullptr) {}
     View(std::shared_ptr<User> user): user(user) {};
-    virtual void handle() = 0;
+    virtual void render() = 0;
     virtual ~View() = default;
     protected:
     std::shared_ptr<User> user;
@@ -27,7 +27,7 @@ class LoginView: public View
     std::function<void(const char*, const char*)> loginHandler = nullptr;
     LoginView(std::shared_ptr<User> user): View(user) {};
     LoginView() {}
-    void handle() override;
+    void render() override;
 };
 
 class MainClientView: public View {
@@ -40,7 +40,7 @@ class MainClientView: public View {
     std::function<void()> uploadHandler;
 
     explicit MainClientView(std::shared_ptr<Client> client) : View(client) {}
-    void handle() override;
+    void render() override;
     private:
     
     char search_service_type[128] = "";  
@@ -65,7 +65,7 @@ class ProfileView: public View {
     std::function<void()> goBack;
 
     ProfileView(std::shared_ptr<User> user): View(user) {}
-    void handle() override;
+    void render() override;
     protected:
     void showOptions();
     void showSecurityMenu(bool*);
@@ -79,20 +79,24 @@ class MainAdminView : public View
     std::function<const char*(const char*)> queryHandler;
     std::function<void()> logoutHandler;
     MainAdminView(std::shared_ptr<User> user): View(user) {}
+<<<<<<< HEAD
     void handle() override;
 private:
+=======
+    void render() override;
+>>>>>>> 72a446c (Local commit)
  };
 
 class ClientProfileView: public ProfileView {
     public:
     ClientProfileView(std::shared_ptr<User> user): ProfileView(user) {}
-    void handle() override;
+    void render() override;
 };
 
 class MainContractorView: public View {
 public:
     explicit MainContractorView(std::shared_ptr<Contractor> contractor) : View(contractor) {};
-    void handle() override;
+    void render() override;
     std::function<void(Job*)> jobAcceptHandler = [](Job*) { INFO("view", "would call accept job"); }; // needs to be created - allows the contractors to view incoming requests
     std::function<void()> logoutHandler = []() { INFO("view", "would log user out"); };
     std::function<void()> profileHandler = []() { INFO("view", "user can view profile"); }; // 

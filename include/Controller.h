@@ -13,17 +13,23 @@
 
 class Controller
 {
-    public:
+public:
     Controller();
     bool start();
     void renderCurrent();
-    private:
+    
+private:
     void setupLoginView();
     void setupMainView(std::shared_ptr<User> user);
     void setupProfileView(std::shared_ptr<User> user);
+    void setupMainClientView(std::shared_ptr<Client> client);
+    void setupMainContractorView(std::shared_ptr<Contractor> contr);
+    
     void pushView(std::shared_ptr<View> view);
     void goBack();
     void goForward();
+
+private:
     ThreadPool pool;
     std::shared_ptr<User> user;
     std::unique_ptr<Database> db;
