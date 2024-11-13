@@ -20,27 +20,32 @@ const char* run_query(const char* query) {
 	int ret_code;
 	std::string result = "";
 	
+    LOG("INFO", "run_query", "Query received: %s", query);
+
 	ret_code = sqlite3_open("../test.db", &db);
 	if (ret_code) {
         LOG("ERROR", "controller", "cannot open database: %s", sqlite3_errmsg(db));
         return nullptr;
 	}
-	INFO("controller", "database open");
+	LOG("INFO", "controller", "database open with code: %d", ret_code);
 
 	ret_code = sqlite3_exec(db, query, callback, (void*)&result, &error_msg);
 	if (ret_code != SQLITE_OK) {
         LOG("ERROR", "controller", "Query failed: %s", error_msg);
-		sqlite3_free(error_msg);
+        char* ret_result = new char[strlen(error_msg) + 1];
+        std::strcpy(ret_result, error_msg);
+        sqlite3_free(error_msg);
         sqlite3_close(db);
-        return nullptr;
+        return ret_result;
 	}
+	LOG("INFO", "controller", "query executed with code: %d", ret_code);
 
 	INFO("controller", "query successful");
 	sqlite3_close(db);
     
     char* ret_result = new char[result.length() + 1];
     std::strcpy(ret_result, result.c_str());
-    LOG("INFO", "controller", "Query result content: %s, Size of result: %s", ret_result, result.length());
+    LOG("INFO", "controller", "Query result content: %s, Size of result: %d", ret_result, result.length());
     return ret_result;
 }
 
