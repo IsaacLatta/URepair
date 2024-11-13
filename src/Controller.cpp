@@ -196,36 +196,8 @@ void Controller::setupMainView(std::shared_ptr<User> user) {
     if (auto client = std::dynamic_pointer_cast<Client>(user)) {
         setupMainClientView(client);   
     }
-<<<<<<< HEAD
-    else if (auto contr = std::dynamic_pointer_cast<Contractor>(user))
-    {
-        auto main = std::make_shared<MainContractorView>(contr);
-        main->logoutHandler = [this]() 
-        {
-            INFO("profile state", "switching to login state");
-            setupLoginView();
-        };
-        main->jobAcceptHandler = [this, contr](Job* job) 
-        {
-            if(db->bookJob(contr.get(), job)) {
-                INFO("controller", "job booked");
-            }
-        };
-        main->profileHandler = [this, main, user]()
-        {
-            setupProfileView(user);
-            INFO("controller", "would switch to contractor profile"); //needs to be implemented still
-        };
-        main->activejobHandler = [this]() 
-        {
-                INFO("controller", "display active jobs");
-        };
-        pushView(main);
-        LOG("INFO", "controller", "main contractor view pushed to history");
-=======
     else if (auto contr = std::dynamic_pointer_cast<Contractor>(user)) {
         setupMainContractorView(contr);
->>>>>>> 72a446c (Local commit)
     }
     else if (auto admin = std::dynamic_pointer_cast<Admin>(user)) {
         auto main = std::make_shared<MainAdminView>(admin);
