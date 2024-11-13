@@ -20,7 +20,7 @@ void MainAdminView::render() {
             
             LOG("INFO", "render", "Query result: %s", query_output);
             memset(query_output_buffer, '\0', QUERY_BUFFER);
-            
+    
             strncpy(query_output_buffer, query_output, QUERY_BUFFER - 1);
             query_output_buffer[QUERY_BUFFER - 1] = '\0';
         }
@@ -32,8 +32,4 @@ void MainAdminView::render() {
     ImGui::Separator();
     ImGui::Text("Output Query:");
     ImGui::TextWrapped("%s", query_output_buffer);
-    //reset query buffer (optional)
-    //memset(query_input_buffer, '\0', BUFFER_SIZE);
-    
-
 }

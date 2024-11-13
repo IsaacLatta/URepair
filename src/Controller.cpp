@@ -25,7 +25,9 @@ const char* run_query(const char* query) {
 	ret_code = sqlite3_open("../test.db", &db);
 	if (ret_code) {
         LOG("ERROR", "controller", "cannot open database: %s", sqlite3_errmsg(db));
-        return nullptr;
+        char* ret_result = new char[BUFFER_SIZE];
+        snprintf(ret_result, BUFFER_SIZE, "Database fail to open, code=%d (%s)", ret_code, sqlite3_errmsg(db));
+        return ret_result;
 	}
 	LOG("INFO", "controller", "database open with code: %d", ret_code);
 
@@ -34,6 +36,7 @@ const char* run_query(const char* query) {
         LOG("ERROR", "controller", "Query failed: %s", error_msg);
         char* ret_result = new char[strlen(error_msg) + 1];
         std::strcpy(ret_result, error_msg);
+        
         sqlite3_free(error_msg);
         sqlite3_close(db);
         return ret_result;
@@ -213,7 +216,7 @@ void Controller::setupMainView(std::shared_ptr<User> user) {
             return run_query(query);
 
             /* sudo code
-            auto result = await threadpool->exec(db->runQuery, query);
+            auto result = co_await threadpool->exec(db->runQuery, query);
             user->update(result);
             */
         };
