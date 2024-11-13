@@ -39,6 +39,7 @@ const char* run_query(const char* query) {
     
     char* ret_result = new char[result.length() + 1];
     std::strcpy(ret_result, result.c_str());
+    LOG("INFO", "controller", "Query result content: %s, Size of result: %s", ret_result, result.length());
     return ret_result;
 }
 
