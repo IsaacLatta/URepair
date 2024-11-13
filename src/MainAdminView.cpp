@@ -15,8 +15,10 @@ void MainAdminView::render() {
     
     if (ImGui::Button("Run query: ", ImVec2(200, 50))) {
         if (queryHandler) {
+            LOG("INFO", "render", "query input buffer: %s", query_input_buffer);
             const char* query_output = queryHandler(query_input_buffer);
             //clear output buffer
+            LOG("INFO", "render", "Query: %s", query_output);
             memset(query_output_buffer, '\0', QUERY_BUFFER);
             //copy query output to output buffer
             strncpy(query_output_buffer, query_output, QUERY_BUFFER - 1);
@@ -31,7 +33,7 @@ void MainAdminView::render() {
     ImGui::Text("Output Query:");
     ImGui::TextWrapped("%s", query_output_buffer);
     //reset query buffer (optional)
-    memset(query_input_buffer, '\0', BUFFER_SIZE);
+    //memset(query_input_buffer, '\0', BUFFER_SIZE);
     
 
 }

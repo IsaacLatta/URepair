@@ -15,7 +15,9 @@ class Controller
 {
 public:
     Controller();
+    /* Connects to the database */
     bool start();
+    /* Render's the current view */
     void renderCurrent();
     
 private:
@@ -30,7 +32,7 @@ private:
     void goForward();
 
 private:
-    ThreadPool pool;
+    //ThreadPool pool;
     std::shared_ptr<User> user;
     std::unique_ptr<Database> db;
     std::stack<std::shared_ptr<View>> history;

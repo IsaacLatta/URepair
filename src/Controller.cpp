@@ -10,6 +10,7 @@ static int callback(void* result_buffer, int argc, char** argv, char** col_name)
         *result += argv[i] ? argv[i] : "NULL";
         *result += "\n";
 	}
+    std::cout << "CALLED\n";
 	return 0;
 }
 
@@ -112,7 +113,7 @@ bool Controller::start() {
         return false;
     }
     setupLoginView();
-    INFO("controller", "start up successful");
+    INFO("controller", "start up successfull");
     return true;
 }
 
