@@ -3,7 +3,7 @@
 
 void MainAdminView::render() {
     static char query_input_buffer[BUFFER_SIZE];
-    static char query_output_buffer[BUFFER_SIZE];
+    static char query_output_buffer[QUERY_BUFFER];
     
     if (ImGui::Button("LOGOUT", ImVec2(200, 50)))
     {
@@ -17,10 +17,10 @@ void MainAdminView::render() {
         if (queryHandler) {
             const char* query_output = queryHandler(query_input_buffer);
             //clear output buffer
-            memset(query_output_buffer, '\0', BUFFER_SIZE);
+            memset(query_output_buffer, '\0', QUERY_BUFFER);
             //copy query output to output buffer
-            strncpy(query_output_buffer, query_output, BUFFER_SIZE - 1);
-            query_output_buffer[BUFFER_SIZE - 1] = '\0';
+            strncpy(query_output_buffer, query_output, QUERY_BUFFER - 1);
+            query_output_buffer[QUERY_BUFFER - 1] = '\0';
         }
         else {
             ERROR("MainAdminView", "no query handler");

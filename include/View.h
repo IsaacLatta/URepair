@@ -6,7 +6,8 @@
 #include <memory>
 #include <functional>
 
-#define BUFFER_SIZE 256
+#define BUFFER_SIZE 512
+#define QUERY_BUFFER 8192
 
 class User;
 
@@ -79,12 +80,8 @@ class MainAdminView : public View
     std::function<const char*(const char*)> queryHandler;
     std::function<void()> logoutHandler;
     MainAdminView(std::shared_ptr<User> user): View(user) {}
-<<<<<<< HEAD
-    void handle() override;
-private:
-=======
     void render() override;
->>>>>>> 72a446c (Local commit)
+
  };
 
 class ClientProfileView: public ProfileView {

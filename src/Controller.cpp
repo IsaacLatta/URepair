@@ -19,7 +19,7 @@ const char* run_query(const char* query) {
 	int ret_code;
 	std::string result = "";
 	
-	ret_code = sqlite3_open("test.db", &db);
+	ret_code = sqlite3_open("../test.db", &db);
 	if (ret_code) {
         LOG("ERROR", "controller", "cannot open database: %s", sqlite3_errmsg(db));
         return nullptr;
