@@ -21,10 +21,17 @@ class App {
 	public:
 	App();
 	~App();
+	
+	/*Initialize the application, setup the glfw and glad openGL loaders, initialize the controller*/
 	bool init();
+	
+	/* Run the applications main loop, cleanup resources after exiting */
 	void run();
+	
 	private:
 	void mainLoop();
+	
+	private:
 	Controller* controller;
 	GLFWwindow* main_window;
 };

@@ -10,6 +10,7 @@ static int callback(void* result_buffer, int argc, char** argv, char** col_name)
         *result += argv[i] ? argv[i] : "NULL";
         *result += "\n";
 	}
+    std::cout << "CALLED\n";
 	return 0;
 }
 
@@ -19,26 +20,35 @@ const char* run_query(const char* query) {
 	int ret_code;
 	std::string result = "";
 	
-	ret_code = sqlite3_open("test.db", &db);
+    LOG("INFO", "run_query", "Query received: %s", query);
+
+	ret_code = sqlite3_open("../test.db", &db);
 	if (ret_code) {
         LOG("ERROR", "controller", "cannot open database: %s", sqlite3_errmsg(db));
-        return nullptr;
+        char* ret_result = new char[BUFFER_SIZE];
+        snprintf(ret_result, BUFFER_SIZE, "Database fail to open, code=%d (%s)", ret_code, sqlite3_errmsg(db));
+        return ret_result;
 	}
-	INFO("controller", "database open");
+	LOG("INFO", "controller", "database open with code: %d", ret_code);
 
 	ret_code = sqlite3_exec(db, query, callback, (void*)&result, &error_msg);
 	if (ret_code != SQLITE_OK) {
         LOG("ERROR", "controller", "Query failed: %s", error_msg);
-		sqlite3_free(error_msg);
+        char* ret_result = new char[strlen(error_msg) + 1];
+        std::strcpy(ret_result, error_msg);
+        
+        sqlite3_free(error_msg);
         sqlite3_close(db);
-        return nullptr;
+        return ret_result;
 	}
+	LOG("INFO", "controller", "query executed with code: %d", ret_code);
 
 	INFO("controller", "query successful");
 	sqlite3_close(db);
     
     char* ret_result = new char[result.length() + 1];
     std::strcpy(ret_result, result.c_str());
+    LOG("INFO", "controller", "Query result content: %s, Size of result: %d", ret_result, result.length());
     return ret_result;
 }
 
@@ -111,7 +121,7 @@ bool Controller::start() {
         return false;
     }
     setupLoginView();
-    INFO("controller", "start up successful");
+    INFO("controller", "start up successfull");
     return true;
 }
 
@@ -206,7 +216,7 @@ void Controller::setupMainView(std::shared_ptr<User> user) {
             return run_query(query);
 
             /* sudo code
-            auto result = await threadpool->exec(db->runQuery, query);
+            auto result = co_await threadpool->exec(db->runQuery, query);
             user->update(result);
             */
         };
