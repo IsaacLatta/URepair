@@ -2,7 +2,7 @@
 
 Controller::Controller() {}
 
-static int callback(void* result_buffer, int argc, char** argv, char** col_name) {
+static int query_callback(void* result_buffer, int argc, char** argv, char** col_name) {
 	std::string* result = static_cast<std::string*>(result_buffer); 
 	for (int i = 0; i < argc; i++) {
 		*result += col_name[i];
@@ -10,10 +10,10 @@ static int callback(void* result_buffer, int argc, char** argv, char** col_name)
         *result += argv[i] ? argv[i] : "NULL";
         *result += "\n";
 	}
-    std::cout << "CALLED\n";
 	return 0;
 }
 
+// temp function for testing before integrating with DB class
 const char* run_query(const char* query) {
     sqlite3* db;
 	char* error_msg = 0;
@@ -31,7 +31,7 @@ const char* run_query(const char* query) {
 	}
 	LOG("INFO", "controller", "database open with code: %d", ret_code);
 
-	ret_code = sqlite3_exec(db, query, callback, (void*)&result, &error_msg);
+	ret_code = sqlite3_exec(db, query, query_callback, (void*)&result, &error_msg);
 	if (ret_code != SQLITE_OK) {
         LOG("ERROR", "controller", "Query failed: %s", error_msg);
         char* ret_result = new char[strlen(error_msg) + 1];
@@ -125,14 +125,14 @@ bool Controller::start() {
     return true;
 }
 
-void Controller::setupMainContractorView(std::shared_ptr<Contractor> contr)
+void Controller::setupMainContractorView(std::shared_ptr<Contractor> contractor)
 {
-    auto main = std::make_shared<MainContractorView>(contr);
+    auto main = std::make_shared<MainContractorView>(contractor);
     main->logoutHandler = [this]() {
         setupLoginView();
     };
-    main->jobAcceptHandler = [this, contr](Job *job) {
-        if (db->bookJob(contr.get(), job))
+    main->jobAcceptHandler = [this, contractor](Job *job) {
+        if (db->bookJob(contractor.get(), job))
         {
             INFO("controller", "job booked");
         }

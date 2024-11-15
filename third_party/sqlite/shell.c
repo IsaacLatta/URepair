@@ -22875,7 +22875,7 @@ static int shell_callback(
 ** This is the callback routine that the SQLite library
 ** invokes for each row of a query result.
 */
-static int callback(void *pArg, int nArg, char **azArg, char **azCol){
+static int query_callback(void *pArg, int nArg, char **azArg, char **azCol){
   /* since we don't have type info, call the shell_callback with a NULL value */
   return shell_callback(pArg, nArg, azArg, azCol, NULL);
 }
@@ -28938,7 +28938,7 @@ static int do_meta_command(char *zLine, ShellState *p){
        "   SELECT sql, type, tbl_name, name, rowid FROM sqlite_temp_schema) "
        "WHERE type!='meta' AND sql NOTNULL AND name NOT LIKE 'sqlite_%' "
        "ORDER BY x",
-       callback, &data, 0
+       query_callback, &data, 0
     );
     if( rc==SQLITE_OK ){
       sqlite3_stmt *pStmt;
@@ -30284,7 +30284,7 @@ static int do_meta_command(char *zLine, ShellState *p){
         new_argv[1] = 0;
         new_colv[0] = "sql";
         new_colv[1] = 0;
-        callback(&data, 1, new_argv, new_colv);
+        query_callback(&data, 1, new_argv, new_colv);
         sqlite3_free(new_argv[0]);
       }
     }
@@ -30357,7 +30357,7 @@ static int do_meta_command(char *zLine, ShellState *p){
       if( bDebug ){
         sqlite3_fprintf(p->out, "SQL: %s;\n", sSelect.z);
       }else{
-        rc = sqlite3_exec(p->db, sSelect.z, callback, &data, &zErrMsg);
+        rc = sqlite3_exec(p->db, sSelect.z, query_callback, &data, &zErrMsg);
       }
       freeText(&sSelect);
     }
