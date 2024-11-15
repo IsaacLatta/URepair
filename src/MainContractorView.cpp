@@ -40,9 +40,23 @@ void MainContractorView::showContractorMenuBar() {
 void MainContractorView::showJobRequestInfo() {
 
 }
-void MainContractorView::showJobRequests() {
 
+void MainContractorView::showJobRequests() {
+	ImGui::Text("Pending job requests: %s");
+	static bool show_request_info = false;
+	std::vector<Job>* jobs = user->getJobs();
+	for (const Job& job : *jobs) {
+		if (ImGui::Selectable(job.name)) {
+			if (ImGui::Button("View##"))
+			{
+				showJobRequestInfo();
+			}
+
+		}
+
+	}
 }
+
 void MainContractorView::render() {
 	std::string welcome_screen = "Welcome, " + user->getUsername() + ".";
 	const char* title = welcome_screen.c_str();
@@ -52,5 +66,6 @@ void MainContractorView::render() {
 
 	showContractorMenuBar();
 	ImGui::Text("Pending job requests: %s" );
+	showJobRequests();
 	ImGui::End();
 }

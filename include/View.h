@@ -79,12 +79,10 @@ class MainAdminView : public View
     std::function<const char*(const char*)> queryHandler;
     std::function<void()> logoutHandler;
     MainAdminView(std::shared_ptr<User> user): View(user) {}
-<<<<<<< HEAD
-    void handle() override;
 private:
-=======
+
     void render() override;
->>>>>>> 72a446c (Local commit)
+
  };
 
 class ClientProfileView: public ProfileView {
