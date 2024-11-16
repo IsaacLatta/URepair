@@ -38,7 +38,7 @@ void MainContractorView::showContractorMenuBar() {
 	}
 }
 void MainContractorView::showJobRequestInfo() {
-
+	// hello world
 }
 
 void MainContractorView::showJobRequests() {
