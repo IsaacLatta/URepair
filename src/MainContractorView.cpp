@@ -42,7 +42,6 @@ void MainContractorView::showJobRequestInfo() {
 }
 
 void MainContractorView::showJobRequests() {
-	ImGui::Text("Pending job requests: %s");
 	static bool show_request_info = false;
 	std::vector<Job>* jobs = user->getJobs();
 	for (const Job& job : *jobs) {
@@ -63,7 +62,6 @@ void MainContractorView::render() {
 
 	ImGui::SetNextWindowSize(ImVec2(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 	ImGui::Begin(title, nullptr, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoCollapse);
-
 	showContractorMenuBar();
 	ImGui::Text("Pending job requests: %s" );
 	showJobRequests();

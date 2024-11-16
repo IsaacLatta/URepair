@@ -67,13 +67,29 @@ std::vector<Talent> Dummy::findTalents(const char* service_type, const char* loc
 }
 
 void Dummy::updateJobs(User* user) {
-    std::vector<Job> jobs = {
-        { 1, "Fix leaky faucet", "Plumber John", "Pending", "2024-10-25", 100.0 },
-        { 2, "Electrical wiring", "Electrician Jane", "Completed", "2024-10-22", 250.0 },
-        { 3, "Painting living room", "Painter Bob", "In Progress", "2024-10-24", 300.0 },
-        { 4, "Install new sink", "Plumber Alice", "Pending", "2024-10-26", 150.0 },
-        { 5, "Fix bathroom light", "Electrician Jane", "Completed", "2024-10-20", 200.0 }
-    };
+    std::vector<Job> jobs;
+    char* msg;
+    if(dynamic_cast<Client*>(user)) {
+        msg = "updated clients jobs\0";
+        jobs = {
+            {1, "Fix leaky faucet", "Plumber John", "Pending", "2024-10-25", 100.0},
+            {2, "Electrical wiring", "Electrician Jane", "Completed", "2024-10-22", 250.0},
+            {3, "Painting living room", "Painter Bob", "In Progress", "2024-10-24", 300.0},
+            {4, "Install new sink", "Plumber Alice", "Pending", "2024-10-26", 150.0},
+            {5, "Fix bathroom light", "Electrician Jane", "Completed", "2024-10-20", 200.0}
+            };
+    }
+    else {
+        msg = "updated contractors jobs\0";
+        jobs = {
+            {1, "Fix leaky faucet", "John doe", "Pending", "2024-10-25", 100.0},
+            {2, "Electrical wiring", "Matia smolcok", "Completed", "2024-10-22", 250.0},
+            {3, "Painting living room", "Isaac beegcoc", "In Progress", "2024-10-24", 300.0},
+            {4, "Install new sink", "Michael nocoq", "Pending", "2024-10-26", 150.0},
+            {5, "Fix bathroom light", "Jane smith", "Completed", "2024-10-20", 200.0}
+            };
+    }
+    INFO("Database", msg);
     user->setJobs(jobs);
 }
 
