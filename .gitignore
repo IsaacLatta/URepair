@@ -2,3 +2,4 @@ build/*
 !build/.gitkeep
 !build/test.db
 *.vscode
+*.vs
