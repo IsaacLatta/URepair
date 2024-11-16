@@ -3,3 +3,4 @@ build/*
 !build/test.db
 *.vscode
 *.vs
+*out
