@@ -63,7 +63,7 @@ void MainContractorView::render() {
 	ImGui::SetNextWindowSize(ImVec2(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 	ImGui::Begin(title, nullptr, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoCollapse);
 	showContractorMenuBar();
-	ImGui::Text("Pending job requests: %s" );
+	ImGui::Text("Pending job requests: %s", "Hello World");
 	showJobRequests();
 	ImGui::End();
 }

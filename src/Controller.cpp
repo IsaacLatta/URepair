@@ -139,6 +139,7 @@ void Controller::setupMainContractorView(std::shared_ptr<Contractor> contractor)
     };
     main->profileHandler = [this]() {
         INFO("controller", "would switch to client view");
+        setupProfileView(user);
     };
     pushView(main);
     LOG("INFO", "controller", "main contractor view pushed to history");
