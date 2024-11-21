@@ -86,13 +86,8 @@ public:
 private:
 
    void showContractorMenuBar();
-<<<<<<< Updated upstream
-=======
    void showJobRequestInfo(const Job* job, bool* stay_open);
->>>>>>> Stashed changes
    void showJobRequests();
-  
-    
 };
 
 #endif
