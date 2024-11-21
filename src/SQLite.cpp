@@ -4,10 +4,6 @@ bool SQLite::connect() {
     return true;
 }
 
-bool run_query(const char* query, void* data) {
-    return true;
-}
-
 
 /* JOB
 jobId = 1000
@@ -53,10 +49,35 @@ static int loaddata_callback(void* user_obj, int argc, char**argv, char** col_na
     User* user = static_cast<User*>(user_obj);
 
 
+
     return 0;
 
 }
 
 bool SQLite::loadData(User* user) {
+    
+
+    
+    return true;
+}
+
+bool run_query(const std::string& query, int (*callback)(void*,int,char**,char**), void* callback_param, std::string& error_msg) {
+    sqlite3* db;
+    int ret_code;
+    char* errmsg = "\0";
+
+    if((ret_code =  sqlite3_open(SQLITE_FILE, &db)) != SQLITE_OK) {
+        error_msg = "cannot open Database: " + std::string(SQLITE_FILE) + " code=" + std::to_string(ret_code) + " (" + sqlite3_errmsg(db) + ")";
+        return false;
+    }
+
+    if(((ret_code) = sqlite3_exec(db, query.c_str(), callback, callback_param, &errmsg)) != SQLITE_OK) {
+        error_msg = "query failed with code=" + std::to_string(ret_code) + " (" + std::string(errmsg) + ")";
+        sqlite3_free(errmsg);
+        sqlite3_close(db);
+        return false;
+    }
+
+    sqlite3_close(db);
     return true;
 }
