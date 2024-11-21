@@ -16,13 +16,13 @@ struct Job {
     char status[128];
     char date[256];
     double cost;
-} ;
+};
 
 struct Talent {
     std::string name;
     std::string service_type;  
     std::string location;      
-    int rating;                // Rating out of 5
+    int rating;                
     float rate;
     Talent() {}
     Talent(const char* name, const char* service, const char* location, int rating, float rate): 

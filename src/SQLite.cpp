@@ -124,10 +124,8 @@ std::shared_ptr<User> SQLite::signIn(const char* username, const char* password)
     return user;
 }
 
-
 static int load_data_info_cb(void* info_param, int argc, char**argv, char** col_name) {
     Info* info = static_cast<Info*>(info_param);
-
     for (int i = 0; i < argc; i++) {
         if (strcmp(col_name[i], "userID") == 0) {
             info->id = argv[i] ? std::stoi(argv[i]) : -1;
@@ -150,9 +148,8 @@ static int load_data_info_cb(void* info_param, int argc, char**argv, char** col_
 
 static int load_data_jobs_cb(void* jobs_param, int argc, char**argv, char** col_name) {
     std::vector<Job>* jobs = static_cast<std::vector<Job>*>(jobs_param);
-
+    Job job;
     for (int i = 0; i < argc; i++) {
-        Job job;
         if (strcmp(col_name[i], "jobId") == 0) {
             job.id = argv[i] ? std::stoi(argv[i]) : -1;
         } 
@@ -175,8 +172,8 @@ static int load_data_jobs_cb(void* jobs_param, int argc, char**argv, char** col_
         else if (strcmp(col_name[i], "cost") == 0) {
             job.cost = argv[i] ? std::stod(argv[i]) : 0.0;
         }
-        jobs->emplace_back(std::move(job));
     }
+    jobs->emplace_back(std::move(job));
     return 0;
 }
 
@@ -192,7 +189,7 @@ bool SQLite::loadData(User* user) {
 
     query = "SELECT * FROM JOB WHERE userID = " + std::to_string(user->getInfo()->id);
     std::vector<Job>* jobs = user->getJobs();
-    if(!Database::runQuery(query, load_data_jobs_cb, (void*)info, error_msg)) {
+    if(!Database::runQuery(query, load_data_jobs_cb, (void*)jobs, error_msg)) {
         LOG("ERROR", "SQLite", "failed to load user data from JOB table[%s]", error_msg.c_str());
         return false;
     }

@@ -29,7 +29,6 @@ void MainClientView::showMenuBar() {
 
 void MainClientView::showJobs() {
 	std::vector<Job>* jobs = user->getJobs();
-	
 	 if (ImGui::BeginTable("Jobs Table", 6, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingFixedFit)) {
         ImGui::TableSetupColumn("ID", 0, 50.0f);              // Fixed width 50
         ImGui::TableSetupColumn("Description", 0, 200.0f);    // Fixed width 200
