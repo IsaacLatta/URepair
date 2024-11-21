@@ -1,3 +1,4 @@
+/*
 #include "Database.h"
 
 bool SQLite::connect() {
@@ -44,7 +45,7 @@ rating = 5
 rate = 200
 message = I will lay your pipe :)
 */
-
+/*
 static int loaddata_callback(void* user_obj, int argc, char**argv, char** col_name) {
     User* user = static_cast<User*>(user_obj);
 
@@ -61,7 +62,7 @@ bool SQLite::loadData(User* user) {
     return true;
 }
 
-bool run_query(const std::string& query, int (*callback)(void*,int,char**,char**), void* callback_param, std::string& error_msg) {
+bool run_query(const std::string& query, int(*callback)(void*,int,char**,char**), void* callback_param, std::string& error_msg) {
     sqlite3* db;
     int ret_code;
     char* errmsg = "\0";
@@ -81,3 +82,4 @@ bool run_query(const std::string& query, int (*callback)(void*,int,char**,char**
     sqlite3_close(db);
     return true;
 }
+*/
