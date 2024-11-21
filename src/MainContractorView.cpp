@@ -64,7 +64,7 @@ void MainContractorView::showJobRequestInfo(const Job* job, bool* stay_open) {
 void MainContractorView::showJobRequests() {
 	static bool show_request_menu = false;
 	std::vector<Job>* jobs = user->getJobs();
-	static const Job* selected_job = nullptr; /* Job pointer needs to be static, othewise it gets reset to nullptr ever frame */
+	static const Job* selected_job = nullptr; /* Job pointer needs to be static, othewise it gets reset to nullptr every frame */
 											  /* Old: const Job* = ... | New: static const Job* = ... */
 	ImGui::Text("Pending job requests: %d", static_cast<int>(jobs->size()));
 	for (int i = 0; i < jobs->size(); i++) {
