@@ -150,12 +150,9 @@ void Controller::setupMainView(std::shared_ptr<User> user) {
         };
         main->profileHandler = [this, main, user]()
         {
-<<<<<<< Updated upstream
-            INFO("controller", "would switch to client view");
-=======
-            setupProfileView(user);
+            setupProfileView(user);git switch --track origin/matia-branch
+
             INFO("controller", "would switch to client view"); //needs to be implemented still
->>>>>>> Stashed changes
         };
         main->activejobHandler = [this, contr](Job* job)
         {
