@@ -39,7 +39,6 @@ class Dummy : public Database
     std::vector<Talent> findTalents(const char* service_type = "", const char* location = "", int min_rating = 0, int min_price = 0, int max_price = 10000) override;
 };
 
-/*
 class SQLite : public Database
 {
     public:
@@ -52,6 +51,6 @@ class SQLite : public Database
     bool changePassword(User* user, const char* old_pass, const char* new_pass) override;
     bool changeUsername(User* user, const char* password, const char* new_username) override;
 };
-*/
+
 
 #endif
