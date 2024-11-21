@@ -5,6 +5,10 @@
 #include <vector>
 #include "logger.h"
 
+enum class ROLE {
+    UNKNOWN, CLIENT, CONTRACTOR, ADMIN
+};
+
 struct Job {
     int id;
     char description[256];
@@ -26,12 +30,13 @@ struct Talent {
 };
 
 struct Info {
+    int id;
     std::string phone;
     std::string email;
     std::string name;
     std::string location;
     std::string bio;
-    Info() {}
+    Info() : id(-1) {} 
     Info(const char* email, const char* phone, const char* name, const char* loc, const char* bio):
     email(email), phone(phone), name(name), location(loc), bio(bio) {}
 };
@@ -44,6 +49,7 @@ struct Message {
 class User 
 {
     public:
+    ROLE role;
     bool isLoggedIn;
     User();
     User(const char* username, const char* password): isLoggedIn(true), username(username), password(password) {}
