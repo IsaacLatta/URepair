@@ -2,7 +2,8 @@
 
 std::unique_ptr<Database> Database::databaseFactory() {
     INFO("database", "created");
-    return std::make_unique<Dummy>();
+    //return std::make_unique<Dummy>();
+    return std::make_unique<SQLite>();
 }
 
 
