@@ -42,11 +42,11 @@ std::vector<Message>* User::getMessages() {
     return &messages;
 }
 
-void Contractor::setTalent(Talent talent) {
+void User::setTalent(Talent&& talent) {
     this->talent = talent;
 }
 
-Talent* Contractor::getTalent() {
+Talent* User::getTalent() {
     return &talent;
 }
 

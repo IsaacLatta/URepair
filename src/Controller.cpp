@@ -87,7 +87,7 @@ bool Controller::start() {
     return true;
 }
 
-void Controller::setupMainContractorView(std::shared_ptr<Contractor> contractor)
+void Controller::setupMainContractorView(std::shared_ptr<User> contractor)
 {
     auto main = std::make_shared<MainContractorView>(contractor);
     main->logoutHandler = [this]() {
@@ -107,20 +107,20 @@ void Controller::setupMainContractorView(std::shared_ptr<Contractor> contractor)
     LOG("INFO", "controller", "main contractor view pushed to history");
 }
 
-void Controller::setupMainClientView(std::shared_ptr<Client> client) {
-    auto main = std::make_shared<MainClientView>(client);
+void Controller::setupMainClientView(std::shared_ptr<User> user) {
+    auto main = std::make_shared<MainClientView>(user);
     main->searchHandler = [this, main](const char *service_type, const char *location, int min_rating, int min_price, int max_price) {
         INFO("Search", "Search for talent triggered");
         main->search_results = db->findTalents(service_type, location, min_rating, min_price, max_price);
     };
-    main->profileHandler = [this, main, client]() {
-        setupProfileView(client);
+    main->profileHandler = [this, main, user]() {
+        setupProfileView(user);
     };
     main->logoutHandler = [this]() {
         INFO("profile state", "switching to login state");
         setupLoginView();
     };
-    main->bookingHandler = [this, main, client](Talent *talent) {
+    main->bookingHandler = [this, main, user](Talent *talent) {
         INFO("booking", "talent booked"); // to be implemented
     };
     main->uploadHandler = [this]() {
@@ -133,7 +133,7 @@ void Controller::setupMainClientView(std::shared_ptr<Client> client) {
 }
 
 void Controller::setupProfileView(std::shared_ptr<User> user) {
-    if(auto client = std::dynamic_pointer_cast<Client>(user)) {
+    if(user->role == ROLE::CLIENT) {
         auto profile = std::make_shared<ClientProfileView>(user);
         profile->changeUsername = [this, user](const char* username, const char* password) 
         {
@@ -157,7 +157,7 @@ void Controller::setupProfileView(std::shared_ptr<User> user) {
         };
         pushView(profile);
     }
-    else if (auto contr = std::dynamic_pointer_cast<Contractor>(user)) {
+    else if (user->role == ROLE::CONTRACTOR) {
         INFO("controller", "attempt to render contractor profile");
     }
     else {
@@ -166,14 +166,14 @@ void Controller::setupProfileView(std::shared_ptr<User> user) {
 }
 
 void Controller::setupMainView(std::shared_ptr<User> user) {
-    if (auto client = std::dynamic_pointer_cast<Client>(user)) {
-        setupMainClientView(client);   
+    if (user->role == ROLE::CLIENT) {
+        setupMainClientView(user);   
     }
-    else if (auto contr = std::dynamic_pointer_cast<Contractor>(user)) {
-        setupMainContractorView(contr);
+    else if (user->role == ROLE::CONTRACTOR) {
+        setupMainContractorView(user);
     }
-    else if (auto admin = std::dynamic_pointer_cast<Admin>(user)) {
-        auto main = std::make_shared<MainAdminView>(admin);
+    else if (user->role == ROLE::ADMIN) {
+        auto main = std::make_shared<MainAdminView>(user);
         main->queryHandler = [this](const char* query) {
             LOG("INFO", "controller", "running query: %s", query);
 

@@ -54,7 +54,10 @@ class User
     User();
     User(const char* username, const char* password): isLoggedIn(true), username(username), password(password) {}
     virtual ~User() = default;
+    void setTalent(Talent&& talent);
+
     std::vector<Job>* getJobs();
+    Talent* getTalent();
     std::vector<Message>* getMessages();
     void setMessages(std::vector<Message>&&);
     void setUsername(const char*);
@@ -66,36 +69,12 @@ class User
     Info* getInfo();
     
     protected:
+    Talent talent;
     Info info;
     std::vector<Message> messages;
     std::vector<Job> jobs;
     std::string username;
     std::string password;
 };
-
-class Admin : public User 
-{
-    public:
-    Admin(const char* username, const char* password): User(username, password) {}
-
-};
-
-class Client : public User
-{
-    public:
-    Client(const char* username, const char* password): User(username, password) {}
-};
-
-class Contractor : public User
-{
-private: 
-    Talent talent;
-public :
-    Contractor(const char* username, const char* password): User(username, password) {} // review to see if correctly implemented
-    Talent* getTalent();
-    void setTalent(Talent talent);
-};
-
-
 
 #endif

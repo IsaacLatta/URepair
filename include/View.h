@@ -40,7 +40,7 @@ class MainClientView: public View {
     std::function<void(Talent*)> bookingHandler;
     std::function<void()> uploadHandler;
 
-    explicit MainClientView(std::shared_ptr<Client> client) : View(client) {}
+    explicit MainClientView(std::shared_ptr<User> user) : View(user) {}
     void render() override;
     private:
     
@@ -95,7 +95,7 @@ class ClientProfileView: public ProfileView {
 
 class MainContractorView: public View {
 public:
-    explicit MainContractorView(std::shared_ptr<Contractor> contractor) : View(contractor) {};
+    explicit MainContractorView(std::shared_ptr<User> user) : View(user) {};
     void render() override;
     std::function<void(Job*)> jobAcceptHandler = [](Job*) { INFO("view", "would call accept job"); }; // needs to be created - allows the contractors to view incoming requests
     std::function<void()> logoutHandler = []() { INFO("view", "would log user out"); };

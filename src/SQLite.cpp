@@ -101,12 +101,14 @@ static int sign_in_cb(void* user_obj, int argc, char**argv, char** col_name) {
 }
 
 std::shared_ptr<User> SQLite::signIn(const char* username, const char* password) {
-    std::shared_ptr<User> user;
+    std::shared_ptr<User> user = std::make_shared<User>();
     if (!strcmp(username, "c")) {
-        return std::make_shared<Contractor>(username, password);
+        user->role = ROLE::CONTRACTOR;
+        return user;
     }
     else if (!strcmp(username, "a")) {
-        return std::make_shared<Admin>(username, password);
+        user->role = ROLE::ADMIN;
+        return user;
     }
     
     std::string error_msg;
@@ -114,12 +116,11 @@ std::shared_ptr<User> SQLite::signIn(const char* username, const char* password)
                     "' AND password = '" + std::string(password) + "'";
 
     LOG("INFO", "SQLite", "QUERY: %s", query.c_str());
-    user = std::make_shared<User>();
+    user->role = ROLE::CLIENT;
     if(!Database::runQuery(query, sign_in_cb, (void*)user.get(), error_msg) || user->getInfo()->id == -1) {
         LOG("ERROR", "SQLite", "Failed to sign in user with username=%s, password=%s [%s]", username, password, error_msg.c_str());
         return nullptr;
     }
-
     return user;
 }
 

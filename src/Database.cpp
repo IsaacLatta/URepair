@@ -41,27 +41,21 @@ bool Dummy::connect() {
 }
 
 bool Dummy::loadData(User* user) {
-    if (auto con = dynamic_cast<Contractor*>(user))
-    {
-        Talent* talent = con->getTalent();
-        // fill with dummy values
-    }
-
     user->setInfo(Info("jdoe@email.com", "2505791234", "John Doe","Vancouver, BC" , "I am a super nice guy, who will definitly pay you"));
     updateJobs(user);
     return true;
 }
 
 std::shared_ptr<User> Dummy::signIn(const char* username, const char* password) {
-    std::shared_ptr<User> user;
+    auto user = std::make_shared<User>();
     if (!strcmp(username, "c")) {
-        user = std::make_shared<Contractor>(username, password);
+        user->role = ROLE::CONTRACTOR;
     }
     else if (!strcmp(username, "a")) {
-        user = std::make_shared<Admin>(username, password);
+        user->role = ROLE::ADMIN;
     }
     else
-        user = std::make_shared<Client>(username, password);
+        user->role = ROLE::CLIENT;
     loadData(user.get());
     return user;
 }
@@ -100,7 +94,7 @@ std::vector<Talent> Dummy::findTalents(const char* service_type, const char* loc
 void Dummy::updateJobs(User* user) {
     std::vector<Job> jobs;
     char* msg;
-    if(dynamic_cast<Client*>(user)) {
+    if(user->role == ROLE::CLIENT) {
         msg = "updated clients jobs\0";
         jobs = {
             {1, "Fix leaky faucet", "Plumber John", "Pending", "2024-10-25", 100.0},
