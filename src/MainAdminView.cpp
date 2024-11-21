@@ -10,9 +10,11 @@ void MainAdminView::render() {
         logoutHandler();
     }
 
-    ImGui::SetNextItemWidth(300.0f);  // Set width of input field
-    ImGui::InputText("Input query: ", query_input_buffer, BUFFER_SIZE);
-    
+    ImGui::SetNextItemWidth(600.0f);  // Set width of input field
+    ImVec2 box_size(500.0f, 300.0f); // Set text box size
+    //ImGui::InputText("Input query: ", query_input_buffer, BUFFER_SIZE);
+    ImGui::InputTextMultiline("##MultilineBox", query_input_buffer, BUFFER_SIZE, box_size);
+
     if (ImGui::Button("Run query: ", ImVec2(200, 50))) {
         if (queryHandler) {
             LOG("INFO", "render", "query input buffer: %s", query_input_buffer);
