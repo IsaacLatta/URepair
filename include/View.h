@@ -77,7 +77,7 @@ class ProfileView: public View {
 class MainAdminView : public View 
 {
     public:
-    std::function<const char*(const char*)> queryHandler;
+    std::function<std::string(const char*)> queryHandler;
     std::function<void()> logoutHandler;
     MainAdminView(std::shared_ptr<User> user): View(user) {}
 

@@ -5,6 +5,36 @@ std::unique_ptr<Database> Database::databaseFactory() {
     return std::make_unique<Dummy>();
 }
 
+
+bool Database::runQuery(const std::string& query, int(*callback)(void*,int,char**,char**), void* callback_param, std::string& error_msg) {
+    sqlite3* db;
+    int ret_code;
+    char* errmsg = nullptr;
+
+    if((ret_code =  sqlite3_open(SQLITE_FILE, &db)) != SQLITE_OK) {
+        error_msg = "cannot open Database: " + std::string(SQLITE_FILE) + " code=" + std::to_string(ret_code) + " (" + sqlite3_errmsg(db) + ")";
+        sqlite3_close(db);
+        return false;
+    }
+
+    if((ret_code = sqlite3_exec(db, query.c_str(), callback, callback_param, &errmsg)) != SQLITE_OK) {
+        error_msg = "query failed with code=" + std::to_string(ret_code);
+        if(errmsg) {
+            error_msg += " (" + std::string(errmsg) + ")";
+            sqlite3_free(errmsg);
+        } 
+        else {
+            error_msg = " (Unknown Error)";
+        }  
+
+        sqlite3_close(db);
+        return false;
+    }
+
+    sqlite3_close(db);
+    return true;
+}
+
 bool Dummy::connect() {
     return true;
 }

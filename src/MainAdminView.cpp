@@ -18,12 +18,12 @@ void MainAdminView::render() {
     if (ImGui::Button("Run query: ", ImVec2(200, 50))) {
         if (queryHandler) {
             LOG("INFO", "render", "query input buffer: %s", query_input_buffer);
-            const char* query_output = queryHandler(query_input_buffer);
+            std::string query_output = queryHandler(query_input_buffer);
             
             LOG("INFO", "render", "Query result: %s", query_output);
             memset(query_output_buffer, '\0', QUERY_BUFFER);
     
-            strncpy(query_output_buffer, query_output, QUERY_BUFFER - 1);
+            strncpy(query_output_buffer, query_output.c_str(), QUERY_BUFFER - 1);
             query_output_buffer[QUERY_BUFFER - 1] = '\0';
         }
         else {

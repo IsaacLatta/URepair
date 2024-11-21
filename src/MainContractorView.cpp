@@ -38,6 +38,10 @@ void MainContractorView::showContractorMenuBar() {
 	}
 }
 void MainContractorView::showJobRequestInfo(const Job* job, bool* stay_open) {
+	if(!*stay_open) {
+		return;
+	}
+	
 	ImGui::SetNextWindowSize(ImVec2(800, 1000), ImGuiCond_Always);
 	if (ImGui::Begin("Request Info:", stay_open, ImGuiWindowFlags_NoResize)) {
 		ImGui::Text("Job Name: %s", job->name);
@@ -60,7 +64,8 @@ void MainContractorView::showJobRequestInfo(const Job* job, bool* stay_open) {
 void MainContractorView::showJobRequests() {
 	static bool show_request_menu = false;
 	std::vector<Job>* jobs = user->getJobs();
-	const Job* selected_job = nullptr;
+	static const Job* selected_job = nullptr; /* Job pointer needs to be static, othewise it gets reset to nullptr every frame */
+											  /* Old: const Job* = ... | New: static const Job* = ... */
 	ImGui::Text("Pending job requests: %d", static_cast<int>(jobs->size()));
 	for (int i = 0; i < jobs->size(); i++) {
 		ImGui::PushID(i);

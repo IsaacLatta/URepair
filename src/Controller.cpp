@@ -2,6 +2,7 @@
 
 Controller::Controller() {}
 
+/* Temp callback before moving intot the Database class*/
 static int query_callback(void* result_buffer, int argc, char** argv, char** col_name) {
 	std::string* result = static_cast<std::string*>(result_buffer); 
 	for (int i = 0; i < argc; i++) {
@@ -11,45 +12,6 @@ static int query_callback(void* result_buffer, int argc, char** argv, char** col
         *result += "\n";
 	}
 	return 0;
-}
-
-// temp function for testing before integrating with DB class
-const char* run_query(const char* query) {
-    sqlite3* db;
-	char* error_msg = 0;
-	int ret_code;
-	std::string result = "";
-	
-    LOG("INFO", "run_query", "Query received: %s", query);
-
-	ret_code = sqlite3_open("../test.db", &db);
-	if (ret_code) {
-        LOG("ERROR", "controller", "cannot open database: %s", sqlite3_errmsg(db));
-        char* ret_result = new char[BUFFER_SIZE];
-        snprintf(ret_result, BUFFER_SIZE, "Database fail to open, code=%d (%s)", ret_code, sqlite3_errmsg(db));
-        return ret_result;
-	}
-	LOG("INFO", "controller", "database open with code: %d", ret_code);
-
-	ret_code = sqlite3_exec(db, query, query_callback, (void*)&result, &error_msg);
-	if (ret_code != SQLITE_OK) {
-        LOG("ERROR", "controller", "Query failed: %s", error_msg);
-        char* ret_result = new char[strlen(error_msg) + 1];
-        std::strcpy(ret_result, error_msg);
-        
-        sqlite3_free(error_msg);
-        sqlite3_close(db);
-        return ret_result;
-	}
-	LOG("INFO", "controller", "query executed with code: %d", ret_code);
-
-	INFO("controller", "query successful");
-	sqlite3_close(db);
-    
-    char* ret_result = new char[result.length() + 1];
-    std::strcpy(ret_result, result.c_str());
-    LOG("INFO", "controller", "Query result content: %s, Size of result: %d", ret_result, result.length());
-    return ret_result;
 }
 
 void Controller::renderCurrent() {
@@ -214,12 +176,16 @@ void Controller::setupMainView(std::shared_ptr<User> user) {
         auto main = std::make_shared<MainAdminView>(admin);
         main->queryHandler = [this](const char* query) {
             LOG("INFO", "controller", "running query: %s", query);
-            return run_query(query);
 
-            /* sudo code
-            auto result = co_await threadpool->exec(db->runQuery, query);
-            user->update(result);
-            */
+            std::string error_msg;
+            std::string result_buf;
+            std::string query_str(query);
+            if(!Database::runQuery(query_str, query_callback,(void*)(&result_buf), error_msg)) {
+                LOG("ERROR", "controller", "query failed: %s", error_msg.c_str());
+                return error_msg;
+            }
+            
+            return result_buf;
         };
         main->logoutHandler = [this]() 
         {
