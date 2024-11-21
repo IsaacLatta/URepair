@@ -150,7 +150,7 @@ void Controller::setupMainView(std::shared_ptr<User> user) {
         };
         main->profileHandler = [this, main, user]()
         {
-            setupProfileView(user);git switch --track origin/matia-branch
+            setupProfileView(user);
 
             INFO("controller", "would switch to client view"); //needs to be implemented still
         };
