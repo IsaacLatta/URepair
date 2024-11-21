@@ -37,22 +37,45 @@ void MainContractorView::showContractorMenuBar() {
 		INFO("view", "Active job handler would appear");
 	}
 }
-void MainContractorView::showJobRequestInfo() {
-	// hello world
+void MainContractorView::showJobRequestInfo(const Job* job, bool* stay_open) {
+	ImGui::SetNextWindowSize(ImVec2(800, 1000), ImGuiCond_Always);
+	if (ImGui::Begin("Request Info:", stay_open, ImGuiWindowFlags_NoResize)) {
+		ImGui::Text("Job Name: %s", job->name);
+		
+		//accept project 
+		if (ImGui::Button("Accept")) {
+			*stay_open = false;
+		}
+
+		//deny project
+		if (ImGui::Button("Deny")) {
+			*stay_open = false;
+		}
+	
+		
+	}
+	ImGui::End();
 }
 
 void MainContractorView::showJobRequests() {
-	static bool show_request_info = false;
+	static bool show_request_menu = false;
 	std::vector<Job>* jobs = user->getJobs();
-	for (const Job& job : *jobs) {
-		if (ImGui::Selectable(job.name)) {
-			if (ImGui::Button("View##"))
+	const Job* selected_job = nullptr;
+	ImGui::Text("Pending job requests: %d", static_cast<int>(jobs->size()));
+	for (int i = 0; i < jobs->size(); i++) {
+		ImGui::PushID(i);
+		const Job& job = jobs->at(i);
+		ImGui::Text("Job Request from: %s", job.name);
+		ImGui::SameLine();
+			if (ImGui::Button("View##Button"))
 			{
-				showJobRequestInfo();
+				show_request_menu = true;
+				selected_job = &job;
 			}
-
-		}
-
+			ImGui::PopID();
+	}
+	if (show_request_menu && selected_job != nullptr) {
+		showJobRequestInfo(selected_job, &show_request_menu);
 	}
 }
 
@@ -63,7 +86,7 @@ void MainContractorView::render() {
 	ImGui::SetNextWindowSize(ImVec2(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 	ImGui::Begin(title, nullptr, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoCollapse);
 	showContractorMenuBar();
-	ImGui::Text("Pending job requests: %s", "Hello World");
+	
 	showJobRequests();
 	ImGui::End();
 }
