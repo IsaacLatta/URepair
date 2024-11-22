@@ -104,7 +104,7 @@ public:
 
 private:
    void showContractorMenuBar();
-   void showJobRequestInfo(const Job* job, bool*);
+   void showJobRequestInfo(Job* job, bool*);
    void showJobRequests();
    void acceptRequest();
 };
