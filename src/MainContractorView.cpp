@@ -48,6 +48,7 @@ void MainContractorView::showJobRequestInfo(Job* job, bool* stay_open) {
 		//accept project 
 		if (ImGui::Button("Accept")) {
 			INFO("Contractor", "Job accepted");
+			jobAcceptHandler(job);
 			*stay_open = false;
 		}
 		//deny project
