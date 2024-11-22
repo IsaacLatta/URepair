@@ -32,6 +32,7 @@ class Dummy : public Database
     bool connect() override;
     std::shared_ptr<User> signIn(const char* username, const char* password) override;
     bool bookJob(User*, Job*) override;
+    bool bookJob(User*, Talent*) override;
     bool loadData(User*) override;
     bool changePassword(User* user, const char* old_pass, const char* new_pass) override;
     bool changeUsername(User* user, const char* password, const char* new_username) override;

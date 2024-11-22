@@ -62,8 +62,7 @@ void MainContractorView::showJobRequestInfo(Job* job, bool* stay_open) {
 }
 void MainContractorView::showActiveJobs() {
 	ImGui::Text("Active Jobs: ");
-
-
+	activejobHandler();
 }
 
 void MainContractorView::showJobRequests() {
@@ -87,6 +86,9 @@ void MainContractorView::showJobRequests() {
 	if (show_request_menu && selected_job != nullptr) {
 		showJobRequestInfo(selected_job, &show_request_menu);
 	}
+}
+void MainContractorView::showProfileWindow() {
+
 }
 
 void MainContractorView::render() {

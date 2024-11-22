@@ -93,15 +93,6 @@ class ClientProfileView: public ProfileView {
     void render() override;
 };
 
-class ContractorProfileView: public ProfileView {
-    public:
-    std::function<bool(const char*, const char*)> changeTalent;
-    
-    protected:
-        void showRating();
-        void showTalent();
-};
-
 class MainContractorView: public View {
 public:
     explicit MainContractorView(std::shared_ptr<User> user) : View(user) {};
@@ -117,6 +108,7 @@ private:
    void showJobRequests();
    void showActiveJobs();
    void acceptRequest();
+   void showProfileWindow();
 };
 
 #endif
