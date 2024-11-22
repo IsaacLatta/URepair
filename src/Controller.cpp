@@ -87,20 +87,20 @@ bool Controller::start() {
     return true;
 }
 
-void Controller::setupMainContractorView(std::shared_ptr<User> contractor)
+void Controller::setupMainContractorView(std::shared_ptr<User> user)
 {
-    auto main = std::make_shared<MainContractorView>(contractor);
+    auto main = std::make_shared<MainContractorView>(user);
     main->logoutHandler = [this]() {
+        LOG("INFO", "controller", "logging out ...");
         setupLoginView();
     };
-    main->jobAcceptHandler = [this, contractor](Job *job) {
-        if (db->bookJob(contractor.get(), job))
-        {
-            INFO("controller", "job booked");
-        }
+    main->jobAcceptHandler = [this, user](Job *job) {
+        LOG("INFO", "controller", "booking job ...");
+        db->bookJob(user.get(), job);
+        db->loadData(user.get());
     };
-    main->profileHandler = [this]() {
-        INFO("controller", "would switch to client view");
+    main->profileHandler = [this, user]() {
+        LOG("INFO", "controller", "switching to profile view ...");
         setupProfileView(user);
     };
     pushView(main);
@@ -109,6 +109,7 @@ void Controller::setupMainContractorView(std::shared_ptr<User> contractor)
 
 void Controller::setupMainClientView(std::shared_ptr<User> user) {
     auto main = std::make_shared<MainClientView>(user);
+
     main->searchHandler = [this, main](const char *service_type, const char *location, int min_rating, int min_price, int max_price) {
         INFO("Search", "Search for talent triggered");
         main->search_results = db->findTalents(service_type, location, min_rating, min_price, max_price);
@@ -127,12 +128,11 @@ void Controller::setupMainClientView(std::shared_ptr<User> user) {
         }
     };
     main->uploadHandler = [this]() {
-        INFO("booking", "uploaded"); // to be implemented
+        INFO("booking", "uploaded"); 
     };
 
-    INFO("controller", "handlers assigned to main client view, pushing new view");
+    INFO("controller", "handlers assigned to main client view, pushed view");
     pushView(main);
-    INFO("controller", "main view pushed");
 }
 
 void Controller::setupProfileView(std::shared_ptr<User> user) {
@@ -150,7 +150,7 @@ void Controller::setupProfileView(std::shared_ptr<User> user) {
         };
         profile->logoutHandler = [this]()
         {
-            INFO("controller", "switching to login state");
+            INFO("controller", "switching to login view");
             setupLoginView();
         };
         profile->goBack = [this]()
