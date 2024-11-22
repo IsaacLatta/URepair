@@ -1,6 +1,6 @@
 
 #include "Database.h"
-
+#include <random>
 
 /* USER
 username = mbaudin
@@ -203,27 +203,73 @@ status boolean, cost number, userId int, talentId int);
 
 insert into job values(1000, 'Isaac is laying pipe at Michaels house',
 'MichaelJob', 0, 200.0, 1000, 1000);
-*/
 
-bool SQLite::bookJob(User* user, Talent* talent) {
+INSERT INTO job (description, name, status, cost, userId, talentId)
+*/
+static std::string generateJobDescription(std::string talentName, std::string userName) {
+    std::string descriptions[21];
+    descriptions[0] = talentName + " is doing stuff to " + userName + "s house.";
+    descriptions[1] = talentName + " is removing all the windows at " + userName + "s house.";
+    descriptions[2] = talentName + " is plumbing all over the place in " + userName + "s house.";
+    descriptions[3] = talentName + " is installing shingles in the bathroom of " + userName + "s house.";
+    descriptions[4] = talentName + " is sleeping at " + userName + "s house.";
+    descriptions[5] = talentName + " is linking the lists at " + userName + "s house.";
+    descriptions[6] = talentName + " is helping his friend Jack, off the horse at " + userName + "s house.";
+    descriptions[7] = talentName + " is drinking at " + userName + "s house.";
+    descriptions[8] = talentName + " is installing a single lightbulb at " + userName + "s house.";
+    descriptions[9] = talentName + " is installing drywall at " + userName + "s house.";
+    descriptions[10] = talentName + " is talking to Bill Nye at " + userName + "s house.";
+    descriptions[11] = talentName + " is drunk at " + userName + "s house.";
+    descriptions[12] = talentName + " is missing. Last seen at " + userName + "s house.";
+    descriptions[13] = talentName + " is manually breathing at " + userName + "s house.";
+    descriptions[14] = talentName + " is attending a lecture at " + userName + "s house.";
+    descriptions[15] = talentName + " is breaking into " + userName + "s house.";
+    descriptions[16] = talentName + " is siphoning gas at " + userName + "s house.";
+    descriptions[17] = talentName + " is hooking up a car battery to " + userName + "s house.";
+    descriptions[18] = talentName + " is mining for diamonds at " + userName + "s house.";
+    descriptions[19] = talentName + " is livin' la vida loca at " + userName + "s house.";
+    descriptions[20] = talentName + " is " + userName + ".";
+
+    //Random Number generation for this
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> distr(0, 21);
+    int randint = distr(gen);
+
+    return descriptions[randint];
+}
+//Calls back to michael's cellphone
+static int michaelCallback(void* jobs_param, int argc, char** argv, char** col_name) {
     return true;
-    /*
+}
+/*
+Runs a SQL query to book a new job and add to the database.
+This code is mostly just constructing the query.
+Returns false if an error is encountered.
+*/
+bool SQLite::bookJob(User* user, Talent* talent) {
+    
+    std::string error_msg;
+
     Info* userInfo = user->getInfo();
 
-       //Select these
-    int jobID;
     int userID = userInfo->id;
-    int talentID = talent->
-    double rate;
-    std::string talent, user;
+    int talentID = talent->id;
+    double rate = talent->rate;
+    std::string talentName = talent->name;
+    std::string userName = user->getUsername();
 
-    std::string query = 
-    "insert into job values(" + std::to_string(jobID) + ", '" + getJobDescription(talent, user) +
-    "', 0, " + std::to_string(rate) + ", " + userID + ", " + std::to_string(talentID) + ")";
+    std::string query = std::string("INSERT INTO job (description, name, status, cost, userId, talentId) VALUES (") + generateJobDescription(talentName, userName) + ", '" + userName + std::string("', 0, ") + std::to_string(rate) + std::string(", ") + std::to_string(userID) + std::string(", ") + std::to_string(talentID) + std::string(")");
 
-     return true;
-     */
+    if (!Database::runQuery(query, michaelCallback, (void*)true, error_msg)) {
+        LOG("ERROR", "SQLite", "failed to load user data from JOB table[%s]", error_msg.c_str());
+        return false;
+    }
+    
+    return true;
 }
+
+
 
 //This is here so that the program doesn't crash!
 bool SQLite::bookJob(User* user, Job* job) {
