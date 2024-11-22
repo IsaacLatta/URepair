@@ -62,7 +62,7 @@ void MainContractorView::showJobRequestInfo(Job* job, bool* stay_open) {
 }
 void MainContractorView::showActiveJobs() {
 	ImGui::Text("Active Jobs: ");
-	activejobHandler();
+	//activejobHandler();
 }
 
 void MainContractorView::showJobRequests() {
