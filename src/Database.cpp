@@ -41,7 +41,26 @@ bool Dummy::connect() {
 
 bool Dummy::loadData(User* user) {
     user->setInfo(Info("jdoe@email.com", "2505791234", "John Doe","Vancouver, BC" , "I am a super nice guy, who will definitly pay you"));
-    updateJobs(user);
+    std::vector<Job> jobs;
+    if(user->role == ROLE::CLIENT) {
+        jobs = {
+            {1, "Fix leaky faucet", "Plumber John", "Pending", "2024-10-25", 100.0},
+            {2, "Electrical wiring", "Electrician Jane", "Completed", "2024-10-22", 250.0},
+            {3, "Painting living room", "Painter Bob", "In Progress", "2024-10-24", 300.0},
+            {4, "Install new sink", "Plumber Alice", "Pending", "2024-10-26", 150.0},
+            {5, "Fix bathroom light", "Electrician Jane", "Completed", "2024-10-20", 200.0}
+            };
+    }
+    else {
+        jobs = {
+            {1, "Fix leaky faucet", "John doe", "Pending", "2024-10-25", 100.0},
+            {2, "Electrical wiring", "Matia smolcok", "Completed", "2024-10-22", 250.0},
+            {3, "Painting living room", "Isaac beegcoc", "In Progress", "2024-10-24", 300.0},
+            {4, "Install new sink", "Michael nocoq", "Pending", "2024-10-26", 150.0},
+            {5, "Fix bathroom light", "Jane smith", "Completed", "2024-10-20", 200.0}
+            };
+    }
+    user->setJobs(jobs);
     return true;
 }
 
@@ -88,33 +107,6 @@ std::vector<Talent> Dummy::findTalents(const char* service_type, const char* loc
         { "Charlie Brown", "Electrician", "San Francisco", 5, 250 }
     };
     return filterTalents(talents, service_type, location, min_rating, min_price, max_price);
-}
-
-void Dummy::updateJobs(User* user) {
-    std::vector<Job> jobs;
-    char* msg;
-    if(user->role == ROLE::CLIENT) {
-        msg = "updated clients jobs\0";
-        jobs = {
-            {1, "Fix leaky faucet", "Plumber John", "Pending", "2024-10-25", 100.0},
-            {2, "Electrical wiring", "Electrician Jane", "Completed", "2024-10-22", 250.0},
-            {3, "Painting living room", "Painter Bob", "In Progress", "2024-10-24", 300.0},
-            {4, "Install new sink", "Plumber Alice", "Pending", "2024-10-26", 150.0},
-            {5, "Fix bathroom light", "Electrician Jane", "Completed", "2024-10-20", 200.0}
-            };
-    }
-    else {
-        msg = "updated contractors jobs\0";
-        jobs = {
-            {1, "Fix leaky faucet", "John doe", "Pending", "2024-10-25", 100.0},
-            {2, "Electrical wiring", "Matia smolcok", "Completed", "2024-10-22", 250.0},
-            {3, "Painting living room", "Isaac beegcoc", "In Progress", "2024-10-24", 300.0},
-            {4, "Install new sink", "Michael nocoq", "Pending", "2024-10-26", 150.0},
-            {5, "Fix bathroom light", "Jane smith", "Completed", "2024-10-20", 200.0}
-            };
-    }
-    INFO("Database", msg);
-    user->setJobs(jobs);
 }
 
 bool Dummy::changePassword(User* user, const char* old_pass, const char* new_pass) {

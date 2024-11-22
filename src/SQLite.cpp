@@ -230,12 +230,6 @@ bool SQLite::bookJob(User* user, Job* job) {
     return true;
 }
 
-void SQLite::updateJobs(User*) {
-
-
-
-
-}
 
 bool SQLite::changePassword(User* user, const char* old_pass, const char* new_pass) {
     return true;
@@ -302,28 +296,23 @@ std::vector<Talent> SQLite::findTalents(const char* service_type, const char* lo
 
     bool has_conditions = false;
     if (strlen(service_type) != 0) {
-        where_clause += (has_conditions ? " AND " : " WHERE ") + 
-                        std::string("service_type = '") + std::string(service_type) + "'";
+        where_clause += (has_conditions ? " AND " : " WHERE ") + std::string("service_type = '") + std::string(service_type) + "'";
         has_conditions = true;
     }
     if (strlen(location) != 0) {
-        where_clause += (has_conditions ? " AND " : " WHERE ") + 
-                        std::string("location = '") + std::string(location) + "'";
+        where_clause += (has_conditions ? " AND " : " WHERE ") + std::string("location = '") + std::string(location) + "'";
         has_conditions = true;
     }
     if (min_rating > 0) {
-        where_clause += (has_conditions ? " AND " : " WHERE ") + 
-                        std::string("rating > ") + std::to_string(min_rating);
+        where_clause += (has_conditions ? " AND " : " WHERE ") + std::string("rating > ") + std::to_string(min_rating);
         has_conditions = true;
     }
     if (min_price > 0) {
-        where_clause += (has_conditions ? " AND " : " WHERE ") + 
-                        std::string("rate > ") + std::to_string(min_price);
+        where_clause += (has_conditions ? " AND " : " WHERE ") + std::string("rate > ") + std::to_string(min_price);
         has_conditions = true;
     }
     if (max_price > 0) {
-        where_clause += (has_conditions ? " AND " : " WHERE ") + 
-                        std::string("rate < ") + std::to_string(max_price);
+        where_clause += (has_conditions ? " AND " : " WHERE ") + std::string("rate < ") + std::to_string(max_price);
         has_conditions = true;
     }
     query += where_clause;
