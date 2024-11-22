@@ -206,9 +206,11 @@ insert into job values(1000, 'Isaac is laying pipe at Michaels house',
 */
 
 bool SQLite::bookJob(User* user, Talent* talent) {
+    return true;
+    /*
     Info* userInfo = user->getInfo();
 
-        //Select these
+       //Select these
     int jobID;
     int userID = userInfo->id;
     int talentID = talent->
@@ -220,6 +222,12 @@ bool SQLite::bookJob(User* user, Talent* talent) {
     "', 0, " + std::to_string(rate) + ", " + userID + ", " + std::to_string(talentID) + ")";
 
      return true;
+     */
+}
+
+//This is here so that the program doesn't crash!
+bool SQLite::bookJob(User* user, Job* job) {
+    return true;
 }
 
 void SQLite::updateJobs(User*) {
