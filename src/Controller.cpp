@@ -121,7 +121,10 @@ void Controller::setupMainClientView(std::shared_ptr<User> user) {
         setupLoginView();
     };
     main->bookingHandler = [this, main, user](Talent *talent) {
-        INFO("booking", "talent booked"); // to be implemented
+        INFO("booking", "talent booked"); 
+        if(!db->bookJob(user.get(), talent) || !db->loadData(user.get())) {
+            LOG("INFO", "controller", "job booking failed"); 
+        }
     };
     main->uploadHandler = [this]() {
         INFO("booking", "uploaded"); // to be implemented
