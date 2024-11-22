@@ -232,6 +232,9 @@ bool SQLite::bookJob(User* user, Job* job) {
 
 void SQLite::updateJobs(User*) {
 
+
+
+
 }
 
 bool SQLite::changePassword(User* user, const char* old_pass, const char* new_pass) {
@@ -242,7 +245,30 @@ bool SQLite::changeUsername(User* user, const char* password, const char* new_us
     return true;
 }
 
+/* TALENT
+talentID = 1000
+name = Isaac Pipe Laying Ltd.
+service_type = Plumbing
+location = Kamloops
+rating = 5
+rate = 200
+message = I will lay your pipe :)
+*/
+
 std::vector<Talent> SQLite::findTalents(const char* service_type, const char* location, int min_rating, int min_price, int max_price) {
+    
+    std::string where_clause = " WHERE";
+    if(strlen(service_type) != 0) {
+        where_clause += " AND service_type = '" + std::string(service_type) + "'"; 
+    }
+    if(strlen(location) != 0) {
+        where_clause += " AND location = '" + std::string(location) + "'";
+    }
+    
+    where_clause += " AND rating > " + std::to_string(min_rating);
+    where_clause += " AND rate > " + std::to_string(min_rating);
+    where_clause += " AND rate < " + std::to_string(max_price);
+    
     return std::vector<Talent>();
 }
 
