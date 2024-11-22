@@ -8,7 +8,6 @@
 #include "User.h"
 #include "logger.h"
 #include "Database.h"
-#include "ThreadPool.h"
 
 /**
  * @class Controller
