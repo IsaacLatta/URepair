@@ -56,18 +56,21 @@ void MainContractorView::showJobRequestInfo(Job* job, bool* stay_open) {
 			INFO("Contractor", "Job denied");
 			jobAcceptHandler(job);
 			*stay_open = false;
-
 		}
-	
 	}
 	ImGui::End();
+}
+void MainContractorView::showActiveJobs() {
+	ImGui::Text("Active Jobs: ");
+
+
 }
 
 void MainContractorView::showJobRequests() {
 	static bool show_request_menu = false;
 	std::vector<Job>* jobs = user->getJobs();
 	static Job* selected_job = nullptr; /* Job pointer needs to be static, othewise it gets reset to nullptr every frame */
-											  /* Old: const Job* = ... | New: static const Job* = ... */
+												/* Old: const Job* = ... | New: static const Job* = ... */
 	ImGui::Text("Pending job requests: %d", static_cast<int>(jobs->size()));
 	for (int i = 0; i < jobs->size(); i++) {
 		ImGui::PushID(i);
@@ -95,5 +98,6 @@ void MainContractorView::render() {
 	showContractorMenuBar();
 	
 	showJobRequests();
+	showActiveJobs();
 	ImGui::End();
 }

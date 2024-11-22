@@ -2,8 +2,8 @@
 
 std::unique_ptr<Database> Database::databaseFactory() {
     INFO("database", "created");
-    //return std::make_unique<Dummy>();
-    return std::make_unique<SQLite>();
+    return std::make_unique<Dummy>();
+    //return std::make_unique<SQLite>();
 }
 
 bool Database::runQuery(const std::string& query, int(*callback)(void*,int,char**,char**), void* callback_param, std::string& error_msg) {

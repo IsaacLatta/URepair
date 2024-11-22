@@ -3,8 +3,8 @@
 
 void LoginView::render() {
     static const std::size_t BUFSIZE = 256;
-    static char username_buffer[BUFSIZE];
-	static char password_buffer[BUFSIZE];
+    static char username_buffer[BUFSIZE] = "mbaudin";
+    static char password_buffer[BUFSIZE] = "616481";
     
     ImGuiStyle& style = ImGui::GetStyle();
     style.FramePadding = ImVec2(10.0f, 10.0f);  // Increase padding inside input fields and buttons
