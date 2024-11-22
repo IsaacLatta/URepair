@@ -255,21 +255,88 @@ rate = 200
 message = I will lay your pipe :)
 */
 
-std::vector<Talent> SQLite::findTalents(const char* service_type, const char* location, int min_rating, int min_price, int max_price) {
-    
-    std::string where_clause = " WHERE";
-    if(strlen(service_type) != 0) {
-        where_clause += " AND service_type = '" + std::string(service_type) + "'"; 
+/*struct Talent {
+    int id;
+    std::string name;
+    std::string service_type;  
+    std::string location;      
+    int rating;                
+    float rate;
+    Talent() {}
+    Talent(const char* name, const char* service, const char* location, int rating, float rate): 
+    name(name), service_type(service), location(location), rating(rating), rate(rate){}
+};*/
+
+static int find_talent_cb(void* talent_param, int argc, char**argv, char** col_name) {
+    std::vector<Talent>* talent = static_cast<std::vector<Talent>*>(talent_param);
+    Talent tal;
+    for (int i = 0; i < argc; i++) {
+        if (strcmp(col_name[i], "talentID") == 0) {
+            tal.id = argv[i] ? std::stoi(argv[i]) : -1;
+        } 
+        else if (strcmp(col_name[i], "name") == 0) {
+            tal.name = argv[i] ? argv[i] : "";
+        } 
+        else if (strcmp(col_name[i], "service_type") == 0) {
+            tal.service_type= argv[i] ? argv[i] : "";
+        } 
+        else if (strcmp(col_name[i], "location") == 0) {
+            tal.location = argv[i] ? argv[i] : "";
+        }
+        else if (strcmp(col_name[i], "rating") == 0) {
+            tal.rating = argv[i] ? std::stoi(argv[i]) : -1;
+        }
+        else if (strcmp(col_name[i], "rate") == 0) {
+            tal.rate = argv[i] ? std::stof(argv[i]) : -1;
+        }
     }
-    if(strlen(location) != 0) {
-        where_clause += " AND location = '" + std::string(location) + "'";
-    }
-    
-    where_clause += " AND rating > " + std::to_string(min_rating);
-    where_clause += " AND rate > " + std::to_string(min_rating);
-    where_clause += " AND rate < " + std::to_string(max_price);
-    
-    return std::vector<Talent>();
+    talent->emplace_back(std::move(tal));
+    return 0;
 }
+
+std::vector<Talent> SQLite::findTalents(const char* service_type, const char* location, int min_rating, int min_price, int max_price) {
+    std::vector<Talent> talent;
+    std::string query = "SELECT * FROM TALENT ";
+    std::string where_clause;
+    std::string err_msg;
+
+    bool has_conditions = false;
+    if (strlen(service_type) != 0) {
+        where_clause += (has_conditions ? " AND " : " WHERE ") + 
+                        std::string("service_type = '") + std::string(service_type) + "'";
+        has_conditions = true;
+    }
+    if (strlen(location) != 0) {
+        where_clause += (has_conditions ? " AND " : " WHERE ") + 
+                        std::string("location = '") + std::string(location) + "'";
+        has_conditions = true;
+    }
+    if (min_rating > 0) {
+        where_clause += (has_conditions ? " AND " : " WHERE ") + 
+                        std::string("rating > ") + std::to_string(min_rating);
+        has_conditions = true;
+    }
+    if (min_price > 0) {
+        where_clause += (has_conditions ? " AND " : " WHERE ") + 
+                        std::string("rate > ") + std::to_string(min_price);
+        has_conditions = true;
+    }
+    if (max_price > 0) {
+        where_clause += (has_conditions ? " AND " : " WHERE ") + 
+                        std::string("rate < ") + std::to_string(max_price);
+        has_conditions = true;
+    }
+    query += where_clause;
+
+    LOG("INFO", "SQLite", "QUERY: %s", query.c_str());
+
+    if (!Database::runQuery(query, find_talent_cb, (void*)&talent, err_msg)) {
+        LOG("ERROR", "SQLite", "failed find talents from TALENT table [%s] [QUERY: %s]", err_msg.c_str(), query.c_str());
+    }
+    return talent;
+}
+
+
+
 
 
