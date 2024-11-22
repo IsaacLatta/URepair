@@ -197,8 +197,38 @@ bool SQLite::loadData(User* user) {
     return true;
 }
 
-bool SQLite::bookJob(User*, Job*) {
-    return true;
+/*
+create table job(jobId int, description varchar, name varchar,
+status boolean, cost number, userId int, talentId int);
+
+insert into job values(1000, 'Isaac is laying pipe at Michaels house',
+'MichaelJob', 0, 200.0, 1000, 1000);
+*/
+
+bool SQLite::bookJob(User* user, Talent* talent) {
+    Info* userInfo = user->getInfo();
+
+        //Select these
+    int jobID;
+    int userID = userInfo->id;
+    int talentID = talent->
+    double rate;
+    std::string talent, user;
+
+    std::string query = 
+    "insert into job values(" + std::to_string(jobID) + ", '" + getJobDescription(talent, user) +
+    "', 0, " + std::to_string(rate) + ", " + userID + ", " + std::to_string(talentID) + ")";
+
+     return true;
+}
+
+//Returns a random string that sounds kinda funny from a string bank
+std::string getJobDescription(std::string* talent, std::string* user) {
+    std::string s = "";
+
+
+
+    return s;
 }
 
 void SQLite::updateJobs(User*) {

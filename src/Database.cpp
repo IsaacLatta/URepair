@@ -6,7 +6,6 @@ std::unique_ptr<Database> Database::databaseFactory() {
     return std::make_unique<SQLite>();
 }
 
-
 bool Database::runQuery(const std::string& query, int(*callback)(void*,int,char**,char**), void* callback_param, std::string& error_msg) {
     sqlite3* db;
     int ret_code;

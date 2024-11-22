@@ -19,6 +19,7 @@ struct Job {
 };
 
 struct Talent {
+    int id;
     std::string name;
     std::string service_type;  
     std::string location;      
