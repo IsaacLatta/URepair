@@ -197,41 +197,29 @@ bool SQLite::loadData(User* user) {
     return true;
 }
 
-/* TALENT
-talentID = 1000
-name = Isaac Pipe Laying Ltd.
-service_type = Plumbing
-location = Kamloops
-rating = 5
-rate = 200
-message = I will lay your pipe :)
-*/
-
-/* JOB
-jobId = 1000
-description = Isaac is laying pipe at Michaels house
-name = MichaelJob
-status = 0
-cost = 200
-userId = 1000
-talentId = 1000
-*/
-
 /*
-struct Job {
-    int id;
-    char description[256];
-    char name[128];
-    char status[128];
-    char date[256];
-    double cost;
-};
+create table job(jobId int, description varchar, name varchar,
+status boolean, cost number, userId int, talentId int);
+
+insert into job values(1000, 'Isaac is laying pipe at Michaels house',
+'MichaelJob', 0, 200.0, 1000, 1000);
 */
 
-bool SQLite::bookJob(User*, Job*) {
-    
-    
-    return true;
+bool SQLite::bookJob(User* user, Talent* talent) {
+    Info* userInfo = user->getInfo();
+
+        //Select these
+    int jobID;
+    int userID = userInfo->id;
+    int talentID = talent->
+    double rate;
+    std::string talent, user;
+
+    std::string query = 
+    "insert into job values(" + std::to_string(jobID) + ", '" + getJobDescription(talent, user) +
+    "', 0, " + std::to_string(rate) + ", " + userID + ", " + std::to_string(talentID) + ")";
+
+     return true;
 }
 
 void SQLite::updateJobs(User*) {

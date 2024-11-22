@@ -47,7 +47,7 @@ class SQLite : public Database
     std::shared_ptr<User> signIn(const char* username, const char* password) override;
     bool loadData(User*) override;
     std::vector<Talent> findTalents(const char* service_type = "", const char* location = "", int min_rating = 0, int min_price = 0, int max_price = 10000) override; 
-    bool bookJob(User*, Job*) override;
+    bool bookJob(User*, Talent*) override;
     void updateJobs(User*) override;
     
     bool changePassword(User* user, const char* old_pass, const char* new_pass) override;
