@@ -197,7 +197,40 @@ bool SQLite::loadData(User* user) {
     return true;
 }
 
+/* TALENT
+talentID = 1000
+name = Isaac Pipe Laying Ltd.
+service_type = Plumbing
+location = Kamloops
+rating = 5
+rate = 200
+message = I will lay your pipe :)
+*/
+
+/* JOB
+jobId = 1000
+description = Isaac is laying pipe at Michaels house
+name = MichaelJob
+status = 0
+cost = 200
+userId = 1000
+talentId = 1000
+*/
+
+/*
+struct Job {
+    int id;
+    char description[256];
+    char name[128];
+    char status[128];
+    char date[256];
+    double cost;
+};
+*/
+
 bool SQLite::bookJob(User*, Job*) {
+    
+    
     return true;
 }
 
