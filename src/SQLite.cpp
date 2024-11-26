@@ -97,7 +97,7 @@ static int sign_in_cb(void* user_obj, int argc, char**argv, char** col_name) {
         else if (strcmp(col_name[i], "username") == 0) {
             user->setUsername(argv[i] ? argv[i] : "");
         } 
-        else if (strcmp(col_name[i], "talent") == 0) {
+        else if (strcmp(col_name[i], "talentID") == 0) {
             talent.id = argv[i] ? std::stoi(argv[i]) : -1;
             user->setTalent(std::move(talent));
         } 
@@ -107,11 +107,7 @@ static int sign_in_cb(void* user_obj, int argc, char**argv, char** col_name) {
 
 std::shared_ptr<User> SQLite::signIn(const char* username, const char* password) {
     std::shared_ptr<User> user = std::make_shared<User>();
-    if (!strcmp(username, "c")) {
-        user->role = ROLE::CONTRACTOR;
-        return user;
-    }
-    else if (!strcmp(username, "a")) {
+    if (!strcmp(username, "a")) {
         user->role = ROLE::ADMIN;
         return user;
     }
@@ -195,6 +191,7 @@ message = I will lay your pipe :)
 static int load_data_talent_cb(void* tal_param, int argc, char**argv, char** col_name) {
     Talent* talent = static_cast<Talent*>(tal_param);
 
+    std::cout << "COL MATCH\n";
     for (int i = 0; i < argc; i++) {
         if(!strcmp(col_name[i], "name")) {
             talent->name = argv[i] ? argv[i] : "";
@@ -238,6 +235,7 @@ bool SQLite::loadData(User* user) {
     }
 
     // Fetch the contractors info
+    std::cout << "GETTING TALENT INFO\n";
     Talent* talent = user->getTalent();
     query = "SELECT * FROM TALENT WHERE talentID = " + std::to_string(talent->id);
     if(!Database::runQuery(query, load_data_talent_cb, (void*)talent, error_msg)) {
@@ -419,7 +417,7 @@ bool SQLite::changeInfo(User* user, const char* what, const char* newstring, Tal
     std::string query;
     
     if(talent != nullptr) {
-        query = "update info set " + std::string(what) + " = '" + std::string(newstring) + "' where talentID = " + std::to_string(talent->id);
+        query = "update TALENT set " + std::string(what) + " = '" + std::string(newstring) + "' where talentID = " + std::to_string(talent->id);
 
         if (!Database::runQuery(query, default_cb, nullptr, error_msg)) {
             LOG("ERROR", "SQLite", "failed to update TALENT[%s]", error_msg.c_str());
@@ -435,7 +433,7 @@ bool SQLite::changeInfo(User* user, const char* what, const char* newstring, Tal
         LOG("ERROR", "SQLite", "failed to update info[%s]", error_msg.c_str());
         return false;
     }
-    
+
     return true;
 }
 

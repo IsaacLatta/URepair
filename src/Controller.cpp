@@ -157,6 +157,7 @@ void Controller::setupProfileView(std::shared_ptr<User> user) {
         db->loadData(user.get());
     };
     profile->updateTalentInfoHandler = [this, user](char* field, char* new_val) {
+        std::cout << "updating talent\n";
         db->changeInfo(user.get(), std::string(field).c_str(), std::string(new_val).c_str(), user->getTalent());
         db->loadData(user.get());
     };
