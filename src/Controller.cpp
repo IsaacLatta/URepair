@@ -158,6 +158,9 @@ void Controller::setupProfileView(std::shared_ptr<User> user) {
             INFO("controller", "going back");
             goBack();
         };
+        profile->updateInfoHandler = [this, user](char*, char*) {
+        
+        };
         pushView(profile);
     }
     else if (user->role == ROLE::CONTRACTOR) {

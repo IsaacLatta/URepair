@@ -6,10 +6,17 @@ void ProfileView::showEditOptions(bool* p_open) {
         return;
     }
     
+
+    char* field;
+    char* new_field;
+    bool update;
+
     static char name[BUFFER_SIZE] = "\0";
     static char phone[BUFFER_SIZE] = "\0";
     static char email[BUFFER_SIZE] = "\0";
     static char location[BUFFER_SIZE] = "\0";
+    static char bio[BUFFER_SIZE] = "\0";
+
     
     // Edit options inputs
     ImGui::Text("New name");
@@ -17,35 +24,49 @@ void ProfileView::showEditOptions(bool* p_open) {
     ImGui::InputText("##name", name, BUFFER_SIZE);
     ImGui::SameLine();
     if(ImGui::SmallButton("Save##1")) {
+<<<<<<< Updated upstream
         
+=======
+        update = true;
+        field = "name";
+        new_field = &name[0];
+>>>>>>> Stashed changes
     }
     ImGui::Text("New phone");
     ImGui::SameLine();
     ImGui::InputText("##phone", phone, BUFFER_SIZE);
     ImGui::SameLine();
     if(ImGui::SmallButton("Save##2")) {
-
+        update = true;
+        field = "phone";
+        new_field = &phone[0];
     }
     ImGui::Text("New email");
     ImGui::SameLine();
     ImGui::InputText("##email", email, BUFFER_SIZE);
     ImGui::SameLine();
     if(ImGui::SmallButton("Save##3")) {
-
+        update = true;
+        field = "email";
+        new_field = &email[0];
     }
     ImGui::Text("New location");
     ImGui::SameLine();
     ImGui::InputText("##location", location, BUFFER_SIZE);
     ImGui::SameLine();
     if(ImGui::SmallButton("Save##4")) {
-
+        update = true;
+        field = "location";
+        new_field = &location[0];
     }
     ImGui::Text("New bio");
     ImGui::SameLine();
     ImGui::InputTextMultiline("##bio", location, BUFFER_SIZE, ImVec2(400, 200));
     ImGui::SameLine();
     if(ImGui::SmallButton("Save##5")) {
-
+        update = true;
+        field = "bio";
+        new_field = &bio[0];
     }
     if (ImGui::Button("Cancel All")) {
         memset(name, '\0', BUFFER_SIZE);
@@ -60,6 +81,7 @@ void ProfileView::showEditOptions(bool* p_open) {
         memset(email, '\0', BUFFER_SIZE);
         memset(location, '\0', BUFFER_SIZE);
         *p_open = false;
+        updateInfoHandler(field, new_field);
     }
 }
 

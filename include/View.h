@@ -60,6 +60,7 @@ class MainClientView: public View {
 
 class ProfileView: public View {
     public:
+    std::function<void(char*, char*)> updateInfoHandler;
     std::function<bool(const char*, const char*)> changeUsername;
     std::function<bool(const char*, const char*)> changePassword;
     std::function<void()> logoutHandler;
