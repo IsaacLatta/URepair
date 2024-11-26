@@ -19,8 +19,7 @@ void Controller::renderCurrent() {
         ERROR("controller", "no view to render");
         return;
     }
-    auto current = history.top();
-    current->render();
+    history.top()->render();
 }
 
 void Controller::pushView(std::shared_ptr<View> view) {
@@ -41,7 +40,6 @@ void Controller::goBack() {
         return;
     }
 
-    // Remove the current view from   
     auto current_view = history.top();
     history.pop();
     revisit.push(current_view);   
@@ -57,8 +55,7 @@ void Controller::goForward() {
     history.push(next);    
 }
 
-void Controller::setupLoginView()
-{
+void Controller::setupLoginView() {
     auto view = std::make_shared<LoginView>();
     view->loginHandler = [this](const char *username, const char *password)
     {
@@ -105,8 +102,12 @@ void Controller::setupMainClientView(std::shared_ptr<User> user) {
     auto main = std::make_shared<MainClientView>(user);
 
     main->searchHandler = [this, main](const char *service_type, const char *location, int min_rating, int min_price, int max_price) {
-        INFO("Search", "Search for talent triggered");
-        main->search_results = db->findTalents(service_type, location, min_rating, min_price, max_price);
+        auto search_results = db->findTalents(service_type, location, min_rating, min_price, max_price);
+        std::sort(search_results.begin(), search_results.end(), [](const Talent& a, const Talent& b) {
+        return a.rating > b.rating; 
+        });
+
+        main->search_results = search_results;
     };
     main->profileHandler = [this, main, user]() {
         setupProfileView(user);

@@ -58,6 +58,7 @@ void MainContractorView::showContractorMenuBar() {
 		ImGui::EndMenuBar();
 	}
 	if (change_to_profile) {
+		change_to_profile = false;
 		profileHandler();
 	}
 	if (logout) {

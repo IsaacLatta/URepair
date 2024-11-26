@@ -1,16 +1,18 @@
 #include "Database.h"
 
-
-bool Dummy::bookJob(User* user, Talent* talent) {
-    return true;
-}
 std::unique_ptr<Database> Database::databaseFactory() {
     INFO("database", "created");
     //return std::make_unique<Dummy>();
     return std::make_unique<SQLite>();
 }
 
+bool Dummy::bookJob(User* user, Talent* talent) {
+    return true;
+}
 
+/*******************************************************/
+/******* DUMMY DATABASE STARTS HERE: NOT USED *********/
+/******************************************************/
 
 bool Database::runQuery(const std::string& query, int(*callback)(void*,int,char**,char**), void* callback_param, std::string& error_msg) {
     sqlite3* db;
@@ -131,10 +133,6 @@ bool Dummy::changeUsername(User* user, const char* password, const char* new_use
 }
 
 bool Dummy::approveJob(User* user, Job* job, bool approve) {
-    return true;
-}
-
-bool Dummy::bookJob(User* user, Job* job) {
     return true;
 }
 

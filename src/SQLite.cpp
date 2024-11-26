@@ -191,7 +191,6 @@ message = I will lay your pipe :)
 static int load_data_talent_cb(void* tal_param, int argc, char**argv, char** col_name) {
     Talent* talent = static_cast<Talent*>(tal_param);
 
-    std::cout << "COL MATCH\n";
     for (int i = 0; i < argc; i++) {
         if(!strcmp(col_name[i], "name")) {
             talent->name = argv[i] ? argv[i] : "";
@@ -211,7 +210,6 @@ static int load_data_talent_cb(void* tal_param, int argc, char**argv, char** col
     }
     return 0;
 }
-
 
 bool SQLite::loadData(User* user) {
     std::string error_msg;
@@ -235,7 +233,6 @@ bool SQLite::loadData(User* user) {
     }
 
     // Fetch the contractors info
-    std::cout << "GETTING TALENT INFO\n";
     Talent* talent = user->getTalent();
     query = "SELECT * FROM TALENT WHERE talentID = " + std::to_string(talent->id);
     if(!Database::runQuery(query, load_data_talent_cb, (void*)talent, error_msg)) {
@@ -316,11 +313,6 @@ bool SQLite::bookJob(User* user, Talent* talent) {
         return false;
     }
     
-    return true;
-}
-
-//This is here so that the program doesn't crash!
-bool SQLite::bookJob(User* user, Job* job) {
     return true;
 }
 
