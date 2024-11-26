@@ -134,6 +134,6 @@ bool Dummy::bookJob(User* user, Job* job) {
     return true;
 }
 
-bool Dummy::changeInfo(User* user, const char*, const char*) {
+bool Dummy::changeInfo(User* user, const char*, const char*, Talent* talent) {
     return true;
 }

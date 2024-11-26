@@ -6,9 +6,9 @@ void ProfileView::showEditOptions(bool* p_open) {
         return;
     }
 
-    char* field;
+    char* field = nullptr;
     char new_field[BUFFER_SIZE];
-    bool update;
+    bool update = false;
 
     static char name[BUFFER_SIZE] = "\0";
     static char phone[BUFFER_SIZE] = "\0";
@@ -86,14 +86,127 @@ void ProfileView::showEditOptions(bool* p_open) {
     }
 }
 
+/*struct Talent {
+    int id;                  ///< Unique identifier for the talent.
+    std::string name;        ///< Name of the talent.
+    std::string service_type;///< Type of service provided by the talent.
+    std::string location;    ///< Location of the talent.
+    int rating;              ///< Rating of the talent.
+    float rate;              ///< Service rate of the talent.
+
+    Talent() {}
+    Talent(const char* name, const char* service, const char* location, int rating, float rate) :
+    name(name), service_type(service), location(location), rating(rating), rate(rate){}
+};*/
+
+void ProfileView::showContractorEditOptions(bool* stay_open) {
+    if (!*stay_open) {
+        return;
+    }
+
+    char* field = nullptr;
+    char new_field[BUFFER_SIZE] = "\0";
+    bool update = false;
+
+    static char name[BUFFER_SIZE] = "\0";
+    static char service_type[BUFFER_SIZE] = "\0";
+    static char location[BUFFER_SIZE] = "\0";
+    static int rating = 0;     // Initialize rating as an int
+    static float rate = 0.0f;  // Initialize rate as a float
+
+    // Edit options inputs
+    ImGui::Text("New Name");
+    ImGui::SameLine();
+    ImGui::InputText("##name", name, BUFFER_SIZE);
+    ImGui::SameLine();
+    if (ImGui::SmallButton("Save##name")) {
+        update = true;
+        field = "name";
+        strncpy(new_field, name, BUFFER_SIZE - 1);
+        new_field[BUFFER_SIZE - 1] = '\0';
+    }
+
+    ImGui::Text("New Service Type");
+    ImGui::SameLine();
+    ImGui::InputText("##service_type", service_type, BUFFER_SIZE);
+    ImGui::SameLine();
+    if (ImGui::SmallButton("Save##service_type")) {
+        update = true;
+        field = "service_type";
+        strncpy(new_field, service_type, BUFFER_SIZE - 1);
+        new_field[BUFFER_SIZE - 1] = '\0';
+    }
+
+    ImGui::Text("New Location");
+    ImGui::SameLine();
+    ImGui::InputText("##location", location, BUFFER_SIZE);
+    ImGui::SameLine();
+    if (ImGui::SmallButton("Save##location")) {
+        update = true;
+        field = "location";
+        strncpy(new_field, location, BUFFER_SIZE - 1);
+        new_field[BUFFER_SIZE - 1] = '\0';
+    }
+
+    ImGui::Text("New Rate");
+    ImGui::SameLine();
+    if (ImGui::InputFloat("##rate", &rate, 0.1f, 1.0f, "%.2f")) {
+        update = true;
+        field = "rate";
+    }
+
+    if (ImGui::Button("Cancel All")) {
+        memset(name, '\0', BUFFER_SIZE);
+        memset(service_type, '\0', BUFFER_SIZE);
+        memset(location, '\0', BUFFER_SIZE);
+        rating = 0;
+        rate = 0.0f;
+        *stay_open = false;
+    }
+
+    if (update && updateInfoHandler) {
+        if (!strcmp(field, "rate")) {
+            snprintf(new_field, BUFFER_SIZE, "%.2f", rate); // Convert float to string
+        }
+        updateTalentInfoHandler(field, new_field);
+
+        memset(name, '\0', BUFFER_SIZE);
+        memset(service_type, '\0', BUFFER_SIZE);
+        memset(location, '\0', BUFFER_SIZE);
+        rating = 0;
+        rate = 0.0f;
+        *stay_open = false;
+    }
+}
+
+void ProfileView::showContractorInfo() {
+    static bool edit = false;
+    Talent* talent = user->getTalent();  
+
+    //ImGui::Text("Contractor Profile");
+    ImGui::Separator();
+
+    ImGui::Text("Company: %s", talent->name.c_str());
+    ImGui::Text("Service Type: %s", talent->service_type.c_str());
+    ImGui::Text("Location: %s", talent->location.c_str());
+    ImGui::Text("Rating: %d", talent->rating);
+    ImGui::Text("Rate: $%.2f/hr", talent->rate);
+    ImGui::Separator();
+
+    if (ImGui::Button("Edit##1")) {
+        edit = true;
+    }
+
+    showContractorEditOptions(&edit);
+}
+
+
 void ProfileView::showProfileInfo() {
 
     static bool edit = false;
     Info* info = user->getInfo();
-    //ImGui::SetNextWindowSize(ImVec2(1000, 1000), ImGuiCond_Always);
-    //ImGui::Begin("Client Profile", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
     ImGui::SameLine();
-    if (ImGui::Button("Edit")) {
+    if (ImGui::Button("Edit##2")) {
         edit = true;
     }
 
@@ -112,7 +225,11 @@ void ProfileView::showProfileInfo() {
     ImGui::TextWrapped("%s", info->bio.c_str());
     ImGui::Separator();
     showEditOptions(&edit);
-    //ImGui::End();
+
+    if(user->role == ROLE::CONTRACTOR) {
+        showContractorInfo();
+    }
+
 }
 
 void ProfileView::showSecurityMenu(bool* p_open)

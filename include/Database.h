@@ -22,8 +22,7 @@ class Database
     virtual bool loadData(User* user) = 0;
     virtual bool changePassword(User* user, const char*, const char*) = 0;
     virtual bool changeUsername(User* user, const char*, const char*) = 0;
-    virtual bool changeInfo(User* user, const char*, const char*) = 0;
-    
+    virtual bool changeInfo(User* user, const char*, const char*, Talent* talent = nullptr) = 0;
     virtual std::vector<Talent> findTalents(const char* service_type = "", const char* location = "", int min_rating = 0, int min_price = 0, int max_price = 10000) = 0;
     virtual ~Database() = default;
 };
@@ -39,7 +38,7 @@ class Dummy : public Database
     bool changePassword(User* user, const char* old_pass, const char* new_pass) override;
     bool changeUsername(User* user, const char* password, const char* new_username) override;
     std::vector<Talent> findTalents(const char* service_type = "", const char* location = "", int min_rating = 0, int min_price = 0, int max_price = 10000) override;
-    bool changeInfo(User* user, const char* what, const char* newInfo);
+    bool changeInfo(User* user, const char* what, const char* newInfo, Talent* talent = nullptr);
 };
 
 class SQLite : public Database
@@ -55,7 +54,7 @@ class SQLite : public Database
     
     bool changePassword(User* user, const char* old_pass, const char* new_pass) override;
     bool changeUsername(User* user, const char* password, const char* new_username) override;
-    bool changeInfo(User* user, const char* what, const char* newInfo);
+    bool changeInfo(User* user, const char* what, const char* newInfo, Talent* talent = nullptr) override;
 };
 
 

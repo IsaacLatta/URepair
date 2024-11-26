@@ -60,6 +60,7 @@ class MainClientView: public View {
 
 class ProfileView: public View {
     public:
+    std::function<void(char*, char*)> updateTalentInfoHandler;
     std::function<void(char*, char*)> updateInfoHandler;
     std::function<bool(const char*, const char*)> changeUsername;
     std::function<bool(const char*, const char*)> changePassword;
@@ -73,6 +74,9 @@ class ProfileView: public View {
     void showSecurityMenu(bool*);
     void showProfileInfo();
     void showEditOptions(bool*);
+    void showContractorInfo();
+    void showContractorEditOptions(bool* stay_open);
+
 };
 
 class MainAdminView : public View 
