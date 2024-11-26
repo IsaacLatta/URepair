@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <stack>
+#include <algorithm>
 
 #include "View.h"
 #include "User.h"

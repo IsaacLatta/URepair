@@ -17,13 +17,13 @@ class Database
 
     virtual bool connect() = 0;
     virtual std::shared_ptr<User> signIn(const char* username, const char* password) = 0; // factory function that creates the corresponding user, (e.g. client, talent) may vary for sqlite vs sql server vs dummy.
-    virtual bool bookJob(User*, Job*) = 0;
     virtual bool bookJob(User*, Talent*) = 0;
     virtual bool loadData(User* user) = 0;
     virtual bool changePassword(User* user, const char*, const char*) = 0;
     virtual bool changeUsername(User* user, const char*, const char*) = 0;
     virtual bool changeInfo(User* user, const char*, const char*, Talent* talent = nullptr) = 0;
     virtual std::vector<Talent> findTalents(const char* service_type = "", const char* location = "", int min_rating = 0, int min_price = 0, int max_price = 10000) = 0;
+    virtual bool approveJob(User* user, Job* job, bool approve) = 0;
     virtual ~Database() = default;
 };
 
@@ -32,13 +32,13 @@ class Dummy : public Database
     public:
     bool connect() override;
     std::shared_ptr<User> signIn(const char* username, const char* password) override;
-    bool bookJob(User*, Job*) override;
     bool bookJob(User*, Talent*) override;
     bool loadData(User*) override;
     bool changePassword(User* user, const char* old_pass, const char* new_pass) override;
     bool changeUsername(User* user, const char* password, const char* new_username) override;
     std::vector<Talent> findTalents(const char* service_type = "", const char* location = "", int min_rating = 0, int min_price = 0, int max_price = 10000) override;
     bool changeInfo(User* user, const char* what, const char* newInfo, Talent* talent = nullptr);
+    bool approveJob(User* user, Job* job, bool approve) override;
 };
 
 class SQLite : public Database
@@ -49,12 +49,12 @@ class SQLite : public Database
     std::shared_ptr<User> signIn(const char* username, const char* password) override;
     bool loadData(User*) override;
     std::vector<Talent> findTalents(const char* service_type = "", const char* location = "", int min_rating = 0, int min_price = 0, int max_price = 10000) override; 
-    bool bookJob(User*, Job*) override;
     bool bookJob(User*, Talent*) override;
     
     bool changePassword(User* user, const char* old_pass, const char* new_pass) override;
     bool changeUsername(User* user, const char* password, const char* new_username) override;
     bool changeInfo(User* user, const char* what, const char* newInfo, Talent* talent = nullptr) override;
+    bool approveJob(User* user, Job* job, bool approve) override;
 };
 
 

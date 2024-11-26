@@ -58,6 +58,7 @@ void MainContractorView::showContractorMenuBar() {
 		ImGui::EndMenuBar();
 	}
 	if (change_to_profile) {
+		change_to_profile = false;
 		profileHandler();
 	}
 	if (logout) {
@@ -75,16 +76,15 @@ void MainContractorView::showJobRequestInfo(Job* job, bool* stay_open) {
 	if (ImGui::Begin("Request Info:", stay_open, ImGuiWindowFlags_NoResize)) {
 		ImGui::Text("Job Name: %s", job->name);
 		
-		//accept project 
 		if (ImGui::Button("Accept")) {
 			INFO("Contractor", "Job accepted");
-			jobAcceptHandler(job);
+			jobAcceptHandler(job, true);
 			*stay_open = false;
 		}
-		//deny project
+
 		if (ImGui::Button("Deny")) {
 			INFO("Contractor", "Job denied");
-			jobAcceptHandler(job);
+			jobAcceptHandler(job, true);
 			*stay_open = false;
 		}
 	}

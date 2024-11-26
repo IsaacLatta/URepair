@@ -102,7 +102,7 @@ class MainContractorView: public View {
 public:
     explicit MainContractorView(std::shared_ptr<User> user) : View(user) {};
     void render() override;
-    std::function<void(Job*)> jobAcceptHandler = [](Job*) { INFO("view", "would call accept job"); }; // needs to be created - allows the contractors to view incoming requests
+    std::function<void(Job*, bool)> jobAcceptHandler = [](Job*, bool) { INFO("view", "would call accept job"); }; // needs to be created - allows the contractors to view incoming requests
     std::function<void()> logoutHandler = []() { INFO("view", "would log user out"); };
     std::function<void()> profileHandler = []() { INFO("view", "user can view profile"); }; // 
     std::function<void()> activejobHandler = []() { INFO("view", "see open jobs "); }; // needs to be created - allows contractors to view details about current active accepted jobs

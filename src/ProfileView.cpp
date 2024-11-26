@@ -331,7 +331,6 @@ void ProfileView::render()
 
     ImGui::BeginChild("Client Profile");
     showProfileInfo();
-    // render additional info here
     ImGui::EndChild();
 
     ImGui::End();
