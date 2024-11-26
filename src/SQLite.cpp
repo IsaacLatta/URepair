@@ -88,7 +88,8 @@ static int sign_in_cb(void* user_obj, int argc, char**argv, char** col_name) {
             info->id = argv[i] ? std::stoi(argv[i]) : -1;  
         } 
         else if (std::string(col_name[i]) == "type") {
-            user->role = argv[i] ? to_role(argv[i]) : ROLE::UNKNOWN;    
+            user->role = argv[i] ? to_role(argv[i]) : ROLE::UNKNOWN;
+            std::cout << "ROLE: " << argv[i] << "\n";  
         }
         else if (strcmp(col_name[i], "password") == 0) {
             user->setPassword(argv[i] ? argv[i] : "");
@@ -116,7 +117,7 @@ std::shared_ptr<User> SQLite::signIn(const char* username, const char* password)
                     "' AND password = '" + std::string(password) + "'";
 
     LOG("INFO", "SQLite", "QUERY: %s", query.c_str());
-    user->role = ROLE::CLIENT;
+    //user->role = ROLE::CLIENT;
     if(!Database::runQuery(query, sign_in_cb, (void*)user.get(), error_msg) || user->getInfo()->id == -1) {
         LOG("ERROR", "SQLite", "Failed to sign in user with username=%s, password=%s [%s]", username, password, error_msg.c_str());
         return nullptr;

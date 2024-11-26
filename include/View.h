@@ -107,8 +107,8 @@ private:
    void showJobRequestInfo(Job* job, bool*);
    void showJobRequests();
    void showActiveJobs();
-   void acceptRequest();
-   void showProfileWindow();
+   //void acceptRequest();
+   //void showProfileWindow();
 };
 
 #endif
