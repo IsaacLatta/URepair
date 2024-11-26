@@ -252,7 +252,7 @@ bool SQLite::bookJob(User* user, Talent* talent) {
     std::string error_msg;
 
     Info* userInfo = user->getInfo();
-
+  
     int userID = userInfo->id;
     int talentID = talent->id;
     double rate = talent->rate;
@@ -278,10 +278,39 @@ bool SQLite::bookJob(User* user, Job* job) {
 
 
 bool SQLite::changePassword(User* user, const char* old_pass, const char* new_pass) {
+    if (old_pass == new_pass) {
+        LOG("Error", "SQLite", " new password cannot be the same as old password.");
+        return false;
+    }
+   
+    std::string error_msg;
+    std::string userName = user->getUsername();
+    std::string query = "update users set password = '" + std::string(new_pass) + "' where username = '" + userName + "'";
+    if (!Database::runQuery(query, michaelCallback, (void*)true, error_msg)) {
+        LOG("ERROR", "SQLite", "failed to update password[%s]", error_msg.c_str());
+        return false;
+    }
+    user->setPassword(new_pass);
     return true;
 }
 
-bool SQLite::changeUsername(User* user, const char* password, const char* new_username) {
+bool SQLite::changeUsername(User* user, const char* new_username, const char* password) {
+    if (user->getUsername() == new_username) {
+        LOG("Error", "SQLite", " new username cannot be the same as old username.");
+        return false;
+    }
+    if (user->getPassword() != password) {
+        LOG("Error", "SQLite", " incorrect password. Username not changed.");
+        return false;
+    }
+    std::string error_msg;
+    std::string userName = user->getUsername();
+    std::string query = "update users set username = '" + std::string(new_username) + "' where username = '" + userName + "'";
+    if (!Database::runQuery(query, michaelCallback, (void*)true, error_msg)) {
+        LOG("ERROR", "SQLite", "failed to load user data from JOB table[%s]", error_msg.c_str());
+        return false;
+    }
+    user->setUsername(new_username);
     return true;
 }
 
