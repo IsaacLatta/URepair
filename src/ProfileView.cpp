@@ -24,13 +24,9 @@ void ProfileView::showEditOptions(bool* p_open) {
     ImGui::InputText("##name", name, BUFFER_SIZE);
     ImGui::SameLine();
     if(ImGui::SmallButton("Save##1")) {
-<<<<<<< Updated upstream
-        
-=======
         update = true;
         field = "name";
         new_field = &name[0];
->>>>>>> Stashed changes
     }
     ImGui::Text("New phone");
     ImGui::SameLine();

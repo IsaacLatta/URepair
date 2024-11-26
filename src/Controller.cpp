@@ -159,7 +159,7 @@ void Controller::setupProfileView(std::shared_ptr<User> user) {
             goBack();
         };
         profile->updateInfoHandler = [this, user](char*, char*) {
-        
+            
         };
         pushView(profile);
     }
