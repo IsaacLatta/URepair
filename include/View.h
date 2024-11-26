@@ -107,6 +107,7 @@ private:
    void showJobRequestInfo(Job* job, bool*);
    void showJobRequests();
    void showActiveJobs();
+   void showAllJobs(bool* stay_open);
    //void acceptRequest();
    //void showProfileWindow();
 };

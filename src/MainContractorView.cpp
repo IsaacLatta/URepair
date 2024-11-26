@@ -1,27 +1,57 @@
 #include "View.h"
 #include "App.h"
 
+void MainContractorView::showAllJobs(bool* stay_open) {
+	if(!*stay_open) {
+		return;
+	}
+
+	ImGui::SetNextWindowSize(ImVec2(DEFAULT_WIDTH, DEFAULT_HEIGHT));
+	ImGui::Begin("ALL JOBS", nullptr, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoCollapse);
+
+	if(ImGui::Button("Close")) {
+		*stay_open =false;
+	}
+
+	std::vector<Job>* jobs = user->getJobs();
+	
+	if (ImGui::BeginTable("Jobs", 5, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingFixedFit)) {
+        ImGui::TableSetupColumn("Name", 0, 100.0f);
+        ImGui::TableSetupColumn("Status", 0, 100.0f);
+        ImGui::TableSetupColumn("Date", 0, 100.0f);
+        ImGui::TableSetupColumn("Pay out", 0, 100.0f);
+        ImGui::TableSetupColumn("Description", 0, 200.0f);
+        ImGui::TableHeadersRow();
+
+        for (int i = 0; i < jobs->size(); ++i) {
+			auto job = jobs->at(i);
+			
+			ImGui::TableNextRow();
+            ImGui::TableSetColumnIndex(0); ImGui::Text("%s", job.name);
+            ImGui::TableSetColumnIndex(1); ImGui::Text("%s", job.status);
+            ImGui::TableSetColumnIndex(2); ImGui::Text("%s", job.date);
+            ImGui::TableSetColumnIndex(3); ImGui::Text("$%.2f", job.cost);
+            ImGui::TableSetColumnIndex(4); ImGui::Text("%s", job.description);
+        }
+        ImGui::EndTable();
+    }
+	ImGui::End();
+}
+
 void MainContractorView::showContractorMenuBar() {
-	bool change_to_profile = false;
-	bool logout = false;
-	bool change_to_jobs = false;
+	static bool change_to_profile = false;
+	static bool logout = false;
+	static bool show_all_jobs = false;
 	if (ImGui::BeginMenuBar()) {
 		if (ImGui::BeginMenu("Profile")) {
 			if (ImGui::MenuItem("Logout")) {
 				logout = true;
 			}
-			ImGui::EndMenu();
-			
-		}
-		if (ImGui::BeginMenu("Profile")) {
 			if (ImGui::MenuItem("View Profile")) {
 				change_to_profile = true;
 			}
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("Profile")){
 			if (ImGui::MenuItem("Jobs")) {
-				change_to_jobs = true;
+				show_all_jobs = true;
 			}
 			ImGui::EndMenu();
 		}
@@ -33,8 +63,8 @@ void MainContractorView::showContractorMenuBar() {
 	if (logout) {
 		logoutHandler();
 	}
-	if (change_to_jobs) {
-		INFO("view", "Active job handler would appear");
+	if (show_all_jobs) {
+		showAllJobs(&show_all_jobs);
 	}
 }
 void MainContractorView::showJobRequestInfo(Job* job, bool* stay_open) {
@@ -81,8 +111,8 @@ void MainContractorView::showActiveJobs() {
             ImGui::TableSetColumnIndex(0); ImGui::Text("%s", job.name);
             ImGui::TableSetColumnIndex(1); ImGui::Text("%s", job.status);
             ImGui::TableSetColumnIndex(2); ImGui::Text("%s", job.date);
-            ImGui::TableSetColumnIndex(3); ImGui::Text("%d/5", job.cost);
-            ImGui::TableSetColumnIndex(4); ImGui::Text("$%.2f", job.description);
+            ImGui::TableSetColumnIndex(3); ImGui::Text("$%.2f", job.cost);
+            ImGui::TableSetColumnIndex(4); ImGui::Text("%s", job.description);
         }
         ImGui::EndTable();
     }
