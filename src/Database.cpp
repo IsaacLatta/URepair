@@ -130,6 +130,10 @@ bool Dummy::changeUsername(User* user, const char* password, const char* new_use
     return true;
 }
 
+bool Dummy::approveJob(User* user, Job* job, bool approve) {
+    return true;
+}
+
 bool Dummy::bookJob(User* user, Job* job) {
     return true;
 }

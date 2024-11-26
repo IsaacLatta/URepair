@@ -285,7 +285,7 @@ static std::string generateJobDescription(std::string talentName, std::string us
     std::uniform_real_distribution<> distr(0, 21);
     int randint = distr(gen);
 
-    return descriptions[randint];
+    return "'" + descriptions[randint] + "'";
 }
 
 static int default_cb(void* jobs_param, int argc, char** argv, char** col_name) {
@@ -309,8 +309,8 @@ bool SQLite::bookJob(User* user, Talent* talent) {
     std::string talentName = talent->name;
     std::string userName = user->getUsername();
 
-    std::string query = std::string("INSERT INTO job (description, name, status, cost, userId, talentId) VALUES (") + generateJobDescription(talentName, userName) + ", '" + userName + std::string("', 0, ") + std::to_string(rate) + std::string(", ") + std::to_string(userID) + std::string(", ") + std::to_string(talentID) + std::string(")");
-
+    std::string query = std::string("INSERT INTO job (description, name, status, cost, userId, talentId) VALUES (") + generateJobDescription(talentName, userName) + ", '" + userName + std::string("', 'pending', ") + std::to_string(rate) + std::string(", ") + std::to_string(userID) + std::string(", ") + std::to_string(talentID) + std::string(")");
+    std::cout << "QUERY: " << query << "\n";
     if (!Database::runQuery(query, default_cb, (void*)true, error_msg)) {
         LOG("ERROR", "SQLite", "failed to load user data from JOB table[%s]", error_msg.c_str());
         return false;
@@ -324,6 +324,27 @@ bool SQLite::bookJob(User* user, Job* job) {
     return true;
 }
 
+/* JOB
+jobId = 1000
+description = Isaac is laying pipe at Michaels house
+name = MichaelJob
+status = 0
+cost = 200
+userId = 1000
+talentId = 1000
+*/
+
+bool SQLite::approveJob(User* user, Job* job, bool approve) {
+    std::string query, error_msg, new_status;
+    new_status = approve ? "in progress" : "denied";
+    query = "UPDATE JOB SET status = " + new_status + " WHERE jobID = " + std::to_string(job->id);
+
+     if (!Database::runQuery(query, default_cb, nullptr, error_msg)) {
+        LOG("ERROR", "SQLite", "failed to update JOB[%s]", error_msg.c_str());
+        return false;
+    }
+    return true;
+}
 
 bool SQLite::changePassword(User* user, const char* old_pass, const char* new_pass) {
     if (old_pass == new_pass) {

@@ -85,20 +85,16 @@ bool Controller::start() {
     return true;
 }
 
-void Controller::setupMainContractorView(std::shared_ptr<User> user)
-{
+void Controller::setupMainContractorView(std::shared_ptr<User> user) {
     auto main = std::make_shared<MainContractorView>(user);
     main->logoutHandler = [this]() {
-        LOG("INFO", "controller", "logging out ...");
         setupLoginView();
     };
-    main->jobAcceptHandler = [this, user](Job *job) {
-        LOG("INFO", "controller", "booking job ...");
-        db->bookJob(user.get(), job);
+    main->jobAcceptHandler = [this, user](Job *job, bool approve) {
+        db->approveJob(user.get(), job, approve);
         db->loadData(user.get());
     };
     main->profileHandler = [this, user]() {
-        LOG("INFO", "controller", "switching to profile view ...");
         setupProfileView(user);
     };
     pushView(main);
