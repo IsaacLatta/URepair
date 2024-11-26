@@ -158,8 +158,9 @@ void Controller::setupProfileView(std::shared_ptr<User> user) {
             INFO("controller", "going back");
             goBack();
         };
-        profile->updateInfoHandler = [this, user](char*, char*) {
-            
+        profile->updateInfoHandler = [this, user](char* field, char* new_val) {
+            db->changeInfo(user.get(), std::string(field).c_str(), std::string(new_val).c_str());
+            db->loadData(user.get());
         };
         pushView(profile);
     }
