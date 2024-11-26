@@ -17,7 +17,7 @@ void ProfileView::showEditOptions(bool* p_open) {
     ImGui::InputText("##name", name, BUFFER_SIZE);
     ImGui::SameLine();
     if(ImGui::SmallButton("Save##1")) {
-
+        
     }
     ImGui::Text("New phone");
     ImGui::SameLine();
@@ -163,15 +163,6 @@ void ProfileView::showOptions() {
         if (ImGui::BeginMenu("Security"))
         {
             showSecurityMenu(&settings_open); // Pass settings_open to control the submenu visibility
-            ImGui::EndMenu();
-        }
-        if (ImGui::BeginMenu("Upload Document"))
-        {
-            ImGui::EndMenu();
-        }
-        if (ImGui::BeginMenu("Help"))
-        {
-            if (ImGui::MenuItem("FAQ")) { /* Handle FAQ action */ }
             ImGui::EndMenu();
         }
         if(ImGui::BeginMenu("Logout")) {

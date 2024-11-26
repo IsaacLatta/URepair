@@ -364,6 +364,23 @@ static int find_talent_cb(void* talent_param, int argc, char**argv, char** col_n
     return 0;
 }
 
+bool SQLite::changeInfo(User* user, const char* what, const char* newstring) {
+    Info* userInfo = user->getInfo();
+    std::string userID = std::to_string(userInfo->id);
+    
+    std::string error_msg;
+    
+
+    std::string query = "update info set " + std::string(what) + " = '" + std::string(newstring) + "' where userID = " + userID;
+    if (!Database::runQuery(query, michaelCallback, (void*)true, error_msg)) {
+        LOG("ERROR", "SQLite", "failed to update info[%s]", error_msg.c_str());
+        return false;
+    }
+
+
+    return true;
+}
+
 std::vector<Talent> SQLite::findTalents(const char* service_type, const char* location, int min_rating, int min_price, int max_price) {
     std::vector<Talent> talent;
     std::string query = "SELECT * FROM TALENT ";

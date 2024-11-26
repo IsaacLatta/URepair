@@ -10,6 +10,8 @@ std::unique_ptr<Database> Database::databaseFactory() {
     return std::make_unique<SQLite>();
 }
 
+
+
 bool Database::runQuery(const std::string& query, int(*callback)(void*,int,char**,char**), void* callback_param, std::string& error_msg) {
     sqlite3* db;
     int ret_code;
@@ -129,5 +131,9 @@ bool Dummy::changeUsername(User* user, const char* password, const char* new_use
 }
 
 bool Dummy::bookJob(User* user, Job* job) {
+    return true;
+}
+
+bool Dummy::changeInfo(User* user, const char*, const char*) {
     return true;
 }
