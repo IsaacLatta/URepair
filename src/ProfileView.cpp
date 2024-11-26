@@ -5,10 +5,9 @@ void ProfileView::showEditOptions(bool* p_open) {
     if(!*p_open) {
         return;
     }
-    
 
     char* field;
-    char* new_field;
+    char new_field[BUFFER_SIZE];
     bool update;
 
     static char name[BUFFER_SIZE] = "\0";
@@ -25,8 +24,9 @@ void ProfileView::showEditOptions(bool* p_open) {
     ImGui::SameLine();
     if(ImGui::SmallButton("Save##1")) {
         update = true;
-        field = "name";
-        new_field = &name[0];
+        field = "name\0";
+        strncpy(new_field, name, BUFFER_SIZE - 1);
+        new_field[BUFFER_SIZE-1] = '\0';
     }
     ImGui::Text("New phone");
     ImGui::SameLine();
@@ -34,8 +34,9 @@ void ProfileView::showEditOptions(bool* p_open) {
     ImGui::SameLine();
     if(ImGui::SmallButton("Save##2")) {
         update = true;
-        field = "phone";
-        new_field = &phone[0];
+        field = "phone\0";
+        strncpy(new_field, phone, BUFFER_SIZE - 1);
+        new_field[BUFFER_SIZE-1] = '\0';
     }
     ImGui::Text("New email");
     ImGui::SameLine();
@@ -43,8 +44,9 @@ void ProfileView::showEditOptions(bool* p_open) {
     ImGui::SameLine();
     if(ImGui::SmallButton("Save##3")) {
         update = true;
-        field = "email";
-        new_field = &email[0];
+        field = "email\0";
+        strncpy(new_field, email, BUFFER_SIZE - 1);
+        new_field[BUFFER_SIZE-1] = '\0';
     }
     ImGui::Text("New location");
     ImGui::SameLine();
@@ -52,8 +54,9 @@ void ProfileView::showEditOptions(bool* p_open) {
     ImGui::SameLine();
     if(ImGui::SmallButton("Save##4")) {
         update = true;
-        field = "location";
-        new_field = &location[0];
+        field = "location\0";
+        strncpy(new_field, location, BUFFER_SIZE - 1);
+        new_field[BUFFER_SIZE-1] = '\0';
     }
     ImGui::Text("New bio");
     ImGui::SameLine();
@@ -61,8 +64,9 @@ void ProfileView::showEditOptions(bool* p_open) {
     ImGui::SameLine();
     if(ImGui::SmallButton("Save##5")) {
         update = true;
-        field = "bio";
-        new_field = &bio[0];
+        field = "bio\0";
+        strncpy(new_field, bio, BUFFER_SIZE - 1);
+        new_field[BUFFER_SIZE-1] = '\0';
     }
     if (ImGui::Button("Cancel All")) {
         memset(name, '\0', BUFFER_SIZE);
@@ -71,13 +75,14 @@ void ProfileView::showEditOptions(bool* p_open) {
         memset(location, '\0', BUFFER_SIZE);
         *p_open = false;
     }
-    if (ImGui::Button("Save All")) {
+    
+    if(update && updateInfoHandler) {
+        updateInfoHandler(field, new_field);
         memset(name, '\0', BUFFER_SIZE);
         memset(phone, '\0', BUFFER_SIZE);
         memset(email, '\0', BUFFER_SIZE);
         memset(location, '\0', BUFFER_SIZE);
         *p_open = false;
-        updateInfoHandler(field, new_field);
     }
 }
 
