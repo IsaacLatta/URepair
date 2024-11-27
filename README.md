@@ -11,7 +11,7 @@ This project was authored by **Isaac Latta**, **Matia Landry**, and **Michael Ba
 - All dependencies are included in the project, except for OpenGL libraries with is assumed to be found on nearly all systems.
 - To evaluate functionality, navigate through the views as a client, contractor, or admin after logging in.
 - Comprehensive comments in the source code and documentation facilitate understanding of the project structure.
-- We have included an executable of the project to save you from building, there is a verion in the root directory for windows and linux.
+- We have included an executable of the project to save you from building, there is a version in the root directory for windows and linux.
 - If you would prefer to build yourself from scratch we have included a small build guide below.
 
 ---
@@ -28,7 +28,7 @@ This project was authored by **Isaac Latta**, **Matia Landry**, and **Michael Ba
 	```
 	- Windows
 	```bash
-	URepair_win..exe
+	URepair_win.exe
 	```
 ### Testing
 
