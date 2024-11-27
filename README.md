@@ -6,17 +6,60 @@ URepair is a comprehensive desktop application designed to facilitate the manage
 
 This project was authored by **Isaac Latta**, **Matia Landry**, and **Michael Baudin**. The provided instructions are tailored for building and running the project on **Windows**, as per the expected platform for evaluation.
 
----
-
 ## Notes for our Instructor
 - The project has been designed and tested on Windows with Visual Studio.
 - All dependencies are included in the project, except for OpenGL libraries with is assumed to be found on nearly all systems.
 - To evaluate functionality, navigate through the views as a client, contractor, or admin after logging in.
 - Comprehensive comments in the source code and documentation facilitate understanding of the project structure.
-- We have included an executable of the project to save you from building.
-- If you prefer building yourself and assuming you are running the project on Windows, we have included the .sln, .vcxproj, and .vcxproj.filters files. If you would prefer to build completely from scratch we have included a small build guide below.
+- We have included an executable of the project to save you from building, there is a verion in the root directory for windows and linux.
+- If you would prefer to build yourself from scratch we have included a small build guide below.
 
 ---
+
+## Running
+- When running on windows or linux simply just click the executable icon to execute the program.
+- Or in the shell, navigate to the directory and run:
+	```bash
+	cd URepair
+	```
+	- Linux
+	```bash
+	./URepair_linux
+	```
+	- Windows
+	```bash
+	URepair_win..exe
+	```
+### Testing
+
+#### Admin Account
+- Logging in with the username **"a"** will direct you to the **admin page**, where you can query the database directly.
+
+#### Example Client Accounts
+| Username   | Password         | Name                 | Notes                                |
+|------------|------------------|----------------------|--------------------------------------|
+| gandalf    | youShallNotPass! | Gandalf The Grey     | Client booking jobs from contractors |
+| samwise    | potatoLover      | Samwise Gamgee       | Another client with pending jobs     |
+
+#### Example Contractor Accounts
+| Username       | Password      | Name                 | Service Type            | Talent ID | Notes                                |
+|----------------|---------------|----------------------|-------------------------|-----------|--------------------------------------|
+| frodo          | ringbearer123 | Frodo Baggins        | Ring Transport          | 101       | Contractor hired by Gandalf          |
+| thegreatmadeni | magic123      | TheGreat Madeni      | Magic Performances      | 104       | Magician from Kazakhstan             |
+| legolas        | elfEyes       | Legolas Greenleaf    | Archery Training        | 102       | Contractor for archery-related jobs  |
+| gimli          | axeMaster     | Gimli Son of Gloin   | Mining and Crafting     | 103       | Contractor for mining and crafting   |
+
+#### Example Job Entries
+- **Job 1**: Frodo Baggins is transporting a mysterious ring to Mordor (booked by Gandalf).
+- **Job 2**: TheGreat Madeni is performing a magical show for a royal event.
+- **Job 3**: Legolas is teaching archery to elves.
+- **Job 4**: Gimli is reinforcing the walls of Erebor.
+
+#### Notes for Testing
+- Use the **admin account** to query or modify the database directly.
+- Use the **client accounts** to book jobs.
+- Use the **contractor accounts** to approve or update jobs.
+
 
 ## Prerequisites
 
