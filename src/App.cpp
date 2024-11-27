@@ -68,7 +68,7 @@ void App::mainLoop() {
         controller->renderCurrent();
 
 		ImGui::Render();
-		glClearColor(1.0f, 0.4118f, 0.7059f, 0.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		glfwSwapBuffers(this->main_window);

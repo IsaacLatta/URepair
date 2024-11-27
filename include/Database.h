@@ -6,7 +6,7 @@
 #include <cstring>
 #include <sqlite3.h>
 
-#define SQLITE_FILE "../test.db"
+#define SQLITE_FILE "../URepair.db"
 
 /**
  * @class Database

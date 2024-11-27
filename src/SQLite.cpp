@@ -183,27 +183,27 @@ bool SQLite::loadData(User* user) {
 
 static std::string generateJobDescription(std::string talentName, std::string userName) {
     std::string descriptions[21];
-    descriptions[0] = talentName + " is doing stuff to " + userName + "s house.";
-    descriptions[1] = talentName + " is removing all the windows at " + userName + "s house.";
-    descriptions[2] = talentName + " is plumbing all over the place in " + userName + "s house.";
-    descriptions[3] = talentName + " is installing shingles in the bathroom of " + userName + "s house.";
-    descriptions[4] = talentName + " is sleeping at " + userName + "s house.";
-    descriptions[5] = talentName + " is linking the lists at " + userName + "s house.";
-    descriptions[6] = talentName + " is helping his friend Jack, off the horse at " + userName + "s house.";
-    descriptions[7] = talentName + " is drinking at " + userName + "s house.";
-    descriptions[8] = talentName + " is installing a single lightbulb at " + userName + "s house.";
-    descriptions[9] = talentName + " is installing drywall at " + userName + "s house.";
-    descriptions[10] = talentName + " is talking to Bill Nye at " + userName + "s house.";
-    descriptions[11] = talentName + " is drunk at " + userName + "s house.";
-    descriptions[12] = talentName + " is missing. Last seen at " + userName + "s house.";
-    descriptions[13] = talentName + " is manually breathing at " + userName + "s house.";
-    descriptions[14] = talentName + " is attending a lecture at " + userName + "s house.";
-    descriptions[15] = talentName + " is breaking into " + userName + "s house.";
-    descriptions[16] = talentName + " is siphoning gas at " + userName + "s house.";
-    descriptions[17] = talentName + " is hooking up a car battery to " + userName + "s house.";
-    descriptions[18] = talentName + " is mining for diamonds at " + userName + "s house.";
-    descriptions[19] = talentName + " is livin' la vida loca at " + userName + "s house.";
-    descriptions[20] = talentName + " is " + userName + ".";
+    descriptions[0] = talentName + " is building a secret tunnel under " + userName + "s house.";
+    descriptions[1] = talentName + " is painting all the walls green at " + userName + "s house.";
+    descriptions[2] = talentName + " is fixing the leaky roof at " + userName + "s house.";
+    descriptions[3] = talentName + " is turning the garage into a home theater at " + userName + "s house.";
+    descriptions[4] = talentName + " is constructing a medieval-style moat around " + userName + "s house.";
+    descriptions[5] = talentName + " is replacing all the doors with revolving ones at " + userName + "s house.";
+    descriptions[6] = talentName + " is installing a secret bookshelf door at " + userName + "s house.";
+    descriptions[7] = talentName + " is soundproofing the karaoke room at " + userName + "s house.";
+    descriptions[8] = talentName + " is upgrading the Wi-Fi signal at " + userName + "s house.";
+    descriptions[9] = talentName + " is adding an indoor pool to " + userName + "s house.";
+    descriptions[10] = talentName + " is training squirrels to guard " + userName + "s house.";
+    descriptions[11] = talentName + " is replacing the grass with a Zen garden at " + userName + "s house.";
+    descriptions[12] = talentName + " is designing a rooftop garden at " + userName + "s house.";
+    descriptions[13] = talentName + " is fixing the time machine in " + userName + "s basement.";
+    descriptions[14] = talentName + " is baking cookies in " + userName + "s kitchen.";
+    descriptions[15] = talentName + " is holding a yoga class in " + userName + "s living room.";
+    descriptions[16] = talentName + " is installing a disco ball in " + userName + "s attic.";
+    descriptions[17] = talentName + " is creating a home automation system for " + userName + "s house.";
+    descriptions[18] = talentName + " is adding solar panels to " + userName + "s roof.";
+    descriptions[19] = talentName + " is building a treehouse for " + userName + " in the backyard.";
+    descriptions[20] = talentName + " is teaching the family cat to play piano at " + userName + "s house.";
 
     //Random Number generation for this
     std::random_device rd;
