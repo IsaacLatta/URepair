@@ -136,7 +136,6 @@ void Controller::setupProfileView(std::shared_ptr<User> user) {
         return;
     }
 
-    //auto profile = std::make_shared<ClientProfileView>(user);
     auto profile = std::make_shared<ProfileView>(user);
     profile->changeUsername = [this, user](const char* username, const char* password) 
     {

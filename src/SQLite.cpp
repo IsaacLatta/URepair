@@ -54,7 +54,7 @@ static int sign_in_cb(void* user_obj, int argc, char**argv, char** col_name) {
 
 std::shared_ptr<User> SQLite::signIn(const char* username, const char* password) {
     std::shared_ptr<User> user = std::make_shared<User>();
-    if (!strcmp(username, "a")) {
+    if (!strcmp(username, "a")) { // To simplify querying the database, would be removed in release.
         user->role = ROLE::ADMIN;
         return user;
     }
@@ -63,7 +63,6 @@ std::shared_ptr<User> SQLite::signIn(const char* username, const char* password)
     std::string query = "SELECT * FROM USERS WHERE username = '" + std::string(username) + 
                     "' AND password = '" + std::string(password) + "'";
 
-    LOG("INFO", "SQLite", "QUERY: %s", query.c_str());
     if(!Database::runQuery(query, sign_in_cb, (void*)user.get(), error_msg) || user->getInfo()->id == -1) {
         LOG("ERROR", "SQLite", "Failed to sign in user with username=%s, password=%s [%s]", username, password, error_msg.c_str());
         return nullptr;
@@ -165,11 +164,13 @@ bool SQLite::loadData(User* user) {
             return false;
         }
     }
+
     if(user->role != ROLE::CONTRACTOR) {
        return true;
     }
 
-    // Fetch the contractors info
+    /* Fetch the contractors info */
+
     Talent* talent = user->getTalent();
     query = "SELECT * FROM TALENT WHERE talentID = " + std::to_string(talent->id);
     if(!Database::runQuery(query, load_data_talent_cb, (void*)talent, error_msg)) {
@@ -215,7 +216,6 @@ static std::string generateJobDescription(std::string talentName, std::string us
     return "'" + descriptions[getRandInt(0, 20)] + "'";
 }
 
-
 static int default_cb(void* jobs_param, int argc, char** argv, char** col_name) {
     return 0;
 }
@@ -234,7 +234,7 @@ bool SQLite::bookJob(User* user, Talent* talent) {
 
     std::string query = std::string("INSERT INTO job (jobId, description, name, status, cost, userId, talentId) VALUES (") + std::to_string(getRandInt(0, INT16_MAX)) + ", " + generateJobDescription(talentName, userName) + ", '" + userName + std::string("', 'pending', ") + std::to_string(rate) + std::string(", ") + std::to_string(userID) + std::string(", ") + std::to_string(talentID) + std::string(")");
     if (!Database::runQuery(query, default_cb, (void*)true, error_msg)) {
-        LOG("ERROR", "SQLite", "[query %s] failed to insert data int0 JOB table[%s]", query.c_str(), error_msg.c_str());
+        LOG("ERROR", "SQLite", "[query %s] failed to insert data into JOB[%s]", query.c_str(), error_msg.c_str());
         return false;
     }
     
