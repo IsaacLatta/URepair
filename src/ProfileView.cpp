@@ -329,7 +329,7 @@ void ProfileView::render()
 	ImGui::Begin("Profile", nullptr, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoCollapse);
     showOptions();
 
-    ImGui::BeginChild("Client Profile");
+    ImGui::BeginChild("Profile");
     showProfileInfo();
     ImGui::EndChild();
 

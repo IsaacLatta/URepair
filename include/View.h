@@ -174,23 +174,6 @@ class MainAdminView : public View
     void render() override;
 };
 
-/**
- * @class ClientProfileView
- * @brief Specialized view for displaying client profiles.
- */
-class ClientProfileView: public ProfileView {
-    public:
-    /**
-     * @brief Constructor for `ClientProfileView` with a user.
-     * @param user A shared pointer to the user object associated with the view.
-     */
-    ClientProfileView(std::shared_ptr<User> user): ProfileView(user) {}
-
-    /**
-     * @brief Renders the client profile view.
-     */
-    void render() override;
-};
 
 /**
  * @class MainContractorView

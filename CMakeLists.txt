@@ -19,7 +19,6 @@ set(SOURCE_FILES
     src/ProfileView.cpp
     src/Controller.cpp
     src/MainContractorView.cpp
-    src/ClientProfileView.cpp
     src/MainAdminView.cpp
     src/SQLite.cpp
     third_party/glad/glad.c
