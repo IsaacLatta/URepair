@@ -4,3 +4,20 @@ build/*
 *.vscode
 *.vs
 *out
+
+
+# Visual Studio build files
+*.obj
+*.pdb
+*.ipch
+*.suo
+*.idb
+*.user
+*.log
+*.tlog
+*.lastbuildstate
+*.VC.db
+*.VC.opendb
+*.ncb
+*.pch
+*.manifest
