@@ -100,11 +100,12 @@ void MainContractorView::showActiveJobs() {
 	std::vector<Job>* jobs = user->getJobs();
 	
 	if (ImGui::BeginTable("Pending Jobs", 6, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingFixedFit)) {
-        ImGui::TableSetupColumn("Name", 0, 100.0f);
+        ImGui::TableSetupColumn("ID", 0, 100.0f);
+		ImGui::TableSetupColumn("Name", 0, 200.0f);
         ImGui::TableSetupColumn("Status", 0, 100.0f);
         ImGui::TableSetupColumn("Date", 0, 100.0f);
         ImGui::TableSetupColumn("Pay out", 0, 100.0f);
-        ImGui::TableSetupColumn("Description", 0, 200.0f);
+        ImGui::TableSetupColumn("Description", 0, 300.0f);
         ImGui::TableHeadersRow();
 
         for (int i = 0; i < jobs->size(); ++i) {
@@ -118,7 +119,7 @@ void MainContractorView::showActiveJobs() {
             ImGui::TableSetColumnIndex(1); ImGui::Text("%s", job.name);
             ImGui::TableSetColumnIndex(2); ImGui::Text("%s", job.status);
             ImGui::TableSetColumnIndex(3); ImGui::Text("%s", job.date);
-            ImGui::TableSetColumnIndex(3); ImGui::Text("$%.2f", job.cost);
+            ImGui::TableSetColumnIndex(4); ImGui::Text("$%.2f", job.cost);
             ImGui::TableSetColumnIndex(5); ImGui::Text("%s", job.description);
         }
         ImGui::EndTable();
@@ -137,7 +138,7 @@ void MainContractorView::showJobRequests() {
         ImGui::TableSetupColumn("Status", 0, 100.0f);
         ImGui::TableSetupColumn("Date", 0, 100.0f);
         ImGui::TableSetupColumn("Pay out", 0, 100.0f);
-        ImGui::TableSetupColumn("Description", 0, 200.0f);
+        ImGui::TableSetupColumn("Description", 0, 300.0f);
         ImGui::TableHeadersRow();
 
         for (int i = 0; i < jobs->size(); ++i) {
@@ -151,7 +152,7 @@ void MainContractorView::showJobRequests() {
             ImGui::TableSetColumnIndex(1); ImGui::Text("%s", job.name);
             ImGui::TableSetColumnIndex(2); ImGui::Text("%s", job.status);
             ImGui::TableSetColumnIndex(3); ImGui::Text("%s", job.date);
-            ImGui::TableSetColumnIndex(3); ImGui::Text("$%f.2", job.cost);
+            ImGui::TableSetColumnIndex(4); ImGui::Text("$%f.2", job.cost);
             ImGui::TableSetColumnIndex(5); ImGui::Text("%s", job.description);
             std::string label = "View##" + std::to_string(i); 
 			if (ImGui::Button(label.c_str())) {
@@ -167,6 +168,7 @@ void MainContractorView::showJobRequests() {
 		showJobRequestInfo(selected_job, &show_request_menu);
 	}
 }
+
 
 void MainContractorView::render() {
 	std::string welcome_screen = "Welcome, " + user->getUsername() + ".";

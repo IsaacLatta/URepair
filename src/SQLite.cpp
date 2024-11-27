@@ -2,6 +2,13 @@
 #include "Database.h"
 #include <random>
 
+static int getRandInt(int low_end, int high_end) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distr(low_end, high_end); // Adjusted to generate integer indices
+    return distr(gen);
+}
+
 bool SQLite::connect() {
     return true;
 }
@@ -183,36 +190,31 @@ bool SQLite::loadData(User* user) {
 
 static std::string generateJobDescription(std::string talentName, std::string userName) {
     std::string descriptions[21];
-    descriptions[0] = talentName + " is building a secret tunnel under " + userName + "s house.";
-    descriptions[1] = talentName + " is painting all the walls green at " + userName + "s house.";
-    descriptions[2] = talentName + " is fixing the leaky roof at " + userName + "s house.";
-    descriptions[3] = talentName + " is turning the garage into a home theater at " + userName + "s house.";
-    descriptions[4] = talentName + " is constructing a medieval-style moat around " + userName + "s house.";
-    descriptions[5] = talentName + " is replacing all the doors with revolving ones at " + userName + "s house.";
-    descriptions[6] = talentName + " is installing a secret bookshelf door at " + userName + "s house.";
-    descriptions[7] = talentName + " is soundproofing the karaoke room at " + userName + "s house.";
-    descriptions[8] = talentName + " is upgrading the Wi-Fi signal at " + userName + "s house.";
-    descriptions[9] = talentName + " is adding an indoor pool to " + userName + "s house.";
-    descriptions[10] = talentName + " is training squirrels to guard " + userName + "s house.";
-    descriptions[11] = talentName + " is replacing the grass with a Zen garden at " + userName + "s house.";
-    descriptions[12] = talentName + " is designing a rooftop garden at " + userName + "s house.";
-    descriptions[13] = talentName + " is fixing the time machine in " + userName + "s basement.";
-    descriptions[14] = talentName + " is baking cookies in " + userName + "s kitchen.";
-    descriptions[15] = talentName + " is holding a yoga class in " + userName + "s living room.";
-    descriptions[16] = talentName + " is installing a disco ball in " + userName + "s attic.";
-    descriptions[17] = talentName + " is creating a home automation system for " + userName + "s house.";
-    descriptions[18] = talentName + " is adding solar panels to " + userName + "s roof.";
-    descriptions[19] = talentName + " is building a treehouse for " + userName + " in the backyard.";
-    descriptions[20] = talentName + " is teaching the family cat to play piano at " + userName + "s house.";
+    descriptions[0] = talentName + " is forging a secret passageway under " + userName + "s hobbit hole.";
+    descriptions[1] = talentName + " is painting a giant tree mural at " + userName + "s house.";
+    descriptions[2] = talentName + " is fixing the roof of the Prancing Pony for " + userName + ".";
+    descriptions[3] = talentName + " is transforming " + userName + "s house into a cozy hobbit hole.";
+    descriptions[4] = talentName + " is constructing an elven bridge near " + userName + "s house.";
+    descriptions[5] = talentName + " is replacing the round hobbit door at " + userName + "s house.";
+    descriptions[6] = talentName + " is installing a hidden elven bookshelf at " + userName + "s house.";
+    descriptions[7] = talentName + " is soundproofing the council chamber at " + userName + "s house.";
+    descriptions[8] = talentName + " is upgrading the seeing-stone (palantír) room for " + userName + ".";
+    descriptions[9] = talentName + " is adding a waterfall feature to " + userName + "s Rivendell-style garden.";
+    descriptions[10] = talentName + " is training the eagles to guard " + userName + "s fortress.";
+    descriptions[11] = talentName + " is planting a Party Tree for " + userName + " in their backyard.";
+    descriptions[12] = talentName + " is designing a lookout tower for " + userName + "s house.";
+    descriptions[13] = talentName + " is repairing the gates of Minas Tirith for " + userName + ".";
+    descriptions[14] = talentName + " is baking lembas bread for " + userName + "s feast.";
+    descriptions[15] = talentName + " is teaching the art of sword fighting in " + userName + "s courtyard.";
+    descriptions[16] = talentName + " is installing a chandelier in " + userName + "s great hall.";
+    descriptions[17] = talentName + " is crafting an enchanted ring for " + userName + " in Mount Doom.";
+    descriptions[18] = talentName + " is carving runes on the walls of " + userName + "s hall.";
+    descriptions[19] = talentName + " is building an elven treehouse for " + userName + " in Lothlórien.";
+    descriptions[20] = talentName + " is training " + userName + "s horse to race like Shadowfax.";
 
-    //Random Number generation for this
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<> distr(0, 21);
-    int randint = distr(gen);
-
-    return "'" + descriptions[randint] + "'";
+    return "'" + descriptions[getRandInt(0, 20)] + "'";
 }
+
 
 static int default_cb(void* jobs_param, int argc, char** argv, char** col_name) {
     return 0;
@@ -230,9 +232,9 @@ bool SQLite::bookJob(User* user, Talent* talent) {
     std::string talentName = talent->name;
     std::string userName = user->getUsername();
 
-    std::string query = std::string("INSERT INTO job (description, name, status, cost, userId, talentId) VALUES (") + generateJobDescription(talentName, userName) + ", '" + userName + std::string("', 'pending', ") + std::to_string(rate) + std::string(", ") + std::to_string(userID) + std::string(", ") + std::to_string(talentID) + std::string(")");
+    std::string query = std::string("INSERT INTO job (jobId, description, name, status, cost, userId, talentId) VALUES (") + std::to_string(getRandInt(0, INT16_MAX)) + ", " + generateJobDescription(talentName, userName) + ", '" + userName + std::string("', 'pending', ") + std::to_string(rate) + std::string(", ") + std::to_string(userID) + std::string(", ") + std::to_string(talentID) + std::string(")");
     if (!Database::runQuery(query, default_cb, (void*)true, error_msg)) {
-        LOG("ERROR", "SQLite", "failed to load user data from JOB table[%s]", error_msg.c_str());
+        LOG("ERROR", "SQLite", "[query %s] failed to insert data int0 JOB table[%s]", query.c_str(), error_msg.c_str());
         return false;
     }
     
