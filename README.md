@@ -16,6 +16,7 @@ This project was authored by **Isaac Latta**, **Matia Landry**, and **Michael Ba
 - We have included an executable of the project to save you from building.
 - If you prefer building yourself and assuming you are running the project on Windows, we have included the .sln, .vcxproj, and .vcxproj.filters files. If you would prefer to build completely from scratch we have included a small build guide below.
 
+---
 
 ## Prerequisites
 
@@ -68,7 +69,7 @@ The project includes all necessary headers aside from OpenGL-related dependencie
 	```bash
 	cmake .. -G "Visual Studio 17 2022"
 	```
-4. Open the .sln file found in the build directory
+4. Open the .sln file found in the build directory in Visual Studio.
 5. Build and run the project:
 	- Press **F5** or click the green **Start** button (arrow) in Visual Studio.
 

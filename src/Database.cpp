@@ -6,14 +6,6 @@ std::unique_ptr<Database> Database::databaseFactory() {
     return std::make_unique<SQLite>();
 }
 
-bool Dummy::bookJob(User* user, Talent* talent) {
-    return true;
-}
-
-/*******************************************************/
-/******* DUMMY DATABASE STARTS HERE: NOT USED *********/
-/******************************************************/
-
 bool Database::runQuery(const std::string& query, int(*callback)(void*,int,char**,char**), void* callback_param, std::string& error_msg) {
     sqlite3* db;
     int ret_code;
@@ -39,9 +31,22 @@ bool Database::runQuery(const std::string& query, int(*callback)(void*,int,char*
         return false;
     }
 
+    LOG("INFO", "Database", "[query %s] finished with code=%d, rows changed=%d", query.c_str(), ret_code, sqlite3_changes64(db));
     sqlite3_close(db);
     return true;
 }
+
+
+/*******************************************************/
+/******* DUMMY DATABASE STARTS HERE: NOT USED *********/
+/******************************************************/
+
+
+
+bool Dummy::bookJob(User* user, Talent* talent) {
+    return true;
+}
+
 
 bool Dummy::connect() {
     return true;

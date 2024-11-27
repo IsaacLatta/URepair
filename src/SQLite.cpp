@@ -2,66 +2,6 @@
 #include "Database.h"
 #include <random>
 
-/* USER
-username = mbaudin
-password = 616481
-fname = Michael
-lname = Baudin
-type = client/contractor/admin
-lastaccessed = 2024-11-21
-userID = 1000
-talentID = NULL
-*/
-
-/* INFO
-userID = 1000
-phone = 250-320-0439
-email = mikeybleven@gmail.com
-name = Michael
-location = Kamloops
-bio = I am a person
-*/
-
-/* JOB
-jobId = 1000
-description = Isaac is laying pipe at Michaels house
-name = MichaelJob
-status = 0
-cost = 200
-userId = 1000
-talentId = 1000
-*/
-
-/*
-struct Job {
-    int id;
-    char description[256];
-    char name[128];
-    char status[128];
-    char date[256];
-    double cost;
-} ;*/
-
-/* JOB
-jobId = 1000
-description = Isaac is laying pipe at Michaels house
-name = MichaelJob
-status = 0
-cost = 200
-userId = 1000
-talentId = 1000
-*/
-
-/* TALENT
-talentID = 1000
-name = Isaac Pipe Laying Ltd.
-service_type = Plumbing
-location = Kamloops
-rating = 5
-rate = 200
-message = I will lay your pipe :)
-*/
-
 bool SQLite::connect() {
     return true;
 }
@@ -177,17 +117,6 @@ static int load_data_jobs_cb(void* jobs_param, int argc, char**argv, char** col_
     return 0;
 }
 
-/* TALENT
-talentID = 1000
-name = Isaac Pipe Laying Ltd.
-service_type = Plumbing
-location = Kamloops
-rating = 5
-rate = 200
-message = I will lay your pipe :)
-*/
-
-
 static int load_data_talent_cb(void* tal_param, int argc, char**argv, char** col_name) {
     Talent* talent = static_cast<Talent*>(tal_param);
 
@@ -221,13 +150,14 @@ bool SQLite::loadData(User* user) {
         return false;
     }
 
-    query = "SELECT * FROM JOB WHERE userID = " + std::to_string(user->getInfo()->id);
-    std::vector<Job>* jobs = user->getJobs();
-    if(!Database::runQuery(query, load_data_jobs_cb, (void*)jobs, error_msg)) {
-        LOG("ERROR", "SQLite", "failed to load user data from JOB table[%s]", error_msg.c_str());
-        return false;
+    if(user->role == ROLE::CLIENT) {
+        query = "SELECT * FROM JOB WHERE userID = " + std::to_string(user->getInfo()->id);
+        std::vector<Job>* jobs = user->getJobs();
+        if(!Database::runQuery(query, load_data_jobs_cb, (void*)jobs, error_msg)) {
+            LOG("ERROR", "SQLite", "failed to load user data from JOB table[%s]", error_msg.c_str());
+            return false;
+        }
     }
-
     if(user->role != ROLE::CONTRACTOR) {
        return true;
     }
@@ -240,18 +170,17 @@ bool SQLite::loadData(User* user) {
         return false;
     }
 
+    query = "SELECT * FROM JOB WHERE talentID = " + std::to_string(talent->id);
+    std::vector<Job>* jobs = user->getJobs();
+    jobs->clear();
+    if(!Database::runQuery(query, load_data_jobs_cb, (void*)jobs, error_msg)) {
+        LOG("ERROR", "SQLite", "failed to load user data from JOB table[%s]", error_msg.c_str());
+        return false;
+    }
+
     return true;
 }
 
-/*
-create table job(jobId int, description varchar, name varchar,
-status boolean, cost number, userId int, talentId int);
-
-insert into job values(1000, 'Isaac is laying pipe at Michaels house',
-'MichaelJob', 0, 200.0, 1000, 1000);
-
-INSERT INTO job (description, name, status, cost, userId, talentId)
-*/
 static std::string generateJobDescription(std::string talentName, std::string userName) {
     std::string descriptions[21];
     descriptions[0] = talentName + " is doing stuff to " + userName + "s house.";
@@ -286,14 +215,9 @@ static std::string generateJobDescription(std::string talentName, std::string us
 }
 
 static int default_cb(void* jobs_param, int argc, char** argv, char** col_name) {
-    LOG("INFO", "SQLite", "table updated");
     return 0;
 }
-/*
-Runs a SQL query to book a new job and add to the database.
-This code is mostly just constructing the query.
-Returns false if an error is encountered.
-*/
+
 bool SQLite::bookJob(User* user, Talent* talent) {
     
     std::string error_msg;
@@ -307,7 +231,6 @@ bool SQLite::bookJob(User* user, Talent* talent) {
     std::string userName = user->getUsername();
 
     std::string query = std::string("INSERT INTO job (description, name, status, cost, userId, talentId) VALUES (") + generateJobDescription(talentName, userName) + ", '" + userName + std::string("', 'pending', ") + std::to_string(rate) + std::string(", ") + std::to_string(userID) + std::string(", ") + std::to_string(talentID) + std::string(")");
-    std::cout << "QUERY: " << query << "\n";
     if (!Database::runQuery(query, default_cb, (void*)true, error_msg)) {
         LOG("ERROR", "SQLite", "failed to load user data from JOB table[%s]", error_msg.c_str());
         return false;
@@ -316,22 +239,12 @@ bool SQLite::bookJob(User* user, Talent* talent) {
     return true;
 }
 
-/* JOB
-jobId = 1000
-description = Isaac is laying pipe at Michaels house
-name = MichaelJob
-status = 0
-cost = 200
-userId = 1000
-talentId = 1000
-*/
-
 bool SQLite::approveJob(User* user, Job* job, bool approve) {
     std::string query, error_msg, new_status;
-    new_status = approve ? "in progress" : "denied";
-    query = "UPDATE JOB SET status = " + new_status + " WHERE jobID = " + std::to_string(job->id);
+    new_status = approve ? "'in progress'" : "'denied'";
+    query = "UPDATE JOB SET status = " + new_status + " WHERE jobId = " + std::to_string(job->id) + ";";
 
-     if (!Database::runQuery(query, default_cb, nullptr, error_msg)) {
+    if (!Database::runQuery(query, default_cb, nullptr, error_msg)) {
         LOG("ERROR", "SQLite", "failed to update JOB[%s]", error_msg.c_str());
         return false;
     }
@@ -346,7 +259,7 @@ bool SQLite::changePassword(User* user, const char* old_pass, const char* new_pa
    
     std::string error_msg;
     std::string userName = user->getUsername();
-    std::string query = "update users set password = '" + std::string(new_pass) + "' where username = '" + userName + "'";
+    std::string query = "update users set password = '" + std::string(new_pass) + "' where username = '" + userName + "';";
     if (!Database::runQuery(query, default_cb, (void*)true, error_msg)) {
         LOG("ERROR", "SQLite", "failed to update password[%s]", error_msg.c_str());
         return false;
@@ -374,28 +287,6 @@ bool SQLite::changeUsername(User* user, const char* new_username, const char* pa
     user->setUsername(new_username);
     return true;
 }
-
-/* TALENT
-talentID = 1000
-name = Isaac Pipe Laying Ltd.
-service_type = Plumbing
-location = Kamloops
-rating = 5
-rate = 200
-message = I will lay your pipe :)
-*/
-
-/*struct Talent {
-    int id;
-    std::string name;
-    std::string service_type;  
-    std::string location;      
-    int rating;                
-    float rate;
-    Talent() {}
-    Talent(const char* name, const char* service, const char* location, int rating, float rate): 
-    name(name), service_type(service), location(location), rating(rating), rate(rate){}
-};*/
 
 static int find_talent_cb(void* talent_param, int argc, char**argv, char** col_name) {
     std::vector<Talent>* talent = static_cast<std::vector<Talent>*>(talent_param);

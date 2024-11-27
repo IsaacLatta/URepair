@@ -88,6 +88,7 @@ void Controller::setupMainContractorView(std::shared_ptr<User> user) {
         setupLoginView();
     };
     main->jobAcceptHandler = [this, user](Job *job, bool approve) {
+        std::cout << "CALLED\n";
         db->approveJob(user.get(), job, approve);
         db->loadData(user.get());
     };

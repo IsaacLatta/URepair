@@ -200,6 +200,7 @@ class ClientProfileView: public ProfileView {
  */
 class MainContractorView: public View {
     public:
+    /* Initialized to default logs */
     std::function<void(Job*, bool)> jobAcceptHandler = [](Job*, bool) { INFO("view", "would call accept job"); }; ///< Callback for handling job acceptance.
     std::function<void()> logoutHandler = []() { INFO("view", "would log user out"); }; ///< Callback for handling logout.
     std::function<void()> profileHandler = []() { INFO("view", "user can view profile"); }; ///< Callback for viewing the profile.

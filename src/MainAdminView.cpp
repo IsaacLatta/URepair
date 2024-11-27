@@ -20,7 +20,7 @@ void MainAdminView::render() {
             LOG("INFO", "render", "query input buffer: %s", query_input_buffer);
             std::string query_output = queryHandler(query_input_buffer);
             
-            LOG("INFO", "render", "Query result: %s", query_output);
+            LOG("INFO", "render", "Query result: %s", query_output.c_str());
             memset(query_output_buffer, '\0', QUERY_BUFFER);
     
             strncpy(query_output_buffer, query_output.c_str(), QUERY_BUFFER - 1);

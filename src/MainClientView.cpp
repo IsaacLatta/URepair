@@ -2,8 +2,8 @@
 #include "App.h"
 
 void MainClientView::showMenuBar() {
-	bool change_to_profile = false;
-	bool logout = false;
+	static bool change_to_profile = false;
+	static bool logout = false;
     if (ImGui::BeginMenuBar()) {
         if (ImGui::BeginMenu("File")) {
             if(ImGui::MenuItem("Logout")) {
@@ -20,9 +20,11 @@ void MainClientView::showMenuBar() {
         ImGui::EndMenuBar();
     }
 	if(change_to_profile) {
+        change_to_profile = false;
 		profileHandler();
 	}
 	if(logout) {
+        logout = false;
 		logoutHandler();
 	}
 }
